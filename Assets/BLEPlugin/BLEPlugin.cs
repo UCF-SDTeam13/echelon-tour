@@ -12,7 +12,7 @@ public sealed class BLEPlugin : MonoBehaviour
     public void Awake()
     {
         _instance = this;
-        //Inject proper plugin based on platform
+        // Inject proper plugin based on platform
 #if UNITY_ANDROID
         _nativePluginInstance = AndroidPlugin.Instance;
 #elif UNITY_IOS
@@ -23,7 +23,12 @@ public sealed class BLEPlugin : MonoBehaviour
     }
 
     public void RequestEnableBLE() {
-        _nativePluginInstance.RequestEnableBLE();
+        if (!_nativePluginInstance.EnabledBLE) {
+            _nativePluginInstance.RequestEnableBLE();
+        }
+        else {
+            BLEDebug.LogWarning("BLE Already Enabled, Ignoring Request");
+        }
     }
 
     public void Scan()
@@ -73,7 +78,7 @@ interface INativePlugin
     void StopScan();
     void Connect(string address);
     void DiscoverServices();
-    //NOTE: This should be a Base64 encoded byte string
+    // NOTE: This should be a Base64 encoded byte string
     void SendPluginMessage(string message);
     void OnApplicationQuit();
 }
