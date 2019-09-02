@@ -90,6 +90,26 @@ public sealed class BLESimulator
                     )
                 );
                 break;
+            case BLEProtocol.ActionCode.SetWorkoutControlState:
+                controlState = messageData[BLEProtocol.Index.WorkoutControlState];
+                BLEPluginInstance.SendMessage("ReceivePluginMessage",
+                    BLEProtocol.ConvertBytesToString(
+                        BLENotify.PrepareWorkoutControlStateBytes(
+                            controlState
+                        )
+                    )
+                );
+                break;
+            case BLEProtocol.ActionCode.SetResistanceLevel:
+                resistanceLevel = messageData[BLEProtocol.Index.ResistanceLevel];
+                BLEPluginInstance.SendMessage("ReceivePluginMessage",
+                    BLEProtocol.ConvertBytesToString(
+                        BLENotify.PrepareResistanceLevelBytes(
+                            resistanceLevel
+                        )
+                    )
+                );
+                break;
             default:
                 BLEDebug.LogError("Error: Received Invalid ActionCode");
                 break;
