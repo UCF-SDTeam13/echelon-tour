@@ -106,7 +106,7 @@ public static class BLEAction
         string firmwareVersion = String.Format(
             $"{data[BLEProtocol.Index.FirmwareVersion.Major]}.{data[BLEProtocol.Index.FirmwareVersion.Minor]}.{data[BLEProtocol.Index.FirmwareVersion.Patch]}"
         );
-        
+
         _bikeListener.OnReceiveDeviceInformation(modelID, hardwareVersion, firmwareVersion);
     }
     private static void ReceiveErrorLog(byte[] data)

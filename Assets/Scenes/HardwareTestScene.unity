@@ -342,6 +342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 52844805}
   - component: {fileID: 52844806}
+  - component: {fileID: 52844807}
   m_Layer: 0
   m_Name: BLEPlugin
   m_TagString: Untagged
@@ -373,6 +374,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff6509b4db07f284ab2f9bbc398fcd71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &52844807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52844804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e42b4aa203ed1040ba941bfd2e3f239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &61166099

@@ -2,13 +2,13 @@
 using UnityEngine;
 using System;
 
-public sealed class BLESimulator
+public sealed class BLESimulator : MonoBehaviour
 {
-    private static readonly Lazy<BLESimulator>
-    _BLESimulator = new Lazy<BLESimulator>(() => new BLESimulator());
-    public static BLESimulator Instance => _BLESimulator.Value;
+    // Hacky but needed due to how MonoBehaviour works
+    private static BLESimulator _BLESimulatorInstance;
+    public static BLESimulator Instance => _BLESimulatorInstance;
 
-    private readonly GameObject BLEPluginInstance;
+    private GameObject BLEPluginInstance;
 
     // Immutable State
     private const int modelID = 1;
@@ -24,10 +24,48 @@ public sealed class BLESimulator
     // Mutable State
     private int controlState = BLEProtocol.WorkoutControlState.Stop;
     private int resistanceLevel = 0;
+    private int timestamp = 0;
+    private int count = 0;
+    private int rpm = 0;
+    private int heartrate = 0;
 
-    private BLESimulator()
+    public void Awake()
     {
+        _BLESimulatorInstance = this;
         BLEPluginInstance = GameObject.Find("BLEPlugin");
+    }
+
+    public void Start()
+    {
+        InvokeRepeating("SendWorkoutStatusNotification", 1.0f, 1.0f);
+    }
+
+    public void SendWorkoutStatusNotification()
+    {
+        if (controlState == BLEProtocol.WorkoutControlState.Stop) {
+            timestamp = 0;
+            count = 0;
+            rpm = 0;
+            heartrate = 0;
+        }
+        else if (controlState == BLEProtocol.WorkoutControlState.Start) {
+            ++timestamp;
+            count += 2;
+            rpm = 120;
+            heartrate = 0;
+        }
+
+        BLEDebug.LogInfo("Sending WorkoutStatusNotification");
+        BLEPluginInstance.SendMessage("ReceivePluginMessage",
+            BLEProtocol.ConvertBytesToString(
+                BLENotify.PrepareWorkoutStatusBytes(
+                    timestamp,
+                    count,
+                    rpm,
+                    heartrate
+                )
+            )
+        );
     }
 
     public void ReceiveUnityMessage(string message)

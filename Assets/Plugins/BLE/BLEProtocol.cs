@@ -175,33 +175,12 @@ public static class BLEProtocol
         BLEDebug.LogInfo("Converted Byte to String: " + message);
         return message;
     }
+
     public static byte[] ConvertStringToBytes(string message)
     {
         return System.Convert.FromBase64String(message);
     }
-    public static int ExtractDataInt2(int beginIndex, int endIndex, byte[] data)
-    {
-        data.Skip(beginIndex).Take(endIndex);
-        // TODO - this works but can be done better
-        //Reverses order and interprets two byte or four byte length
-        if (endIndex - beginIndex + 1 == 4)
-        {
-            byte x = data[beginIndex];
-            data[beginIndex] = data[endIndex];
-            data[endIndex] = x;
-            x = data[beginIndex + 1];
-            data[beginIndex + 1] = data[endIndex - 1];
-            data[endIndex - 1] = x;
-            return BitConverter.ToInt32(data, beginIndex);
-        }
-        else
-        {
-            byte x = data[beginIndex];
-            data[beginIndex] = data[endIndex];
-            data[endIndex] = x;
-            return BitConverter.ToInt16(data, beginIndex);
-        }
-    }
+
     public static int ExtractDataInt(int beginIndex, int endIndex, byte[] data)
     {
         data = data.Skip(beginIndex).Take(endIndex - beginIndex + 1).Reverse().ToArray();
@@ -212,6 +191,19 @@ public static class BLEProtocol
         else
         {
             return BitConverter.ToInt16(data, 0);
+        }
+    }
+    
+    public static byte[] ExtractIntData(int value, int beginIndex, int endIndex)
+    {
+        int length = endIndex - beginIndex + 1;
+        if (length == 4)
+        {
+            return BitConverter.GetBytes((Int32)value).Reverse().ToArray();
+        }
+        else
+        {
+            return BitConverter.GetBytes((Int16)value).Reverse().ToArray();
         }
     }
 }

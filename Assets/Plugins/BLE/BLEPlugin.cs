@@ -22,11 +22,14 @@ public sealed class BLEPlugin : MonoBehaviour
 #endif
     }
 
-    public void RequestEnableBLE() {
-        if (!_nativePluginInstance.EnabledBLE) {
+    public void RequestEnableBLE()
+    {
+        if (!_nativePluginInstance.EnabledBLE)
+        {
             _nativePluginInstance.RequestEnableBLE();
         }
-        else {
+        else
+        {
             BLEDebug.LogWarning("BLE Already Enabled, Ignoring Request");
         }
     }
