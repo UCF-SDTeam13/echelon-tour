@@ -123,7 +123,7 @@ public static class BLEProtocol
         // ResponseCode "should" be in the same location as ActionCode
         return GetActionCode(data);
     }
-    private static byte CalculateChecksum(byte[] data)
+    public static byte CalculateChecksum(byte[] data)
     {
         byte checksumExpected = 0;
         for (int i = 0; i < data.Length - 1; ++i)
@@ -168,6 +168,7 @@ public static class BLEProtocol
         preparedBytes[preparedBytes.Length - 1] = CalculateChecksum(preparedBytes);
         return preparedBytes;
     }
+
     public static string ConvertBytesToString(byte[] data)
     {
         string message = System.Convert.ToBase64String(data);
@@ -183,7 +184,8 @@ public static class BLEProtocol
         data.Skip(beginIndex).Take(endIndex);
         // TODO - this works but can be done better
         //Reverses order and interprets two byte or four byte length
-        if (endIndex - beginIndex + 1 == 4) {
+        if (endIndex - beginIndex + 1 == 4)
+        {
             byte x = data[beginIndex];
             data[beginIndex] = data[endIndex];
             data[endIndex] = x;
@@ -192,7 +194,8 @@ public static class BLEProtocol
             data[endIndex - 1] = x;
             return BitConverter.ToInt32(data, beginIndex);
         }
-        else {
+        else
+        {
             byte x = data[beginIndex];
             data[beginIndex] = data[endIndex];
             data[endIndex] = x;
@@ -202,10 +205,12 @@ public static class BLEProtocol
     public static int ExtractDataInt(int beginIndex, int endIndex, byte[] data)
     {
         data = data.Skip(beginIndex).Take(endIndex - beginIndex + 1).Reverse().ToArray();
-        if (data.Length == 4) {
+        if (data.Length == 4)
+        {
             return BitConverter.ToInt32(data, 0);
         }
-        else {
+        else
+        {
             return BitConverter.ToInt16(data, 0);
         }
     }

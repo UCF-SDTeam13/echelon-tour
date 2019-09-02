@@ -16,9 +16,9 @@ public sealed class BLEPlugin : MonoBehaviour
 #if UNITY_ANDROID
         _nativePluginInstance = AndroidPlugin.Instance;
 #elif UNITY_IOS
-        _nativePlugin = iOSPlugin.Instance;
+        _nativePluginInstance = iOSPlugin.Instance;
 #else
-        _nativePlugin = SimulatorPlugin.Instance;
+        _nativePluginInstance = SimulatorPlugin.Instance;
 #endif
     }
 
