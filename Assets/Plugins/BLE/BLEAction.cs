@@ -3,7 +3,7 @@ using System.Linq;
 
 public static class BLEAction
 {
-    private static IBikeListener _bikeListener;
+    private static IBikeListener _bikeListener = new PlaceholderBike();
 
     public static void Get(byte actionCode)
     {
@@ -159,5 +159,34 @@ public static class BLEAction
         int heartRate = data[BLEProtocol.Index.HeartRate];
 
         _bikeListener.OnReceiveWorkoutStatus(timeStamp, count, rpm, heartRate);
+    }
+
+    private class PlaceholderBike : IBikeListener
+    {
+        public void OnAcknowledge() {
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
+        public void OnReceiveDeviceInformation(int modelID, string hardwareVersion, string firmwareVersion) {
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
+        public void OnReceiveErrorLog(byte[] log) { 
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
+
+        public void OnReceiveResistanceLevelRange(int min, int max) { 
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
+
+        public void OnReceiveResistanceLevel(int resistanceLevel) { 
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
+
+        public void OnReceiveWorkoutControlState(int controlState) { 
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
+
+        public void OnReceiveWorkoutStatus(int timestamp, int count, int rpm, int heartrate) { 
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
     }
 }
