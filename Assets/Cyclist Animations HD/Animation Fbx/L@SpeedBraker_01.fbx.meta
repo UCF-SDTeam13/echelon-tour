@@ -1,0 +1,241 @@
+fileFormatVersion: 2
+guid: 1f3162ebdd5e2644080ec155ccf9076a
+timeCreated: 1478463919
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Back_Wheel
+    100002: Bike
+    100004: bk_handle
+    100006: bk_susp_child
+    100008: bk_susp_pare
+    100010: bk_suspention
+    100012: bk_wheel
+    100014: bk_wheel0
+    100016: body1
+    100018: Chest_J
+    100020: Cycle_body
+    100022: Cyclist_Lady
+    100024: Cyclist_Lady___cycle:Body_geo
+    100026: Cyclist_Lady___cycle:Eye_geo
+    100028: Cyclist_Lady___cycle:Gloves_geo
+    100030: Cyclist_Lady___cycle:Goggles_geo
+    100032: Cyclist_Lady___cycle:Hair_geo
+    100034: Cyclist_Lady___cycle:Hand_geo
+    100036: Cyclist_Lady___cycle:Hemet_geo
+    100038: Cyclist_Lady___cycle:Shoe_geo
+    100040: Cyclist_Lady_Character
+    100042: Front_Wheel
+    100044: FT_wheel_Ball
+    100046: ft_wheel_suspention
+    100048: handle
+    100050: joint2
+    100052: joint3
+    100054: //RootNode
+    100056: L_Ankle_J
+    100058: L_Arm_J
+    100060: L_Ball_J
+    100062: L_Clavicle_J
+    100064: L_Elbow_J
+    100066: L_Hip_J
+    100068: L_Index_01_J
+    100070: L_Index_02_J
+    100072: L_Index_03_J
+    100074: L_Knee_J
+    100076: L_Middle_01_J
+    100078: L_Middle_02_J
+    100080: L_Middle_03_J
+    100082: L_ProWrist_J
+    100084: L_Thumb_01_J
+    100086: L_Thumb_02_J
+    100088: L_Toe_J
+    100090: L_Wrist_J
+    100092: Neck_J
+    100094: pedal_J
+    100096: Peddle
+    100098: Pelvis_J
+    100100: R_Ankle_J
+    100102: R_Arm_J
+    100104: R_Ball_J
+    100106: R_Clavicle_J
+    100108: R_Elbow_J
+    100110: R_Hip_J
+    100112: R_Index_01_J
+    100114: R_Index_02_J
+    100116: R_Index_03_J
+    100118: R_Knee_J
+    100120: R_Middle_01_J
+    100122: R_Middle_02_J
+    100124: R_Middle_03_J
+    100126: R_ProWrist_J
+    100128: R_Thumb_01_J
+    100130: R_Thumb_02_J
+    100132: R_Toe_J
+    100134: R_Wrist_J
+    100136: Root_J
+    100138: Root_J 1
+    100140: Spline_01_J
+    100142: Spline_02_J
+    400000: Back_Wheel
+    400002: Bike
+    400004: bk_handle
+    400006: bk_susp_child
+    400008: bk_susp_pare
+    400010: bk_suspention
+    400012: bk_wheel
+    400014: bk_wheel0
+    400016: body1
+    400018: Chest_J
+    400020: Cycle_body
+    400022: Cyclist_Lady
+    400024: Cyclist_Lady___cycle:Body_geo
+    400026: Cyclist_Lady___cycle:Eye_geo
+    400028: Cyclist_Lady___cycle:Gloves_geo
+    400030: Cyclist_Lady___cycle:Goggles_geo
+    400032: Cyclist_Lady___cycle:Hair_geo
+    400034: Cyclist_Lady___cycle:Hand_geo
+    400036: Cyclist_Lady___cycle:Hemet_geo
+    400038: Cyclist_Lady___cycle:Shoe_geo
+    400040: Cyclist_Lady_Character
+    400042: Front_Wheel
+    400044: FT_wheel_Ball
+    400046: ft_wheel_suspention
+    400048: handle
+    400050: joint2
+    400052: joint3
+    400054: //RootNode
+    400056: L_Ankle_J
+    400058: L_Arm_J
+    400060: L_Ball_J
+    400062: L_Clavicle_J
+    400064: L_Elbow_J
+    400066: L_Hip_J
+    400068: L_Index_01_J
+    400070: L_Index_02_J
+    400072: L_Index_03_J
+    400074: L_Knee_J
+    400076: L_Middle_01_J
+    400078: L_Middle_02_J
+    400080: L_Middle_03_J
+    400082: L_ProWrist_J
+    400084: L_Thumb_01_J
+    400086: L_Thumb_02_J
+    400088: L_Toe_J
+    400090: L_Wrist_J
+    400092: Neck_J
+    400094: pedal_J
+    400096: Peddle
+    400098: Pelvis_J
+    400100: R_Ankle_J
+    400102: R_Arm_J
+    400104: R_Ball_J
+    400106: R_Clavicle_J
+    400108: R_Elbow_J
+    400110: R_Hip_J
+    400112: R_Index_01_J
+    400114: R_Index_02_J
+    400116: R_Index_03_J
+    400118: R_Knee_J
+    400120: R_Middle_01_J
+    400122: R_Middle_02_J
+    400124: R_Middle_03_J
+    400126: R_ProWrist_J
+    400128: R_Thumb_01_J
+    400130: R_Thumb_02_J
+    400132: R_Toe_J
+    400134: R_Wrist_J
+    400136: Root_J
+    400138: Root_J 1
+    400140: Spline_01_J
+    400142: Spline_02_J
+    4300000: Cyclist_Lady___cycle:Body_geo
+    4300002: Cyclist_Lady___cycle:Hair_geo
+    4300004: Cyclist_Lady___cycle:Goggles_geo
+    4300006: Cyclist_Lady___cycle:Eye_geo
+    4300008: Cyclist_Lady___cycle:Hemet_geo
+    4300010: Cyclist_Lady___cycle:Gloves_geo
+    4300012: Cyclist_Lady___cycle:Shoe_geo
+    4300014: Cyclist_Lady___cycle:Hand_geo
+    4300016: Front_Wheel
+    4300018: Back_Wheel
+    4300020: Peddle
+    4300022: Cycle_body
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Back_Wheel
+    13700002: Cycle_body
+    13700004: Cyclist_Lady___cycle:Body_geo
+    13700006: Cyclist_Lady___cycle:Eye_geo
+    13700008: Cyclist_Lady___cycle:Gloves_geo
+    13700010: Cyclist_Lady___cycle:Goggles_geo
+    13700012: Cyclist_Lady___cycle:Hair_geo
+    13700014: Cyclist_Lady___cycle:Hand_geo
+    13700016: Cyclist_Lady___cycle:Hemet_geo
+    13700018: Cyclist_Lady___cycle:Shoe_geo
+    13700020: Front_Wheel
+    13700022: Peddle
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
