@@ -7,7 +7,7 @@ public sealed class SimulatorPlugin : INativePlugin
     _SimulatorPlugin = new Lazy<SimulatorPlugin>(() => new SimulatorPlugin());
     public static SimulatorPlugin Instance => _SimulatorPlugin.Value;
 
-    public bool EnabledBLE 
+    public bool EnabledBLE
     {
         get;
         private set;
@@ -16,8 +16,8 @@ public sealed class SimulatorPlugin : INativePlugin
     // Normally we would make implementation a separate class
     // but there is no Language crossing that makes that necessary
     private SimulatorPlugin()
-    { 
-        
+    {
+
     }
 
     public void RequestEnableBLE()

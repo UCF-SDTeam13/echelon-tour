@@ -3,7 +3,7 @@ using System;
 public class Workout
 {
     private static readonly Lazy<Workout>
-    _Workout = new Lazy<Workout> (() => new Workout());
+    _Workout = new Lazy<Workout>(() => new Workout());
     public static Workout Instance => _Workout.Value;
 
     //Note: I'm pretty sure calculating calories this way is wrong but it's how the factory does it
@@ -141,10 +141,12 @@ public class Workout
     private int _controlState = BLEProtocol.WorkoutControlState.Stop;
     public int ControlState
     {
-        get {
+        get
+        {
             return _controlState;
         }
-        set {
+        set
+        {
             // Ignore and Log Invalid States
             // TODO - Do this properly since range clamping shouldn't be used for states
             _controlState = Units.ClampValueToRange(value, BLEProtocol.WorkoutControlState.Stop, BLEProtocol.WorkoutControlState.Pause);

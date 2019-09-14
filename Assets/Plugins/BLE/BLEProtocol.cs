@@ -193,7 +193,7 @@ public static class BLEProtocol
             return BitConverter.ToInt16(data, 0);
         }
     }
-    
+
     public static byte[] ExtractIntData(int value, int beginIndex, int endIndex)
     {
         int length = endIndex - beginIndex + 1;

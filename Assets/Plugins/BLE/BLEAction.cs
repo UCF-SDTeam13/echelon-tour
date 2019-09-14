@@ -163,29 +163,36 @@ public static class BLEAction
 
     private class PlaceholderBike : IBikeListener
     {
-        public void OnAcknowledge() {
+        public void OnAcknowledge()
+        {
             BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
         }
-        public void OnReceiveDeviceInformation(int modelID, string hardwareVersion, string firmwareVersion) {
+        public void OnReceiveDeviceInformation(int modelID, string hardwareVersion, string firmwareVersion)
+        {
             BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
         }
-        public void OnReceiveErrorLog(byte[] log) { 
-            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
-        }
-
-        public void OnReceiveResistanceLevelRange(int min, int max) { 
-            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
-        }
-
-        public void OnReceiveResistanceLevel(int resistanceLevel) { 
+        public void OnReceiveErrorLog(byte[] log)
+        {
             BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
         }
 
-        public void OnReceiveWorkoutControlState(int controlState) { 
+        public void OnReceiveResistanceLevelRange(int min, int max)
+        {
             BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
         }
 
-        public void OnReceiveWorkoutStatus(int timestamp, int count, int rpm, int heartrate) { 
+        public void OnReceiveResistanceLevel(int resistanceLevel)
+        {
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
+
+        public void OnReceiveWorkoutControlState(int controlState)
+        {
+            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+        }
+
+        public void OnReceiveWorkoutStatus(int timestamp, int count, int rpm, int heartrate)
+        {
             BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
         }
     }

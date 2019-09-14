@@ -42,13 +42,15 @@ public sealed class BLESimulator : MonoBehaviour
 
     public void SendWorkoutStatusNotification()
     {
-        if (controlState == BLEProtocol.WorkoutControlState.Stop) {
+        if (controlState == BLEProtocol.WorkoutControlState.Stop)
+        {
             timestamp = 0;
             count = 0;
             rpm = 0;
             heartrate = 0;
         }
-        else if (controlState == BLEProtocol.WorkoutControlState.Start) {
+        else if (controlState == BLEProtocol.WorkoutControlState.Start)
+        {
             ++timestamp;
             count += 2;
             rpm = 120;
