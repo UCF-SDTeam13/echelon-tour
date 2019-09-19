@@ -12,9 +12,12 @@ using Amazon.CognitoSync.SyncManager;
 
 public class SyncClient : MonoBehaviour
 {
-Dataset playerInfo;
-CognitoSyncManager syncManager;
-CognitoAWSCredentials credentials;
+    public GameObject LoginUI;
+    string username;
+    string password;
+    Dataset playerInfo;
+    CognitoSyncManager syncManager;
+    CognitoAWSCredentials credentials;
 
     // Start is called before the first frame update
     void Start()
@@ -29,5 +32,22 @@ CognitoAWSCredentials credentials;
         syncManager = new CognitoSyncManager(credentials, RegionEndpoint.USEast1);
         playerInfo = syncManager.OpenOrCreateDataset("playerInfo");
     
+    }
+
+    public void ChangeUsername(string newUsername)
+    {
+        username = newUsername;
+        playerInfo.Put("username", newUsername);
+    }
+
+    public void ChangePassword(string newPassword)
+    {
+        password = newPassword;
+        playerInfo.Put("password", newPassword);
+    }
+
+    public void Synchronize()
+    {
+        playerInfo.SynchronizeOnConnectivity();
     }
 }
