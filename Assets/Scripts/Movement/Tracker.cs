@@ -33,6 +33,8 @@ public class Tracker : MonoBehaviour
 
     private void Start()
     {
+        // Gets the circuit of the current level
+        circuit = GameObject.FindGameObjectWithTag("Circuit").GetComponent<Circuit>();
         Reset();
     }
 

@@ -27,7 +27,7 @@ public class Follow : MonoBehaviour
         }
         else
         {
-            Debug.Log("failed");
+            Debug.Log("Vector3 is zero, don't know why.");
         }
     }
 }

@@ -39,6 +39,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3814595885653536611}
+  - component: {fileID: 5704575069551547354}
+  - component: {fileID: 4179126142809162672}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -61,6 +63,37 @@ Transform:
   m_Father: {fileID: 8263083918613319014}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5704575069551547354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2696016777133509398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 470d7e84f8b5d1a46b89e79ec437b8fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
+  next: {x: 0, y: 0, z: 0}
+  amount: 0
+  dirNum: 0
+  angle: 0
+--- !u!114 &4179126142809162672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2696016777133509398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0241eaaf31da01e4dbecce9747724663, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angle: 0
+  z: 0
 --- !u!1 &4945330972155356318
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,7 +106,7 @@ GameObject:
   - component: {fileID: 1737602348531206632}
   - component: {fileID: 3013503838974635559}
   m_Layer: 0
-  m_Name: Player (male)
+  m_Name: MalePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 726875390416789746}
-  speed: 0.05
+  speed: 0.1
 --- !u!114 &3013503838974635559
 MonoBehaviour:
   m_ObjectHideFlags: 0
