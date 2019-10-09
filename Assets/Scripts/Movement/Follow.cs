@@ -4,7 +4,7 @@ public class Follow : MonoBehaviour
 {
     [SerializeField] private GameObject target = null;
 
-    public float speed = .05f;
+    public float speed = 10f;
 
     private Tracker tracker;
     private void Start()
@@ -14,7 +14,7 @@ public class Follow : MonoBehaviour
 
     private void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed);
+        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
 
         Vector3 targetDirection = target.transform.position - transform.position;
         if (targetDirection != Vector3.zero)

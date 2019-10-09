@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private GameObject femalePrefab;
-    [SerializeField] private GameObject malePrefab;
-    [SerializeField] private int numRoutes;
+    [SerializeField] private GameObject femalePrefab = null;
+    [SerializeField] private GameObject malePrefab = null;
+    [SerializeField] private int numRoutes = 8;
 
     public Transform lineStart, lineEnd;
 

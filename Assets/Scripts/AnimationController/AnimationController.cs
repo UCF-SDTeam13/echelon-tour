@@ -3,8 +3,8 @@
 public class AnimationController : MonoBehaviour
 {
     private Animator animator;
-    private Follow newFollow;
-    private Tracker newTracker;
+    private Follow follow;
+    private Tracker tracker;
 
     public float speed;
     public Vector3 next;
@@ -15,23 +15,23 @@ public class AnimationController : MonoBehaviour
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
-        newFollow = GetComponentInParent<Follow>();
-        newTracker = GetComponentInParent<Tracker>();
+        follow = GetComponentInParent<Follow>();
+        tracker = GetComponentInParent<Tracker>();
     }
 
     void Update()
     {
         // Temporary speed values
-        speed = newFollow.speed;
-        if (speed > 0 && speed <= 0.1f)
+        speed = follow.speed;
+        if (speed > 0 && speed <= 5f)
         {
             animator.SetFloat("SpeedY", .34f);
         }
-        else if (speed > 0.1f && speed <= 0.2f)
+        else if (speed > 5f && speed <= 10f)
         {
             animator.SetFloat("SpeedY", .67f);
         }
-        else if (speed > 0.2f)
+        else if (speed > 10f)
         {
             animator.SetFloat("SpeedY", 1);
         }

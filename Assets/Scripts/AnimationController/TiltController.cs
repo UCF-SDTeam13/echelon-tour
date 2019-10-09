@@ -22,6 +22,7 @@ public class TiltController : MonoBehaviour
         // Calculate angle for tilting value
         Vector3 up = new Vector3(0, 1, 0);
         angle = Vector3.Dot(Vector3.Cross(transform.forward, tracker.targetForward), up);
+        angle = (angle / 2.0f);
 
         // Checks if between leeway to tilt object to upright or not
         if(angle < leeway && angle > -leeway)
