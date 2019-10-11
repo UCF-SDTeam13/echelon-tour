@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TiltController : MonoBehaviour
 {
+    // Tracker and angle value varies a lot so there needs to be a leeway to make sure they are upright
+    [SerializeField] private float leeway = 15.0f;
+    [SerializeField] private float angle;
+
     private Tracker tracker;
     private Vector3 initialEuler;
 
-    public float leeway = 15.0f;
-    public float angle;
-    public float z;
-
     private void Start()
     {
+        // Get the component and save the initial euler angles
         tracker = GetComponentInParent<Tracker>();
         initialEuler = transform.localEulerAngles;
     }
@@ -27,42 +26,18 @@ public class TiltController : MonoBehaviour
         // Checks if between leeway to tilt object to upright or not
         if(angle < leeway && angle > -leeway)
         {
+            // Lerp to where the player is upright again
             transform.localEulerAngles = AngleLerp(transform.localEulerAngles, initialEuler, Time.deltaTime);
         }
         else
         {
+            // Lerp between the current euler to the new adjusted euler
             transform.localEulerAngles = AngleLerp(transform.localEulerAngles,
                                                     new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, angle), Time.deltaTime);
         }
     }
 
-    /*
-    // -Left +Right
-    private void OnDrawGizmos()
-    {
-        Vector3 heading = cube.transform.position;
-        Vector3 up = new Vector3(0, 1, 0);
-        dirNum = Vector3.Dot(Vector3.Cross(-transform.forward, heading), up);
-        z = dirNum * 15.0f;
-
-        Debug.Log("-transform.forward: " + -transform.forward);
-        Debug.Log("heading: " + heading);
-        Debug.Log("transform.up: " + transform.up);
-        Debug.Log("Cross: " + Vector3.Cross(-transform.forward, heading));
-        Debug.Log("Dot: " + Vector3.Dot(Vector3.Cross(-transform.forward, heading), transform.up));
-
-        //Vector3 euler = transform.localEulerAngles;
-        //euler.z = Mathf.Lerp(euler.z, z, Time.deltaTime);
-        //transform.localEulerAngles = euler;
-        
-        transform.localEulerAngles = AngleLerp(transform.localEulerAngles,
-                                                    new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, z), Time.deltaTime);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, heading);
-    }
-    */
-
+    // New Lerp function as using negative values for rotation causes errors
     Vector3 AngleLerp(Vector3 StartAngle, Vector3 FinishAngle, float t)
     {
         float xLerp = Mathf.LerpAngle(StartAngle.x, FinishAngle.x, t);

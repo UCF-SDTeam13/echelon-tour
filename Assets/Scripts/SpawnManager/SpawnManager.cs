@@ -1,17 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject femalePrefab = null;
     [SerializeField] private GameObject malePrefab = null;
+
     [SerializeField] private int numRoutes = 8;
 
-    public Transform lineStart, lineEnd;
+    // Used to create the spawning line
+    [SerializeField] private Transform lineStart = null;
+    [SerializeField] private Transform lineEnd = null;
 
     private void Start()
     {
+        // Testing values, needs to be adjusted depending on Gamelift
         Spawn(1, 0);
         Spawn(0, 1);
         Spawn(1, 2);
@@ -22,8 +24,10 @@ public class SpawnManager : MonoBehaviour
         Spawn(0, 7);
     }
 
+    // Spawn function (needs to get adjusted)
     private void Spawn(int gender, int index)
     {
+        // Ranges between 2 points
         float xRange = lineEnd.position.x - lineStart.position.x;
         float yRange = lineEnd.position.y - lineStart.position.y;
         float zRange = lineEnd.position.z - lineStart.position.z;
@@ -33,6 +37,7 @@ public class SpawnManager : MonoBehaviour
         float partition = 1f / (numRoutes - 1);
         float value;
 
+        // Index value determine what type of partition (weird adjustments due to tracker script)
         if(index == 0)
         {
             value = 0;
@@ -46,15 +51,18 @@ public class SpawnManager : MonoBehaviour
             value = partition * (index - 1);
         }
 
+        // The position where the player will spawn
         Vector3 spawnLocation = new Vector3(lineStart.position.x + (xRange * value),
                                                 lineStart.position.y + (yRange * value),
                                                     lineStart.position.z + (zRange * value));
 
+        // The rotation or direction the player will be set at
         Quaternion spawnRotation = new Quaternion(transform.rotation.x,
                                                      transform.rotation.y,
                                                         transform.rotation.z,
                                                             transform.rotation.w);
 
+        // Check which prefab needs to be used
         GameObject prefab = gender == 0 ? malePrefab : femalePrefab;
         GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
     }

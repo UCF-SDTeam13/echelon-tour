@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 3814595885653536611}
   - component: {fileID: 5704575069551547354}
   - component: {fileID: 4179126142809162672}
+  - component: {fileID: 1100930601165289086}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -75,11 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470d7e84f8b5d1a46b89e79ec437b8fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  low: 0
+  middle: 5
+  high: 10
   speed: 0
-  next: {x: 0, y: 0, z: 0}
-  amount: 0
-  dirNum: 0
-  angle: 0
 --- !u!114 &4179126142809162672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,7 +94,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leeway: 15
   angle: 0
-  z: 0
+--- !u!114 &1100930601165289086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2696016777133509398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d26343bd4db1c541af2bdaacf247dca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateSpeed: 2
+  floatValue: 0.1
 --- !u!1 &4945330972155356318
 GameObject:
   m_ObjectHideFlags: 0

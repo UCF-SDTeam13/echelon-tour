@@ -18,7 +18,8 @@ public class Circuit : MonoBehaviour
     [SerializeField] private int numRoutes = 2;
 
     // Used for the current length and number of physical nodes in a route
-    private float[] length = null;
+    public float[] length = null;
+
     private int numPoints;
 
     // Value holders for curve smoothing

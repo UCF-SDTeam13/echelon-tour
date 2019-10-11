@@ -2,36 +2,38 @@
 
 public class AnimationController : MonoBehaviour
 {
+    // Threshold values to determine which animations
+    [SerializeField] private float low = 0.0f;
+    [SerializeField] private float middle = 5.0f;
+    [SerializeField] private float high = 10.0f;
+
+    [SerializeField] private float speed;
+
     private Animator animator;
     private Follow follow;
-    private Tracker tracker;
-
-    public float speed;
-    public Vector3 next;
-    public float amount;
-    public float dirNum;
-    public float angle;
 
     private void Start()
     {
+        // Get components to access values
         animator = GetComponentInChildren<Animator>();
         follow = GetComponentInParent<Follow>();
-        tracker = GetComponentInParent<Tracker>();
     }
 
-    void Update()
+    private void LateUpdate()
     {
-        // Temporary speed values
+        // Depending on how fast, the player's animation will change
         speed = follow.speed;
-        if (speed > 0 && speed <= 5f)
+
+        // Ranges of speed, else no animation
+        if (speed > low && speed <= middle)
         {
             animator.SetFloat("SpeedY", .34f);
         }
-        else if (speed > 5f && speed <= 10f)
+        else if (speed > middle && speed <= high)
         {
             animator.SetFloat("SpeedY", .67f);
         }
-        else if (speed > 10f)
+        else if (speed > high)
         {
             animator.SetFloat("SpeedY", 1);
         }
@@ -39,20 +41,5 @@ public class AnimationController : MonoBehaviour
         {
             animator.SetFloat("SpeedY", 0);
         }
-
-        //Ignoring animation tilting
-        /*
-        Vector3 heading = newTracker.targetPosition - transform.position;
-        dirNum = Vector3.Dot(Vector3.Cross(transform.forward, heading), transform.up) * 100;
-
-        if((dirNum > -1f && dirNum < 1f) || animator.GetFloat("SpeedY") == 0)
-        {
-            animator.SetFloat("SpeedX", 0);
-        }
-        else
-        {
-            animator.SetFloat("SpeedX", dirNum);
-        }
-        */
     }
 }

@@ -7,6 +7,7 @@ public class Follow : MonoBehaviour
     public float speed = 10f;
 
     private Tracker tracker;
+
     private void Start()
     {
         tracker = GetComponent<Tracker>();
