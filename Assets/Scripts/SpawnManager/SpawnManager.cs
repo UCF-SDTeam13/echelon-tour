@@ -11,9 +11,14 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private Transform lineStart = null;
     [SerializeField] private Transform lineEnd = null;
 
+    [SerializeField] private GameObject cam = null;
+
+    [SerializeField] private GameObject[] players;
+
     private void Start()
     {
         // Testing values, needs to be adjusted depending on Gamelift
+        players = new GameObject[numRoutes];
         Spawn(1, 0);
         Spawn(0, 1);
         Spawn(1, 2);
@@ -22,6 +27,8 @@ public class SpawnManager : MonoBehaviour
         Spawn(0, 5);
         Spawn(1, 6);
         Spawn(0, 7);
+        cam.GetComponent<CameraPivot>().SetTarget(players[1]);
+        
     }
 
     // Spawn function (needs to get adjusted)
@@ -64,7 +71,8 @@ public class SpawnManager : MonoBehaviour
 
         // Check which prefab needs to be used
         GameObject prefab = gender == 0 ? malePrefab : femalePrefab;
-        GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
+        players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
+        //GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
     }
 
     private void OnDrawGizmos()

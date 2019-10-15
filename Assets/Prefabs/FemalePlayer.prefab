@@ -63,7 +63,7 @@ MonoBehaviour:
   circuit: {fileID: 0}
   lookAheadForTargetOffset: 2
   lookAheadForTargetFactor: 0.1
-  lookAheadForSpeedOffset: 3
+  lookAheadForSpeedOffset: 5
   lookAheadForSpeedFactor: 0.2
   target: {fileID: 295312179989842230}
   targetPosition: {x: 0, y: 0, z: 0}
@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leeway: 15
   angle: 0
+  divNum: 2
 --- !u!114 &2271574217892165973
 MonoBehaviour:
   m_ObjectHideFlags: 0

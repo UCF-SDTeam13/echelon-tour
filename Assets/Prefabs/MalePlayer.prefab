@@ -94,6 +94,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leeway: 15
   angle: 0
+  divNum: 2
+  refForward: {x: 0, y: 0, z: 0}
+  refRight: {x: 0, y: 0, z: 0}
+  newDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &1100930601165289086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +175,7 @@ MonoBehaviour:
   circuit: {fileID: 0}
   lookAheadForTargetOffset: 2
   lookAheadForTargetFactor: 0.1
-  lookAheadForSpeedOffset: 3
+  lookAheadForSpeedOffset: 5
   lookAheadForSpeedFactor: 0.2
   target: {fileID: 4089603957055277768}
   targetPosition: {x: 0, y: 0, z: 0}

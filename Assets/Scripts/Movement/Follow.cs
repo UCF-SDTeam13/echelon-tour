@@ -22,9 +22,11 @@ public class Follow : MonoBehaviour
         {
             //transform.rotation = Quaternion.LookRotation(targetDirection);
 
-            Vector3 lookAhead = tracker.target.position + tracker.target.forward;
-            float angle = Vector3.Angle(lookAhead, transform.forward);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetDirection), angle * Time.deltaTime);
+            //Vector3 lookAhead = tracker.target.position + tracker.target.forward;
+            //Vector3 lookAhead = tracker.targetForward;
+            //float angle = Vector3.Angle(lookAhead, transform.forward);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(targetDirection), angle * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(targetDirection), 1);
         }
         else
         {

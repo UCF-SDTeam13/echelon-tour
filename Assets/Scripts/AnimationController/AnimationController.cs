@@ -3,9 +3,9 @@
 public class AnimationController : MonoBehaviour
 {
     // Threshold values to determine which animations
-    [SerializeField] private float low = 0.0f;
-    [SerializeField] private float middle = 5.0f;
-    [SerializeField] private float high = 10.0f;
+    [SerializeField] private float low = 0f;
+    [SerializeField] private float middle = 10f;
+    [SerializeField] private float high = 20f;
 
     [SerializeField] private float speed;
 
@@ -15,7 +15,9 @@ public class AnimationController : MonoBehaviour
     private void Start()
     {
         // Get components to access values
-        animator = GetComponentInChildren<Animator>();
+        // Longer one is used as animation is faulty
+        //animator = GetComponentInChildren<Animator>();
+        animator = transform.GetChild(0).GetComponentInChildren<Animator>();
         follow = GetComponentInParent<Follow>();
     }
 

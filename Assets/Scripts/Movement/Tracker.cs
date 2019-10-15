@@ -23,6 +23,8 @@ public class Tracker : MonoBehaviour
     // Possible variables for animations
     public Vector3 targetPosition;
     public Vector3 targetForward;
+    public Vector3 targetFarther;
+    public float farther = 0.5f;
 
     [SerializeField] private float speed;
     [SerializeField] private int index = 0;
@@ -65,6 +67,9 @@ public class Tracker : MonoBehaviour
 
         targetPosition = target.position;
         targetForward = target.position + target.forward;
+        targetFarther = 
+            circuit.GetRoutePoint(progressDistance + lookAheadForTargetOffset + lookAheadForTargetFactor + farther * speed, index)
+                .position;
 
         progressPoint = circuit.GetRoutePoint(progressDistance, index);
         Vector3 progressDelta = progressPoint.position - transform.position;
@@ -84,9 +89,14 @@ public class Tracker : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, target.position);
 
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(target.position, targetFarther);
+
+            /*
             // Draw a line for the look ahead
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(target.position, target.position + target.forward);
+            */
         }
     }
 }
