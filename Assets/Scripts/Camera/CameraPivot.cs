@@ -14,11 +14,11 @@ public class CameraPivot : MonoBehaviour
     private float turnSpeedVelocityChange;
     private Vector3 rollUp = Vector3.up;
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if(target != null)
         {
-            FollowTarget(Time.deltaTime);
+            FollowTarget(Time.fixedDeltaTime);
         }
     }
 

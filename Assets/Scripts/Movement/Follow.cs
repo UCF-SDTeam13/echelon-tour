@@ -15,6 +15,7 @@ public class Follow : MonoBehaviour
         multiplier = tracker.GetSpeedMultiplier();
     }
 
+    /*
     private void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
@@ -28,6 +29,22 @@ public class Follow : MonoBehaviour
             //Vector3 lookAhead = tracker.targetForward;
             //float angle = Vector3.Angle(lookAhead, transform.forward);
             //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(targetDirection), angle * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(targetDirection), 1);
+        }
+        else
+        {
+            Debug.Log("Vector3 is zero, don't know why.");
+        }
+    }
+    */
+    
+    private void FixedUpdate()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.fixedDeltaTime);
+
+        Vector3 targetDirection = target.transform.position - transform.position;
+        if (targetDirection != Vector3.zero)
+        {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(targetDirection), 1);
         }
         else

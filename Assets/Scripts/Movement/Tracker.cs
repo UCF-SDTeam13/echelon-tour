@@ -46,6 +46,7 @@ public class Tracker : MonoBehaviour
         progressDistance = 0;
     }
 
+    /*
     private void Update()
     {
         if (Time.deltaTime > 0)
@@ -67,6 +68,41 @@ public class Tracker : MonoBehaviour
 
         // Get the target look ahead for animation purposes
         targetLookAhead = 
+            circuit.GetRoutePoint(progressDistance + lookAheadForTargetOffset + lookAheadForTargetFactor + lookAhead * speed, index)
+                .position;
+
+        progressPoint = circuit.GetRoutePoint(progressDistance, index);
+        Vector3 progressDelta = progressPoint.position - transform.position;
+        if (Vector3.Dot(progressDelta, progressPoint.direction) < 0)
+        {
+            progressDistance += progressDelta.magnitude * 0.5f;
+        }
+
+        lastPosition = transform.position;
+    }
+    */
+
+    private void FixedUpdate()
+    {
+        if (Time.fixedDeltaTime > 0)
+        {
+            speed = Mathf.Lerp(speed, (lastPosition - transform.position).magnitude / Time.fixedDeltaTime,
+                               Time.fixedDeltaTime);
+        }
+
+        // Change the position of the target in front of the object
+        target.position =
+            circuit.GetRoutePoint(progressDistance + lookAheadForTargetOffset + lookAheadForTargetFactor * speed, index)
+                .position;
+
+        // Change the rotation of the target in front of the object
+        target.rotation =
+            Quaternion.LookRotation(
+                circuit.GetRoutePoint(progressDistance + lookAheadForSpeedOffset + lookAheadForSpeedFactor * speed, index)
+                       .direction);
+
+        // Get the target look ahead for animation purposes
+        targetLookAhead =
             circuit.GetRoutePoint(progressDistance + lookAheadForTargetOffset + lookAheadForTargetFactor + lookAhead * speed, index)
                 .position;
 
