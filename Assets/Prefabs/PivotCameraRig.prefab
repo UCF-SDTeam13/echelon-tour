@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   moveSpeed: 5
-  turnSpeed: 3
+  turnSpeed: 10
   rollSpeed: 0.2
   spinTurnLimit: 90
 --- !u!1 &6750644253474251561

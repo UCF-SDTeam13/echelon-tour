@@ -1,16 +1,18 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Follow : MonoBehaviour
 {
     [SerializeField] private GameObject target = null;
-
-    public float speed = 10f;
+    [SerializeField] private float speed = 0;
+    [SerializeField] private float multiplier = 1;
 
     private Tracker tracker;
 
     private void Start()
     {
         tracker = GetComponent<Tracker>();
+        multiplier = tracker.GetSpeedMultiplier();
     }
 
     private void Update()
@@ -32,5 +34,15 @@ public class Follow : MonoBehaviour
         {
             Debug.Log("Vector3 is zero, don't know why.");
         }
+    }
+
+    public void SetSpeed(float speed)
+    {
+        this.speed = speed * multiplier;
+    }
+
+    public float GetSpeed()
+    {
+        return speed / multiplier;
     }
 }

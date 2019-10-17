@@ -34,7 +34,7 @@ public class TiltControllerV2 : MonoBehaviour
     private void CalculateTurn()
     {
         // 0 the y to ignore height differences
-        Vector3 targetPosition = new Vector3(tracker.targetFarther.x, 0, tracker.targetFarther.z);
+        Vector3 targetPosition = new Vector3(tracker.targetLookAhead.x, 0, tracker.targetLookAhead.z);
         //Vector3 transformPosition = new Vector3(transform.position.x, 0, transform.position.z);
         Vector3 transformPosition = new Vector3(helper.transform.position.x, 0, helper.transform.position.z);
         Vector3 targetDirection = targetPosition - transformPosition;
@@ -89,7 +89,7 @@ public class TiltControllerV2 : MonoBehaviour
         if (Application.isPlaying)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, tracker.targetFarther);
+            Gizmos.DrawLine(transform.position, tracker.targetLookAhead);
         }
     }
 }

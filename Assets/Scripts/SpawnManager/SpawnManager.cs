@@ -19,16 +19,20 @@ public class SpawnManager : MonoBehaviour
     {
         // Testing values, needs to be adjusted depending on Gamelift
         players = new GameObject[numRoutes];
-        Spawn(1, 0);
-        Spawn(0, 1);
-        Spawn(1, 2);
-        Spawn(0, 3);
-        Spawn(1, 4);
-        Spawn(0, 5);
-        Spawn(1, 6);
-        Spawn(0, 7);
+        for(int i = 0; i < numRoutes; i++)
+        {
+            int j = i % 2;
+            Spawn(j, i);
+        }
         cam.GetComponent<CameraPivot>().SetTarget(players[1]);
-        
+    }
+
+    private void Update()
+    {
+        for (int i = 0; i < numRoutes; i++)
+        {
+            players[i].GetComponent<Follow>().SetSpeed(20);
+        }
     }
 
     // Spawn function (needs to get adjusted)
@@ -71,6 +75,7 @@ public class SpawnManager : MonoBehaviour
 
         // Check which prefab needs to be used
         GameObject prefab = gender == 0 ? malePrefab : femalePrefab;
+        prefab.GetComponent<Tracker>().SetIndex(index);
         players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
         //GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
     }

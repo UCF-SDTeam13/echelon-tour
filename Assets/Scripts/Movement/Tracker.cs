@@ -3,7 +3,10 @@
 public class Tracker : MonoBehaviour
 {
     // Reference to the circuit it should follow
-    public Circuit circuit = null;
+    [SerializeField] private Circuit circuit = null;
+
+    // Target for object
+    [SerializeField] private Transform target = null;
 
     // Offset ahead that the object should aim for
     [SerializeField] private float lookAheadForTargetOffset = 5;
@@ -17,23 +20,20 @@ public class Tracker : MonoBehaviour
     // Multiplier to adjust distance for speed
     [SerializeField] private float lookAheadForSpeedFactor = .2f;
 
-    // Target for object
-    public Transform target;
+    // Index for the current player
+    [SerializeField] private int index = 0;
 
     // Possible variables for animations
-    public Vector3 targetPosition;
-    public Vector3 targetForward;
-    public Vector3 targetFarther;
-    public float farther = 0.5f;
+    public Vector3 targetLookAhead;
+    public float lookAhead = 1;
 
-    [SerializeField] private float speed;
-    [SerializeField] private int index = 0;
+    private float speed;
 
     public Circuit.RoutePoint progressPoint;
     private float progressDistance;
     private Vector3 lastPosition;
 
-    private void Start()
+    private void Awake()
     {
         // Gets the circuit of the current level
         circuit = GameObject.FindGameObjectWithTag("Circuit").GetComponent<Circuit>();
@@ -65,10 +65,9 @@ public class Tracker : MonoBehaviour
                 circuit.GetRoutePoint(progressDistance + lookAheadForSpeedOffset + lookAheadForSpeedFactor * speed, index)
                        .direction);
 
-        targetPosition = target.position;
-        targetForward = target.position + target.forward;
-        targetFarther = 
-            circuit.GetRoutePoint(progressDistance + lookAheadForTargetOffset + lookAheadForTargetFactor + farther * speed, index)
+        // Get the target look ahead for animation purposes
+        targetLookAhead = 
+            circuit.GetRoutePoint(progressDistance + lookAheadForTargetOffset + lookAheadForTargetFactor + lookAhead * speed, index)
                 .position;
 
         progressPoint = circuit.GetRoutePoint(progressDistance, index);
@@ -81,6 +80,18 @@ public class Tracker : MonoBehaviour
         lastPosition = transform.position;
     }
 
+    // Set the index for the current track
+    public void SetIndex(int index)
+    {
+        this.index = index;
+    }
+
+    // Get the multiplier from the circuit
+    public float GetSpeedMultiplier()
+    {
+        return circuit.GetMultiplier(index);
+    }
+
     private void OnDrawGizmos()
     {
         if (Application.isPlaying)
@@ -90,13 +101,7 @@ public class Tracker : MonoBehaviour
             Gizmos.DrawLine(transform.position, target.position);
 
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(target.position, targetFarther);
-
-            /*
-            // Draw a line for the look ahead
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(target.position, target.position + target.forward);
-            */
+            Gizmos.DrawLine(target.position, targetLookAhead);
         }
     }
 }
