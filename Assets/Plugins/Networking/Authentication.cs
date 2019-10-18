@@ -1,21 +1,6 @@
 using System;
-using System.Text;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using UnityEngine;
-
-[Serializable]
-public class Credentials
-{
-    public string username;
-    public string password;
-
-    // Messy - but necessary because we can't use reflection
-    public override string ToString()
-    {
-        return "{\n" + "\"username\":\"" + username + "\",\n" + "\"password\":\"" + password + "\"\n" + "}";
-    }
-}
+using System.Collections.Generic;
 
 public sealed class Authentication
 {
@@ -32,16 +17,22 @@ public sealed class Authentication
 
     public async void Login(string username, string password)
     {
-        Credentials cred = new Credentials();
-        cred.username = username;
-        cred.password = password;
+        Dictionary<string, string> credentials = new Dictionary<string, string>();
+        credentials.Add("username", username);
+        credentials.Add("password", password);
 
-        string json = cred.ToString();
-        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        BLEDebug.LogInfo(json);
+        HttpContent content = FlatJSON.SerializeContent(credentials);
+        HttpResponseMessage result = await client.PostAsync("https://66hlxirzx1.execute-api.us-east-2.amazonaws.com/Prod/auth/login", content);
+        content.Dispose();
 
-        var result = await client.PostAsync("https://66hlxirzx1.execute-api.us-east-2.amazonaws.com/Prod/auth/login", content);
-        BLEDebug.LogInfo(await result.Content.ReadAsStringAsync());
+        string body = await result.Content.ReadAsStringAsync();
+        BLEDebug.LogInfo(body);
+        Dictionary<string, string> response = FlatJSON.Deserialize(body);
+        string message = "";
+        string token = "";
+        response.TryGetValue("token", out message);
+        response.TryGetValue("token", out token);
+        BLEDebug.LogInfo(message);
+        BLEDebug.LogInfo(token);
     }
 }
