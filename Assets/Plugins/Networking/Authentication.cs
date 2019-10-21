@@ -30,7 +30,7 @@ public sealed class Authentication
         Dictionary<string, string> response = FlatJSON.Deserialize(body);
         string message = "";
         string token = "";
-        response.TryGetValue("token", out message);
+        response.TryGetValue("message", out message);
         response.TryGetValue("token", out token);
         BLEDebug.LogInfo(message);
         BLEDebug.LogInfo(token);
