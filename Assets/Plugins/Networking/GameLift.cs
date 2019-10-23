@@ -3,7 +3,7 @@ using System.Text;
 using Aws.GameLift.Realtime;
 using Aws.GameLift.Realtime.Event;
 using Aws.GameLift.Realtime.Types;
-
+using System.Collections.Generic;
 
 /**
  * An example client that wraps the GameLift Realtime client SDK
@@ -17,7 +17,14 @@ public class RealTimeClient
     public Aws.GameLift.Realtime.Client Client { get; private set; }
 
     // An opcode defined by client and your server script that represents a custom message type
-    private const int MY_TEST_OP_CODE = 111;
+    private const int OP_CODE_PLAYER_ACCEPTED = 113;
+    private const int OP_CODE_PLAYER_DISCONNECTED = 114;
+    private const int OP_CODE_RACE_START = 115;
+    private const int OP_CODE_RACE_END = 116;
+    private const int OP_CODE_SESSION_TERMINATE = 117;
+    private const int OP_CODE_STATS_UPDATE = 118;
+
+    private IGameListener gameListener;
 
     /// Initialize a client for GameLift Realtime and connect to a player session.
     /// <param name="endpoint">The DNS name that is assigned to Realtime server</param>
@@ -73,12 +80,28 @@ public class RealTimeClient
     /// </summary>
     /// <param name="intent">Choice of delivery intent ie Reliable, Fast etc. </param>
     /// <param name="payload">Custom payload to send with message</param>
+    /*
     public void SendMessage(DeliveryIntent intent, string payload)
     {
-        Client.SendMessage(Client.NewMessage(MY_TEST_OP_CODE)
+        
+        Client.SendMessage(Client.NewMessage(OP_CODE_CUSTOM_OP1)
             .WithDeliveryIntent(intent)
             .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
             .WithPayload(StringToBytes(payload)));
+    }
+    */
+
+    public void UpdateStats(float rotations, float rpm)
+    {
+        Dictionary<string, string> payload = new Dictionary<string, string> {
+            {"rotations",  "" + rotations},
+            {"rpm", "" + rpm}
+        };
+
+        Client.SendMessage(Client.NewMessage(OP_CODE_STATS_UPDATE)
+            .WithDeliveryIntent(DeliveryIntent.Reliable)
+            .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
+            .WithPayload(StringToBytes(FlatJSON.Serialize(payload))));
     }
 
     /**
@@ -102,17 +125,56 @@ public class RealTimeClient
     {
     }
 
+    public void RegisterGameListener(IGameListener gListener)
+    {
+        gameListener = gListener;
+    }
+
     /**
      *  Handle data received from the Realtime server 
      */
-    public virtual void OnDataReceived(object sender, DataReceivedEventArgs e)
+    public void OnDataReceived(object sender, DataReceivedEventArgs e)
     {
         switch (e.OpCode)
         {
             // handle message based on OpCode
+            case OP_CODE_PLAYER_ACCEPTED:
+                gameListener.OnPlayerAccepted(BytesToString(e.Data));
+                break;
+
+            case OP_CODE_PLAYER_DISCONNECTED:
+                gameListener.OnPlayerAccepted(BytesToString(e.Data));
+                break;
+
+            case OP_CODE_RACE_START:
+                gameListener.OnRaceStart();
+                break;
+
+            case OP_CODE_RACE_END:
+                gameListener.OnRaceEnd();
+                break;
+
+            case OP_CODE_SESSION_TERMINATE:
+                gameListener.OnSessionTerminate();
+                break;
+
+            case OP_CODE_STATS_UPDATE:
+                Dictionary<string, string> payload = FlatJSON.Deserialize(BytesToString(e.Data));
+                float rotations, speed;
+                string srotations, sspeed;
+
+                payload.TryGetValue("rotations", out srotations);
+                Single.TryParse(srotations, out rotations);
+
+                payload.TryGetValue("speed", out sspeed);
+                Single.TryParse(sspeed, out speed);
+                gameListener.OnStatsUpdate(rotations, speed);
+                break;
+
             default:
                 break;
         }
+        BLEDebug.LogInfo("OPCODE " + e.OpCode + " Received, Data:" + BytesToString(e.Data));
     }
 
     /**
@@ -130,4 +192,14 @@ public class RealTimeClient
     {
         return Encoding.UTF8.GetString(bytes);
     }
+}
+
+public interface IGameListener
+{
+    void OnPlayerAccepted(string peerId);
+    void OnPlayerDisconnected(string peerId);
+    void OnRaceStart();
+    void OnRaceEnd();
+    void OnSessionTerminate();
+    void OnStatsUpdate(float rotations, float rpm);
 }
