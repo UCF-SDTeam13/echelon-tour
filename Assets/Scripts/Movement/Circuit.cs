@@ -18,7 +18,11 @@ public class Circuit : MonoBehaviour
     [SerializeField] private int numRoutes = 2;
 
     // Used for the current length and number of physical nodes in a route
-    private float[] length = null;
+    [SerializeField] private float[] lengths = null;
+
+    // Used to make up for the speed differences of difference lanes
+    [SerializeField] private float[] multipliers = null;
+
     private int numPoints;
 
     // Value holders for curve smoothing
@@ -29,10 +33,13 @@ public class Circuit : MonoBehaviour
     // Initialized all the positions and distances
     private void Awake()
     {
+        // Initialize variables
         numPoints = transform.GetChild(0).childCount;
         outerNodes = new Transform[transform.childCount][];
-        length = new float[numRoutes];
+        lengths = new float[numRoutes];
+        multipliers = new float[numRoutes];
 
+        // Get the physical nodes and set them
         for (int i = 0; i < transform.childCount; i++)
         {
             outerNodes[i] = new Transform[numPoints];
@@ -44,7 +51,43 @@ public class Circuit : MonoBehaviour
         }
         
         SetPositionsAndDistances();
+
+        // Set values for the multipliers for each track/lane
+        for (int i = 0; i < numRoutes; i++)
+        {
+            multipliers[i] = distances[i][numPoints] / distances[0][numPoints];
+        }
     }
+
+    /*
+    public void initializeCircuit()
+    {
+        // Initialize variables
+        numPoints = transform.GetChild(0).childCount;
+        outerNodes = new Transform[transform.childCount][];
+        lengths = new float[numRoutes];
+        multipliers = new float[numRoutes];
+
+        // Get the physical nodes and set them
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            outerNodes[i] = new Transform[numPoints];
+
+            for (int j = 0; j < numPoints; j++)
+            {
+                outerNodes[i][j] = transform.GetChild(i).GetChild(j);
+            }
+        }
+
+        SetPositionsAndDistances();
+
+        // Set values for the multipliers for each track/lane
+        for (int i = 0; i < numRoutes; i++)
+        {
+            multipliers[i] = distances[i][numPoints] / distances[0][numPoints];
+        }
+    }
+    */
 
     // Two functions for the tracker
     public RoutePoint GetRoutePoint(float dist, int index)
@@ -126,13 +169,13 @@ public class Circuit : MonoBehaviour
         int point = 0;
 
         // Makes sure length is not 0
-        if (length[index] == 0)
+        if (lengths[index] == 0)
         {
-            length[index] = distances[index][numPoints];
+            lengths[index] = distances[index][numPoints];
         }
 
         // Loops dist without it being greater than length and lower than 0 (similar to modulo) 
-        dist = Mathf.Repeat(dist, length[index]);
+        dist = Mathf.Repeat(dist, lengths[index]);
 
         while (distances[index][point] < dist)
         {
@@ -169,6 +212,13 @@ public class Circuit : MonoBehaviour
                 (-p0 + 3 * p1 - 3 * p2 + p3) * i * i * i);
     }
 
+    // Return the multiplier for the selected index
+    public float GetMultiplier(int index)
+    {
+        return multipliers[index];
+    }
+
+    // Gizmos reasons (makes sure it is always showing);B
     private void OnDrawGizmos()
     {
         DrawGizmos(false);
@@ -189,7 +239,8 @@ public class Circuit : MonoBehaviour
             // Initializing values
             numPoints = transform.GetChild(0).childCount;
             outerNodes = new Transform[transform.childCount][];
-            length = new float[numRoutes];
+            lengths = new float[numRoutes];
+            multipliers = new float[numRoutes];
 
             // Initializing physical nodes
             for (int i = 0; i < transform.childCount; i++)
@@ -211,7 +262,8 @@ public class Circuit : MonoBehaviour
 
             for (int i = 0; i < numRoutes; i++)
             {
-                length[i] = distances[i][numPoints];
+                lengths[i] = distances[i][numPoints];
+                multipliers[i] = distances[i][numPoints] / distances[0][numPoints];
 
                 // Save an initial position (starting node)
                 Vector3 prev = i < transform.childCount ? outerNodes[i][0].position :
@@ -220,7 +272,7 @@ public class Circuit : MonoBehaviour
                 Vector3 temp = GetRoutePosition(1, i);
 
                 // Loop through nodes based off overall "nodes" (substeps)
-                for (float dist = 0; dist < length[i]; dist += (length[i] / substeps))
+                for (float dist = 0; dist < lengths[i]; dist += (lengths[i] / substeps))
                 {
                     // Get a position in front of the current distance
                     Vector3 next = GetRoutePosition(dist + 1, i);
@@ -249,6 +301,6 @@ public class Circuit : MonoBehaviour
                     partition = partition + (1f / (numRoutes - 1));
                 }
             }
-        } 
+        }
     }
 }

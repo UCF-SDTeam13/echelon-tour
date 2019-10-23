@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 7600200706256240632}
-  speed: 0.1
+  speed: 0
 --- !u!114 &5635020610139316755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,9 +61,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   circuit: {fileID: 0}
-  lookAheadForTargetOffset: 5
+  lookAheadForTargetOffset: 2
   lookAheadForTargetFactor: 0.1
-  lookAheadForSpeedOffset: 10
+  lookAheadForSpeedOffset: 5
   lookAheadForSpeedFactor: 0.2
   target: {fileID: 295312179989842230}
   targetPosition: {x: 0, y: 0, z: 0}
@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 5908555196702701845}
   - component: {fileID: 968027207590639761}
   - component: {fileID: 2060389731242875061}
+  - component: {fileID: 2271574217892165973}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -115,11 +116,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470d7e84f8b5d1a46b89e79ec437b8fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  low: 0
+  middle: 5
+  high: 10
   speed: 0
-  next: {x: 0, y: 0, z: 0}
-  amount: 0
-  dirNum: 0
-  angle: 0
 --- !u!114 &2060389731242875061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,8 +132,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0241eaaf31da01e4dbecce9747724663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leeway: 15
   angle: 0
-  z: 0
+  divNum: 2
+--- !u!114 &2271574217892165973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5894290874156577580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d26343bd4db1c541af2bdaacf247dca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateSpeed: 2
+  floatValue: 0.1
 --- !u!1 &7600200706256240632
 GameObject:
   m_ObjectHideFlags: 0

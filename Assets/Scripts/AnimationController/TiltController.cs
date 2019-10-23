@@ -1,67 +1,109 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TiltController : MonoBehaviour
 {
+    // Tracker and angle value varies a lot so there needs to be a leeway to make sure they are upright
+    [SerializeField] private float lowLeeway = 10;
+    [SerializeField] private float highLeeWay = 20;
+    [SerializeField] private float angle;
+    [SerializeField] private float divNum = 2;
+
     private Tracker tracker;
     private Vector3 initialEuler;
 
-    public float leeway = 15.0f;
-    public float angle;
-    public float z;
+    public Vector3 refForward;
+    public Vector3 refRight;
+    public Vector3 newDirection;
+
+    public float mathAngle;
 
     private void Start()
     {
+        // Get the component and save the initial euler angles
         tracker = GetComponentInParent<Tracker>();
         initialEuler = transform.localEulerAngles;
+        initialRotation = transform.rotation;
     }
 
     private void LateUpdate()
     {
         // Calculate angle for tilting value
-        Vector3 up = new Vector3(0, 1, 0);
-        angle = Vector3.Dot(Vector3.Cross(transform.forward, tracker.targetForward), up);
+        //angle = Vector3.Dot(Vector3.Cross(transform.forward, tracker.targetForward), Vector3.up);
+        //angle = (angle / divNum);
 
+        //angle = Vector3.SignedAngle(transform.forward, tracker.targetForward - transform.position, Vector3.up);
+
+        /*
+        Vector3 refForward = transform.forward;
+        refForward.y = 0;
+        Vector3 refRight = Vector3.Cross(Vector3.up, refForward);
+        refRight.y = 0;
+        Vector3 newDirection = tracker.targetForward - transform.position;
+        newDirection.y = 0;
+        float angleVal = Vector3.Angle(newDirection, refForward);
+        float sign = Mathf.Sign(Vector3.Dot(newDirection, refRight));
+        angle = sign * angleVal;
+        */
+
+        CalculateAngle();
+
+        /*
         // Checks if between leeway to tilt object to upright or not
-        if(angle < leeway && angle > -leeway)
+        if((angle > -highLeeway && angle < -lowLeeway) || (angle > lowLeeway && angle < highLeeway))
         {
-            transform.localEulerAngles = AngleLerp(transform.localEulerAngles, initialEuler, Time.deltaTime);
-        }
-        else
-        {
+            // Lerp between the current euler to the new adjusted euler
             transform.localEulerAngles = AngleLerp(transform.localEulerAngles,
                                                     new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, angle), Time.deltaTime);
         }
+        else
+        {
+            // Lerp to where the player is upright again
+            transform.localEulerAngles = AngleLerp(transform.localEulerAngles, initialEuler, Time.deltaTime);
+        }
+        */
     }
 
-    /*
-    // -Left +Right
-    private void OnDrawGizmos()
+    public Quaternion lookRotation;
+    public Quaternion lookRotation2;
+    public Quaternion initialRotation;
+    public Quaternion currRot;
+    public Quaternion newRot;
+    public GameObject target;
+    public Vector3 inverseTransformPoint;
+    private int index = 0;
+
+    private void CalculateAngle()
     {
-        Vector3 heading = cube.transform.position;
-        Vector3 up = new Vector3(0, 1, 0);
-        dirNum = Vector3.Dot(Vector3.Cross(-transform.forward, heading), up);
-        z = dirNum * 15.0f;
+        //angle = Mathf.Acos(Vector3.Dot(transform.forward.normalized, tracker.targetForward.normalized));
 
-        Debug.Log("-transform.forward: " + -transform.forward);
-        Debug.Log("heading: " + heading);
-        Debug.Log("transform.up: " + transform.up);
-        Debug.Log("Cross: " + Vector3.Cross(-transform.forward, heading));
-        Debug.Log("Dot: " + Vector3.Dot(Vector3.Cross(-transform.forward, heading), transform.up));
+        // I fucking hate this shit
+        //transform.InverseTransformPoint(tracker.targetForward);
 
-        //Vector3 euler = transform.localEulerAngles;
-        //euler.z = Mathf.Lerp(euler.z, z, Time.deltaTime);
-        //transform.localEulerAngles = euler;
-        
-        transform.localEulerAngles = AngleLerp(transform.localEulerAngles,
-                                                    new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, z), Time.deltaTime);
+        /*
+        Vector3 forward = transform.forward;
+        Vector3 direction = tracker.targetFarther - transform.position;
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, heading);
+        forward.y = 0;
+        direction.y = 0;
+        angle = Mathf.Acos(Vector3.Dot(forward.normalized, direction.normalized));
+        */
+
+        //Still fucking hate this shit
+        Vector3 targetPosition = new Vector3(target.transform.position.x, 0, target.transform.position.z);
+        Vector3 transformPosition = new Vector3(transform.position.x, 0, transform.position.z);
+        Vector3 targetDirection = targetPosition - transformPosition;
+        lookRotation = Quaternion.LookRotation(targetDirection);
+        lookRotation2 = Quaternion.LookRotation(target.transform.position - transform.position);
+        currRot = transform.rotation;
+
+        Quaternion currRotation = transform.rotation;
+        newRot = Quaternion.Lerp(currRotation, lookRotation, 1f);
+        // Use x (+ means target on right) (- means target on left)
+        inverseTransformPoint = transform.InverseTransformPoint(target.transform.position);
     }
-    */
 
+
+    // New Lerp function as using negative values for rotation causes errors
     Vector3 AngleLerp(Vector3 StartAngle, Vector3 FinishAngle, float t)
     {
         float xLerp = Mathf.LerpAngle(StartAngle.x, FinishAngle.x, t);
@@ -69,5 +111,18 @@ public class TiltController : MonoBehaviour
         float zLerp = Mathf.LerpAngle(StartAngle.z, FinishAngle.z, t);
         Vector3 Lerped = new Vector3(xLerp, yLerp, zLerp);
         return Lerped;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.red;
+            //Gizmos.DrawLine(transform.position, tracker.targetForward);
+            Gizmos.DrawLine(transform.position, target.transform.position);
+
+            Gizmos.color = Color.green;
+            //Gizmos.DrawLine(transform.position, transform.position + transform.forward);
+        }
     }
 }
