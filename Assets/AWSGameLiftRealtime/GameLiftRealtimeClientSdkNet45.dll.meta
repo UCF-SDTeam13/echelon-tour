@@ -1,12 +1,10 @@
 fileFormatVersion: 2
-guid: c56293bdbe564bb4aa43835f5667d39a
+guid: bf2a01492c946774394e869938071bff
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
   iconMap: {}
-  executionOrder:
-    Amazon.Runtime.Internal.UnityMainThreadDispatcher: -20
-    Amazon.UnityInitializer: -50
+  executionOrder: {}
   defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
