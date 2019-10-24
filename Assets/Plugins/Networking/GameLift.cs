@@ -21,7 +21,7 @@ public class RealTimeClient
     private const int OP_CODE_PLAYER_DISCONNECTED = 114;
     private const int OP_CODE_RACE_START = 115;
     private const int OP_CODE_RACE_END = 116;
-    private const int OP_CODE_SESSION_TERMINATE = 117;
+    private const int OP_CODE_TIME_TILL_TERMINATE = 117;
     private const int OP_CODE_STATS_UPDATE = 118;
 
     private IGameListener gameListener;
@@ -154,8 +154,10 @@ public class RealTimeClient
                 gameListener.OnRaceEnd();
                 break;
 
-            case OP_CODE_SESSION_TERMINATE:
-                gameListener.OnSessionTerminate();
+            case OP_CODE_TIME_TILL_TERMINATE:
+                int time;
+                Int32.TryParse(BytesToString(e.Data), out time);
+                gameListener.NotifyTimeTillTerminate(time);
                 break;
 
             case OP_CODE_STATS_UPDATE:
@@ -200,6 +202,6 @@ public interface IGameListener
     void OnPlayerDisconnected(string peerId);
     void OnRaceStart();
     void OnRaceEnd();
-    void OnSessionTerminate();
+    void NotifyTimeTillTerminate(int time);
     void OnStatsUpdate(float rotations, float rpm);
 }
