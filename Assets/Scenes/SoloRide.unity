@@ -5220,7 +5220,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1898341832134802784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70b58566ba147054b8526986875b3c84, type: 3}
+  m_Script: {fileID: 11500000, guid: 7af3f9e41f5379c499b96b2e9b85c704, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 2
@@ -5237,7 +5237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leeway: 2
-  tiltValue: 75
+  tiltValue: 100
   turnAngle: 0
   tiltAngle: 0
   helper: {fileID: 572904995040410814}
