@@ -1,6 +1,26 @@
 using System;
 using System.Net.Http;
-using System.Collections.Generic;
+using System.Net.Http.Headers;
+using UnityEngine;
+using System.Text;
+
+[Serializable]
+public class Credentials
+{
+    public Credentials(string u, string p)
+    {
+        username = u;
+        password = p;
+    }
+    public string username;
+    public string password;
+
+    // Messy - but necessary because we can't use reflection
+    public override string ToString()
+    {
+        return "{\n" + "\"username\":\"" + username + "\",\n" + "\"password\":\"" + password + "\"\n" + "}";
+    }
+}
 
 public sealed class Authentication
 {
@@ -13,26 +33,32 @@ public sealed class Authentication
     private Authentication()
     {
         client = new HttpClient();
+
+
     }
 
     public async void Login(string username, string password)
     {
-        Dictionary<string, string> credentials = new Dictionary<string, string>();
-        credentials.Add("username", username);
-        credentials.Add("password", password);
+        Credentials cred = new Credentials("test", "password");
+        //c.username = "test";
+        //c.password = "password";
+        string json = JsonUtility.ToJson(cred);
+        BLEDebug.LogInfo(json);
 
-        HttpContent content = FlatJSON.SerializeContent(credentials);
-        HttpResponseMessage result = await client.PostAsync("https://66hlxirzx1.execute-api.us-east-2.amazonaws.com/Prod/auth/login", content);
-        content.Dispose();
+        //BLEDebug.LogInfo(cred.username);
+        //BLEDebug.LogInfo(cred.password);
+        /*
+        Credentials cred = new Credentials();
+        cred.username = username;
+        cred.password = password;
 
-        string body = await result.Content.ReadAsStringAsync();
-        BLEDebug.LogInfo(body);
-        Dictionary<string, string> response = FlatJSON.Deserialize(body);
-        string message = "";
-        string token = "";
-        response.TryGetValue("message", out message);
-        response.TryGetValue("token", out token);
-        BLEDebug.LogInfo(message);
-        BLEDebug.LogInfo(token);
+        string json = cred.ToString();
+        */
+        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        BLEDebug.LogInfo(json);
+
+        var result = await client.PostAsync("https://66hlxirzx1.execute-api.us-east-2.amazonaws.com/Prod/auth/login", content);
+        BLEDebug.LogInfo(await result.Content.ReadAsStringAsync());
     }
 }
