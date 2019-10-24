@@ -11,13 +11,20 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 608b1cd8c6ccf45ddaf922f1d16ffb54
+<<<<<<< HEAD
   - enabled: 1
     path: Assets/Scenes/NetworkTestScene.unity
     guid: 9337b3c97941288418d761e1b81949cf
   - enabled: 1
+=======
+  - enabled: 0
+>>>>>>> 2d28ff872f534cb19b1cddebc7f28cef59890b6c
     path: Assets/Scenes/HardwareTestScene.unity
     guid: 8a8102ef2c3889845a923ea0cd0e7882
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BikeAnimationTestScene.unity
     guid: ce60e919d2a46564093aec0b6acc58f8
+  - enabled: 1
+    path: Assets/Scenes/EchelonDomeTrack.unity
+    guid: c5b33a83b48ddbe44812877cde259d0c
   m_configObjects: {}
