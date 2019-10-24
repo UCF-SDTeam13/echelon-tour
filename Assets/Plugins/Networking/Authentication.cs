@@ -14,12 +14,6 @@ public class Credentials
     }
     public string username;
     public string password;
-
-    // Messy - but necessary because we can't use reflection
-    public override string ToString()
-    {
-        return "{\n" + "\"username\":\"" + username + "\",\n" + "\"password\":\"" + password + "\"\n" + "}";
-    }
 }
 
 public sealed class Authentication
@@ -33,27 +27,14 @@ public sealed class Authentication
     private Authentication()
     {
         client = new HttpClient();
-
-
     }
 
     public async void Login(string username, string password)
     {
         Credentials cred = new Credentials("test", "password");
-        //c.username = "test";
-        //c.password = "password";
         string json = JsonUtility.ToJson(cred);
         BLEDebug.LogInfo(json);
 
-        //BLEDebug.LogInfo(cred.username);
-        //BLEDebug.LogInfo(cred.password);
-        /*
-        Credentials cred = new Credentials();
-        cred.username = username;
-        cred.password = password;
-
-        string json = cred.ToString();
-        */
         StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         BLEDebug.LogInfo(json);
