@@ -4,6 +4,7 @@ using Aws.GameLift.Realtime;
 using Aws.GameLift.Realtime.Event;
 using Aws.GameLift.Realtime.Types;
 using System.Collections.Generic;
+using UnityEngine;
 
 /**
  * An example client that wraps the GameLift Realtime client SDK
@@ -91,17 +92,18 @@ public class RealTimeClient
     }
     */
 
-    public void UpdateStats(float rotations, float rpm)
+    public void UpdateStats(int rotations, int rpm)
     {
-        Dictionary<string, string> payload = new Dictionary<string, string> {
-            {"rotations",  "" + rotations},
-            {"rpm", "" + rpm}
+        StatUpdate su = new StatUpdate()
+        {
+            rotations = rotations,
+            rpm = rpm
         };
 
         Client.SendMessage(Client.NewMessage(OP_CODE_STATS_UPDATE)
             .WithDeliveryIntent(DeliveryIntent.Reliable)
             .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
-            .WithPayload(StringToBytes(FlatJSON.Serialize(payload))));
+            .WithPayload(StringToBytes(JsonUtility.ToJson(su))));
     }
 
     /**
@@ -164,16 +166,8 @@ public class RealTimeClient
                 break;
 
             case OP_CODE_STATS_UPDATE:
-                Dictionary<string, string> payload = FlatJSON.Deserialize(BytesToString(e.Data));
-                float rotations, speed;
-                string srotations, sspeed;
-
-                payload.TryGetValue("rotations", out srotations);
-                Single.TryParse(srotations, out rotations);
-
-                payload.TryGetValue("speed", out sspeed);
-                Single.TryParse(sspeed, out speed);
-                gameListener.OnStatsUpdate(rotations, speed);
+                StatUpdate su = JsonUtility.FromJson<StatUpdate>(BytesToString(e.Data));
+                gameListener.OnStatsUpdate(su.rotations, su.rpm);
                 break;
 
             default:
@@ -206,5 +200,12 @@ public interface IGameListener
     void OnRaceStart();
     void OnRaceEnd();
     void NotifyTimeTillTerminate(int time);
-    void OnStatsUpdate(float rotations, float rpm);
+    void OnStatsUpdate(int rotations, int rpm);
+}
+
+[Serializable]
+public class StatUpdate
+{
+    public int rotations;
+    public int rpm;
 }
