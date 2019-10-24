@@ -139,11 +139,14 @@ public class RealTimeClient
         {
             // handle message based on OpCode
             case OP_CODE_PLAYER_ACCEPTED:
-                gameListener.OnPlayerAccepted(BytesToString(e.Data));
+                int peerId;
+                Int32.TryParse(BytesToString(e.Data), out peerId);
+                gameListener.OnPlayerAccepted(peerId);
                 break;
 
             case OP_CODE_PLAYER_DISCONNECTED:
-                gameListener.OnPlayerAccepted(BytesToString(e.Data));
+                Int32.TryParse(BytesToString(e.Data), out peerId);
+                gameListener.OnPlayerDisconnected(peerId);
                 break;
 
             case OP_CODE_RACE_START:
@@ -198,8 +201,8 @@ public class RealTimeClient
 
 public interface IGameListener
 {
-    void OnPlayerAccepted(string peerId);
-    void OnPlayerDisconnected(string peerId);
+    void OnPlayerAccepted(int peerId);
+    void OnPlayerDisconnected(int peerId);
     void OnRaceStart();
     void OnRaceEnd();
     void NotifyTimeTillTerminate(int time);
