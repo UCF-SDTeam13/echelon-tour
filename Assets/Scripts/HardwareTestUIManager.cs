@@ -12,33 +12,33 @@ public class HardwareTestUIManager : MonoBehaviour
 
     public void Scan()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.StartScan();
-        #else
-            BLEPlugin.Instance.Scan();
-        #endif
+#else
+        BLEPlugin.Instance.Scan();
+#endif
     }
 
     public void StopScan()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.StopScan();
-        #else
-            BLEPlugin.Instance.StopScan();
-        #endif
+#else
+        BLEPlugin.Instance.StopScan();
+#endif
     }
 
     public void Connect()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.Connect();
-        #else
-            // "E3:C5:90:DF:26:A0" Bike Simulator MAC Address
-            // TODO - Dialog Based Selection
-            BLEPlugin.Instance.Connect("E3:C5:90:DF:26:A0");
-            // BLEPlugin.Instance.Connect("C6:00:F8:85:5E:29");
-            Bike.Instance.RegisterBikeListener(_bikeListener);
-        #endif
+#else
+        // "E3:C5:90:DF:26:A0" Bike Simulator MAC Address
+        // TODO - Dialog Based Selection
+        BLEPlugin.Instance.Connect("E3:C5:90:DF:26:A0");
+        // BLEPlugin.Instance.Connect("C6:00:F8:85:5E:29");
+        Bike.Instance.RegisterBikeListener(_bikeListener);
+#endif
     }
     public void ConnectTestMockBike()
     {
@@ -55,11 +55,11 @@ public class HardwareTestUIManager : MonoBehaviour
     }
     public void DiscoverServices()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.DiscoverServices();
-        #else
-            BLEPlugin.Instance.DiscoverServices();
-        #endif
+#else
+        BLEPlugin.Instance.DiscoverServices();
+#endif
     }
     public void SendMessage()
     {
@@ -95,50 +95,50 @@ public class HardwareTestUIManager : MonoBehaviour
     // - when there are 0-32 levels a one level difference is hard to notice
     public void InreaseResistanceLevel()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.IncreaseResistanceLevel();
-        #else
-            // Add one level, propery will auto clamp to valid range
-            ++Workout.Instance.ResistanceLevel;
-            Bike.Instance.Set(BLEProtocol.ActionCode.SetResistanceLevel, Workout.Instance.ResistanceLevel);
-        #endif
+#else
+        // Add one level, propery will auto clamp to valid range
+        ++Workout.Instance.ResistanceLevel;
+        Bike.Instance.Set(BLEProtocol.ActionCode.SetResistanceLevel, Workout.Instance.ResistanceLevel);
+#endif
     }
     public void DecreaseResistanceLevel()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.DecreaseResistanceLevel();
-        #else
-            // Subtract one level, property will auto clamp to valid range
-            --Workout.Instance.ResistanceLevel;
-            Bike.Instance.Set(BLEProtocol.ActionCode.SetResistanceLevel, Workout.Instance.ResistanceLevel);
-        #endif
+#else
+        // Subtract one level, property will auto clamp to valid range
+        --Workout.Instance.ResistanceLevel;
+        Bike.Instance.Set(BLEProtocol.ActionCode.SetResistanceLevel, Workout.Instance.ResistanceLevel);
+#endif
     }
     public void StopWorkout()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.StopWorkout();
-        #else
-            Workout.Instance.ControlState = BLEProtocol.WorkoutControlState.Stop;
-            Bike.Instance.Set(BLEProtocol.ActionCode.SetWorkoutControlState, Workout.Instance.ControlState);
-        #endif
+#else
+        Workout.Instance.ControlState = BLEProtocol.WorkoutControlState.Stop;
+        Bike.Instance.Set(BLEProtocol.ActionCode.SetWorkoutControlState, Workout.Instance.ControlState);
+#endif
     }
     public void StartWorkout()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.StartWorkout();
-        #else
-            Workout.Instance.ControlState = BLEProtocol.WorkoutControlState.Start;
-            Bike.Instance.Set(BLEProtocol.ActionCode.SetWorkoutControlState, Workout.Instance.ControlState);
-        #endif
+#else
+        Workout.Instance.ControlState = BLEProtocol.WorkoutControlState.Start;
+        Bike.Instance.Set(BLEProtocol.ActionCode.SetWorkoutControlState, Workout.Instance.ControlState);
+#endif
     }
     public void PauseWorkout()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.PauseWorkout();
-        #else
-            Workout.Instance.ControlState = BLEProtocol.WorkoutControlState.Pause;
-            Bike.Instance.Set(BLEProtocol.ActionCode.SetWorkoutControlState, Workout.Instance.ControlState);
-        #endif
+#else
+        Workout.Instance.ControlState = BLEProtocol.WorkoutControlState.Pause;
+        Bike.Instance.Set(BLEProtocol.ActionCode.SetWorkoutControlState, Workout.Instance.ControlState);
+#endif
     }
 }
 
@@ -153,6 +153,9 @@ class TestBikeListener : IBikeListener
     public void OnReceiveDeviceInformation(int modelID, string hardwareVersion, string firmwareVersion)
     {
         BLEDebug.LogInfo($"Device Info ModelID: {modelID}, Hardware Version: {hardwareVersion} Firmware Version: {firmwareVersion}");
+        Bike.Instance.ModelID = modelID;
+        Bike.Instance.HardwareVersion = hardwareVersion;
+        Bike.Instance.FirmwareVersion = firmwareVersion;
     }
     public void OnReceiveErrorLog(byte[] errorCode)
     {
@@ -163,20 +166,29 @@ class TestBikeListener : IBikeListener
     {
         BLEDebug.LogInfo($"Resistance Level Range Received: ({min},{max})");
         // TODO - Current implementation uses Units.Min/Max and ignores what the bike says
+        Bike.Instance.ResistanceMin = min;
+        Bike.Instance.ResistanceMax = max;
     }
     public void OnReceiveResistanceLevel(int resistanceLevel)
     {
         BLEDebug.LogInfo($"Resistance Level Received: {resistanceLevel}");
         Workout.Instance.ResistanceLevel = resistanceLevel;
+        Bike.Instance.ResistanceLevel = resistanceLevel;
     }
     public void OnReceiveWorkoutControlState(int controlState)
     {
         BLEDebug.LogInfo($"Workout Control State Received: {controlState}");
         Workout.Instance.ControlState = controlState;
+        Bike.Instance.ControlState = controlState;
     }
     public void OnReceiveWorkoutStatus(int timestamp, int count, int rpm, int heartrate)
     {
-        BLEDebug.LogInfo($"Timestamp: {timestamp}, Count: {count}, RPM: {rpm}, Heart rate {heartrate}");
+        //BLEDebug.LogInfo($"Timestamp: {timestamp}, Count: {count}, RPM: {rpm}, Heart rate {heartrate}");
+        Bike.Instance.Timestamp = timestamp;
+        Bike.Instance.Count = count;
+        Bike.Instance.RPM = rpm;
+        Bike.Instance.Heartrate = heartrate;
+        BLEDebug.LogInfo($"Timestamp: {Bike.Instance.Timestamp}, Count: {Bike.Instance.Count}, RPM: {Bike.Instance.RPM}, Heart rate {Bike.Instance.Heartrate}");
         // TODO - Feed this to workout for calculations
     }
 }
