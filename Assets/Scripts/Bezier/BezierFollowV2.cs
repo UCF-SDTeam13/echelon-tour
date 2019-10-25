@@ -25,7 +25,7 @@ public class BezierFollowV2 : MonoBehaviour
     private void FixedUpdate()
     {
         // Save speed for that exact moment (just in case)
-        float currentSpeed = speed / 2.0f;
+        float currentSpeed = speed;
 
         // Move the object position towards the target at a given speed
         //transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.fixedDeltaTime);
@@ -52,8 +52,11 @@ public class BezierFollowV2 : MonoBehaviour
         // Trying to hard code pi
         float distancePerCount = wheelDiameter * 3.14f * rpmRatio;
         float speedMultiplier = distancePerCount * 60;
-        int rpm = Bike.Instance.RPM;
-        speed = rpm * speedMultiplier;
+        float mph = Bike.Instance.RPM * speedMultiplier;
+
+        // mph to ms
+        speed = mph / 0.621f * 1000 / 60 / 60;
     }
+
 }
 
