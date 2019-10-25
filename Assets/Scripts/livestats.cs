@@ -14,19 +14,28 @@ public class livestats : MonoBehaviour
     public Text distanceText;
     public Text totalOutputText;
 
-    float rpm = 0f;
+    int rpm = 0;
     float speed = 0f;
-    float resistance = 0f;
+    float resistance = 1f;
     float watts = 0f;
     float calories = 0f;
     float distance = 0f;
     float totalOutput = 0f;
+
+    private static float wheelDiameter = 78 * 2.54f / 100000;
+    private static float rpmRatio = 1f;
+
+    private static float distancePerCount = wheelDiameter * Mathf.PI * rpmRatio;
+
+    private static float speedMultiplier = distancePerCount * 60;
 
     // Start is called before the first frame update
     void Start()
     {
         GameObject g = GameObject.FindGameObjectWithTag("NODESTROY");
         g.SendMessage("StartWorkout");
+
+        resistanceText.text = resistance.ToString();
     }
 
     // Update is called once per frame
@@ -37,10 +46,11 @@ public class livestats : MonoBehaviour
 
     public void updateUIText()
     {
+        rpm = Bike.Instance.RPM;
+        speed = rpm * speedMultiplier;
 
-        rpmText.text = Bike.Instance.RPM.ToString();
+        rpmText.text = rpm.ToString();
         speedText.text = speed.ToString();
-        resistanceText.text = resistance.ToString();
         wattsText.text = watts.ToString();
         caloriesText.text = calories.ToString();
         distanceText.text = distance.ToString();
