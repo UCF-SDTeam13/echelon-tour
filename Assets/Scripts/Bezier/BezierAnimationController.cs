@@ -20,7 +20,7 @@ public class BezierAnimationController : MonoBehaviour
     private void LateUpdate()
     {
         // Save the speed, can adjust if necessary
-        speed = follow.speed;
+        speed = follow.speed / 2.0f;
 
         // Ranges of speed, else no animation
         if (speed > lowThreshold && speed <= middleThreshold)

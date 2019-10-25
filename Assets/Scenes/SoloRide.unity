@@ -10102,8 +10102,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lowThreshold: 0
-  middleThreshold: 5
-  highThreshold: 10
+  middleThreshold: 10
+  highThreshold: 20
 --- !u!1 &3829201518085920388
 GameObject:
   m_ObjectHideFlags: 0
