@@ -1,6 +1,5 @@
 ﻿#if UNITY_IOS
 
-using System;
 using UnityEngine;
 
 public sealed class iOSPlugin : INativePlugin
@@ -45,11 +44,6 @@ public sealed class iOSPlugin : INativePlugin
     public void OnApplicationQuit()
     {
         
-    }
-
-    public void SendPluginMessage(string message)
-    {
-        Instance.SendPluginMessage(message);
     }
 }
 

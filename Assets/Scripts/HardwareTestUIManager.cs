@@ -52,6 +52,7 @@ public class HardwareTestUIManager : MonoBehaviour
         // "C6:00:F8:85:5E:29" ECHEX-3-105011
         BLEPlugin.Instance.Connect("C6:00:F8:85:5E:29");
         Bike.Instance.RegisterBikeListener(_bikeListener);
+
     }
     public void DiscoverServices()
     {
