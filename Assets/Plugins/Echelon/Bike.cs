@@ -25,6 +25,18 @@ public sealed class Bike
     {
         BLEAction.RegisterBikeListener(bikeListener);
     }
+
+    public int ModelID { get; set; } = 0;
+    public string HardwareVersion { get; set; } = "00.00";
+    public string FirmwareVersion { get; set; } = "00.00.00";
+    public int ResistanceMin { get; set; } = 0;
+    public int ResistanceMax { get; set; } = 32;
+    public int ResistanceLevel { get; set; } = 0;
+    public int ControlState { get; set; } = 0;
+    public int Timestamp { get; set; } = 0;
+    public int Count { get; set; } = 0;
+    public int RPM { get; set; } = 0;
+    public int Heartrate { get; set; } = 0;
 }
 
 public interface IBikeListener
