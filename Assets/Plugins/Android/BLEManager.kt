@@ -124,7 +124,7 @@ object BLEManager {
     // Send a Message Received From BLE to Unity
     fun sendUnityMessage(message: String) {
         BLEDebug.logInfo("Sending Message from Native to Unity")
-        UnityPlayer.UnitySendMessage("BLEPlugin", "ReceivePluginMessage", message)
+        UnityPlayer.UnitySendMessage("DontDestroyOnLoad", "ReceivePluginMessage", message)
     }
 
     // Handle Bluetooth Adapter State Changes

@@ -3,8 +3,16 @@ using UnityEngine;
 
 public class HardwareTestUIManager : MonoBehaviour
 {
-    private readonly TestBikeListener _bikeListener = new TestBikeListener();
+    private TestBikeListener _bikeListener;
 
+    public void Start()
+    {
+        _bikeListener = new TestBikeListener();
+        RequestBLE();
+        Scan();
+        ConnectTestRealBike();
+        DiscoverServices();
+    }
     public void RequestBLE()
     {
         BLEPlugin.Instance.RequestEnableBLE();

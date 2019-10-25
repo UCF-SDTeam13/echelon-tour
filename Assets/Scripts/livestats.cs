@@ -25,7 +25,8 @@ public class livestats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        GameObject g = GameObject.FindGameObjectWithTag("NODESTROY");
+        g.SendMessage("StartWorkout");
     }
 
     // Update is called once per frame
@@ -36,7 +37,8 @@ public class livestats : MonoBehaviour
 
     public void updateUIText()
     {
-        rpmText.text = rpm.ToString();
+
+        rpmText.text = Bike.Instance.RPM.ToString();
         speedText.text = speed.ToString();
         resistanceText.text = resistance.ToString();
         wattsText.text = watts.ToString();

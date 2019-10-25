@@ -35,7 +35,7 @@ public sealed class Bike
     public int ControlState { get; set; } = 0;
     public int Timestamp { get; set; } = 0;
     public int Count { get; set; } = 0;
-    public int RPM { get; set; } = 0;
+    public int RPM { get; set; } = 1;
     public int Heartrate { get; set; } = 0;
 }
 
