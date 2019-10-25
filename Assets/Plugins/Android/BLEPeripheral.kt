@@ -8,6 +8,8 @@ object BLEPeripheral {
     private lateinit var writeCharacteristic: BluetoothGattCharacteristic
     private lateinit var readCharacteristic: BluetoothGattCharacteristic
     private lateinit var notifyCharacteristic: BluetoothGattCharacteristic
+    private lateinit var readDescriptor : BluetoothGattDescriptor
+    private lateinit var notifyDescriptor : BluetoothGattDescriptor
     private val readBuffer = mutableListOf<Byte>()
     private val notifyBuffer = mutableListOf<Byte>()
 
@@ -33,20 +35,31 @@ object BLEPeripheral {
         }
     }
 
-    fun onCharacteristicDiscovery() {
-        // NOTE: Order of notification descriptors seems to matter
-        BLEDebug.logInfo("Subscribing to Notifications for Notify Characteristic")
-        bleGatt.setCharacteristicNotification(notifyCharacteristic, true)
-        val notifyDescriptor = notifyCharacteristic.getDescriptor(BLEProtocol.notifyDescriptorUUID)
-        notifyDescriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-        bleGatt.writeDescriptor(notifyDescriptor)
-
-        BLEDebug.logInfo("Subscribing to Notifications for Read Characteristic")
+    // Subscribe to Read Characteristic - This Triggers onDescriptorWrite Callback
+    fun subscribeReadCharacteristic() {
         bleGatt.setCharacteristicNotification(readCharacteristic, true)
-        val readDescriptor = readCharacteristic.getDescriptor(BLEProtocol.notifyDescriptorUUID)
         readDescriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-        bleGatt.writeDescriptor(readDescriptor)
+        val result = bleGatt.writeDescriptor(readDescriptor)
+        BLEDebug.logInfo("Notification Subscribe for Read Characteristic: " + result)
+
     }
+    // Subscribe to Notify Characteristic - This Triggers onDescriptorWrite Callback
+    fun subscribeNotifyCharacteristic() {
+        bleGatt.setCharacteristicNotification(notifyCharacteristic, true)
+        notifyDescriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+        val result = bleGatt.writeDescriptor(notifyDescriptor)
+        BLEDebug.logInfo("Notification Subscribe for Notify Characteristic: " + result)
+    }
+
+    fun onCharacteristicDiscovery() {
+        // NOTE: Can Only Write ONE notification descriptor at a time!!!
+        // Call notify
+        // Set read using callbacks after notify is done with bluetooth hardware
+        readDescriptor = readCharacteristic.getDescriptor(BLEProtocol.notifyDescriptorUUID)
+        notifyDescriptor = notifyCharacteristic.getDescriptor(BLEProtocol.notifyDescriptorUUID)
+        subscribeNotifyCharacteristic()
+    }
+
     private fun syncBuffer(buffer: MutableList<Byte>) {
         val syncIndex = buffer.indexOf(BLEProtocol.startByte)
 
@@ -139,12 +152,21 @@ object BLEPeripheral {
             BLEDebug.logInfo("Characteristic Change Detected")
             BLEDebug.logInfo("${characteristic?.uuid}")
             when (characteristic?.uuid) {
-                BLEProtocol.readCharacteristicUUID -> processBuffer(readBuffer, readCharacteristic)
+                BLEProtocol.readCharacteristicUUID -> {
+                    BLEDebug.logInfo("Read Changed")
+                    processBuffer(readBuffer, readCharacteristic)
+                }
                 BLEProtocol.writeCharacteristicUUID -> processWrite()
                 BLEProtocol.notifyCharacteristicUUID -> {
                     BLEDebug.logInfo("Notify Changed")
                     processBuffer(notifyBuffer, notifyCharacteristic)
                 }
+            }
+        }
+
+        override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
+            if (descriptor == notifyDescriptor) {
+                subscribeReadCharacteristic()
             }
         }
     }
