@@ -16,6 +16,9 @@ public class BezierFollowV2 : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Calculate speed (echelon way)
+        calculateSpeed();
+
         // Move the object position towards the target at a given speed
         transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.fixedDeltaTime);
 
@@ -32,5 +35,14 @@ public class BezierFollowV2 : MonoBehaviour
         {
             Debug.Log("Vector3 is zero, don't know why.");
         }
+    }
+
+    private void calculateSpeed()
+    {
+        float rpmRatio = 1;
+        float wheelDiameter = (78 * 2.54f) / 100000;
+        float distancePerCount = wheelDiameter * Mathf.PI * rpmRatio;
+        float speedMultiplier = distancePerCount * 60;
+        speed = Bike.Instance.RPM * speedMultiplier;
     }
 }
