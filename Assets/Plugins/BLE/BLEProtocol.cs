@@ -152,6 +152,7 @@ public static class BLEProtocol
         };
         // Calculate and set checksum
         preparedBytes[preparedBytes.Length - 1] = CalculateChecksum(preparedBytes);
+        BLEDebug.LogInfo("Get HexByte Array: " + ByteArrayToHexString(preparedBytes));
         return preparedBytes;
     }
 
@@ -166,9 +167,13 @@ public static class BLEProtocol
         };
         // Calculate and set checksum
         preparedBytes[preparedBytes.Length - 1] = CalculateChecksum(preparedBytes);
+        BLEDebug.LogInfo("Set HexByte Array: " + ByteArrayToHexString(preparedBytes));
         return preparedBytes;
     }
-
+    public static string ByteArrayToHexString(byte[] ba)
+    {
+        return BitConverter.ToString(ba).Replace("-", "");
+    }
     public static string ConvertBytesToString(byte[] data)
     {
         string message = System.Convert.ToBase64String(data);
