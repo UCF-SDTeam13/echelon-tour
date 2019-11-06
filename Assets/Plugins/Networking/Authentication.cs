@@ -39,7 +39,7 @@ public sealed class Authentication
         content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
         BLEDebug.LogInfo(json);
 
-        var result = await client.PostAsync("https://66hlxirzx1.execute-api.us-east-2.amazonaws.com/Prod/auth/login", content);
+        var result = await client.PostAsync("https://iddz0upx1d.execute-api.us-east-2.amazonaws.com/Prod/auth/login", content);
         BLEDebug.LogInfo(await result.Content.ReadAsStringAsync());
     }
 }
