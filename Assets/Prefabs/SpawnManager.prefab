@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9012987266733147022}
-  - component: {fileID: 9012987266733147023}
+  - component: {fileID: 53057347422476431}
   m_Layer: 0
   m_Name: SpawnManager
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9012987266733147023
+--- !u!114 &53057347422476431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,16 +42,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 9012987266733147020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c86b0656ad0b94d4f9a14c0e0a987e8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b228994ad442ba46af829e37586f961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  femalePrefab: {fileID: 5717236135065375139, guid: 610bcf1ceb09a0c42afd01bfedec4ae2,
+  femalePrefab: {fileID: 3887045885762571563, guid: 328f1994689f5a54599100bd764b7dd3,
     type: 3}
-  malePrefab: {fileID: 4945330972155356318, guid: 84f1d069898fa7e47afc06c854084ddb,
+  malePrefab: {fileID: 4352215826839558514, guid: 10bfd11df97504b458b89ae1d61d6c60,
     type: 3}
   numRoutes: 8
   lineStart: {fileID: 9012987267271323451}
   lineEnd: {fileID: 9012987266772512502}
+  cam: {fileID: 0}
+  players: []
 --- !u!1 &9012987266772512503
 GameObject:
   m_ObjectHideFlags: 0
