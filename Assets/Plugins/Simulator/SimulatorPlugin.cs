@@ -26,7 +26,10 @@ public sealed class SimulatorPlugin : INativePlugin
         EnabledBLE = true;
         BLEDebug.LogInfo("Simulating Enable BLE");
     }
+    public void RequestEnableLocation()
+    {
 
+    }
     public void Scan()
     {
         // TODO - Simulate Scan and Report Simulated Results to Unity

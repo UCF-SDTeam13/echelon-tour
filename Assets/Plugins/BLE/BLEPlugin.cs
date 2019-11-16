@@ -32,8 +32,12 @@ public sealed class BLEPlugin : MonoBehaviour
         {
             BLEDebug.LogWarning("BLE Already Enabled, Ignoring Request");
         }
-    }
 
+        RequestEnableLocation();
+    }
+    public void RequestEnableLocation() {
+        _nativePluginInstance.RequestEnableLocation();
+    }
     public void Scan()
     {
         _nativePluginInstance.Scan();
@@ -77,6 +81,7 @@ interface INativePlugin
     bool EnabledBLE { get; }
 
     void RequestEnableBLE();
+    void RequestEnableLocation();
     void Scan();
     void StopScan();
     void Connect(string address);
