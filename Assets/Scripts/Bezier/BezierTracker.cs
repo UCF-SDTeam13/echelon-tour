@@ -9,20 +9,21 @@ public class BezierTracker : MonoBehaviour
     [SerializeField] private float speedFactor = 0.5f;
     [SerializeField] private float lookAheadOffset = 15;
 
-    [SerializeField] private BezierCircuit circuit;
     [SerializeField] private Transform target;
 
     private float progressDistance;
     private BezierCircuit.TrackPoint progressPoint;
     private Vector3 lastPosition;
 
+    public BezierCircuit circuit;
     public Vector3 targetLookAhead;
     public float speed = 0;
 
     private void Awake()
     {
+        // May not need anymore (Use editor for singleplayer, use spawm manager for multiplayer)
         // Find the bezier circuit in the scene
-        circuit = GameObject.FindGameObjectWithTag("Circuit").GetComponent<BezierCircuit>();
+        // circuit = GameObject.FindGameObjectWithTag("Circuit").GetComponent<BezierCircuit>();
 
         if(circuit == null)
         {
