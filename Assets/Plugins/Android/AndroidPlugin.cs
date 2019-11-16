@@ -42,13 +42,14 @@ public sealed class AndroidPlugin : INativePlugin
     {
         // Ask for BLE to be Enabled
         _BLEManagerClass.CallStatic("requestEnableBLE", _currentActivity);
-
-        // TODO - Separate Out Location Permissions and Use a Dialog to Explain
+    }
+    public void RequestEnableLocation()
+    {
+        // TODO - Use a Dialog to Explain
         // (Bluetooth Permission reasoning is fairly obvious but Location is Not)
         // Need Location Permission for BLE Scanning - Coarse Because We Don't Care About Actual Location
         Permission.RequestUserPermission(Permission.CoarseLocation);
     }
-
     // Scan for BLE Devices
     public void Scan()
     {
