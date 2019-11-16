@@ -85,11 +85,12 @@ public class Connect : MonoBehaviour
         if (east1.isDone)
         {
             pingEast1 = east1.time;
-
+            BLEDebug.LogInfo("East1 Ping" + pingEast1);
         }
         if (east2.isDone)
         {
             pingEast2 = east2.time;
+            BLEDebug.LogInfo("East2 Ping" + pingEast2);
         }
 
         if (timer >= pingInterval)
@@ -98,8 +99,5 @@ public class Connect : MonoBehaviour
             east2 = new Ping("3.14.0.0");
             timer = 0.0f;
         }
-
-        BLEDebug.LogInfo("East1 Ping" + pingEast1);
-        BLEDebug.LogInfo("East2 Ping" + pingEast2);
     }
 }
