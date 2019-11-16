@@ -2,13 +2,24 @@
 
 public class DataManager : MonoBehaviour
 {
-    public void SaveData(float speed, float rpm, float calories)
+    // Examples
+    public void SavePlayerData(float speed, float rpm, float calories)
     {
-        SaveSystem.SaveData(speed, rpm, calories);
+        SaveSystem.SavePlayerData(speed, rpm, calories);
     }
 
-    public PlayerData LoadData()
+    public PlayerData LoadPlayerData()
     {
-        return SaveSystem.loadData();
+        return SaveSystem.loadPlayerData();
+    }
+
+    public void SaveChallengeData(bool[] statuses)
+    {
+        SaveSystem.SaveChallengeData(statuses);
+    }
+
+    public ChallengeData LoadChallengeData()
+    {
+        return SaveSystem.loadChallengeData();
     }
 }

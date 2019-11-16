@@ -4,29 +4,63 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem
 {
-    public static void SaveData(float speed, float rpm, float calories)
+    // Adjustments need to be made later
+    public static void SavePlayerData(float speed, float rpm, float calories)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Path.Combine(Application.persistentDataPath, "PlayerStatistics");
-        FileStream stream = new FileStream(path, FileMode.Create);
+        string path = Path.Combine(Application.persistentDataPath, "PlayerData");
 
-        PlayerData data = new PlayerData(speed, rpm, calories);
-
-        formatter.Serialize(stream, data);
-        stream.Close();
+        using (FileStream stream = new FileStream(path, FileMode.Create))
+        {
+            PlayerData data = new PlayerData(speed, rpm, calories);
+            formatter.Serialize(stream, data);
+        }
     }
 
-    public static PlayerData loadData()
+    public static PlayerData loadPlayerData()
     {
-        string path = Path.Combine(Application.persistentDataPath, "PlayerStatistics");
+        string path = Path.Combine(Application.persistentDataPath, "PlayerData");
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
 
-            PlayerData data = formatter.Deserialize(stream) as PlayerData;
-            stream.Close();
-            return data;
+            using (FileStream stream = new FileStream(path, FileMode.Open))
+            {
+                PlayerData data = formatter.Deserialize(stream) as PlayerData;
+                return data;
+            }
+        }
+        else
+        {
+            Debug.LogError("Save data not found in " + path);
+            return null;
+        }
+    }
+
+    public static void SaveChallengeData(bool[] statuses)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Path.Combine(Application.persistentDataPath, "ChallengeData");
+
+        using (FileStream stream = new FileStream(path, FileMode.Create))
+        {
+            ChallengeData data = new ChallengeData(statuses);
+            formatter.Serialize(stream, data);
+        }
+    }
+
+    public static ChallengeData loadChallengeData()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "ChallengeData");
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            using (FileStream stream = new FileStream(path, FileMode.Open))
+            {
+                ChallengeData data = formatter.Deserialize(stream) as ChallengeData;
+                return data;
+            }
         }
         else
         {

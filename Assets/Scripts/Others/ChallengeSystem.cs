@@ -11,68 +11,66 @@ public class ChallengeSystem : MonoBehaviour
     public GameObject challengeDescription;
 
     public GameObject TopSpeedImage;
-    public CustomChallenge challenge01;
-
     public GameObject MaintainSpeedImage;
-    public CustomChallenge challenge02;
+    public GameObject RacePlacementImage;
+
+    public TopSpeedChallenge tsc01;
+    public MaintainSpeedChallenge msc01;
+    public RacePlacementChallenge rpc01;
+
+    public bool[] challengeStatuses;
+    public int numChallenges;
 
     private void Start()
     {
-        // Values can be obtained and adjusted later
-        float topSpeed = 50;
-        float maintainSpeed = 30;
-        float time = 60;
-
-        challenge01 = new CustomChallenge(TopSpeedImage, topSpeed);
-        challenge02 = new CustomChallenge(MaintainSpeedImage, maintainSpeed, time);
+        challengeStatuses = new bool[numChallenges];
     }
     
     private void Update()
     {
-        float speed = calculateSpeed();
 
-        if (challenge01.Achieved == false && challenge01.Active == true && speed >= challenge01.Speed)
-        {
-            StartCoroutine(ChallengerTrigger(challenge01));
-        }
-
-        if(challenge02.Achieved == false && challenge02.Active == false && speed >= challenge02.Speed)
-        {
-            float time = Time.time;
-            challenge02.Active = true;
-            StartCoroutine(Challenge02Tracker(time));
-        }
     }
 
-    IEnumerator ChallengerTrigger(CustomChallenge challenge)
+    IEnumerator TopSpeedTrigger(TopSpeedChallenge challenge)
+    {
+        challenge.Achieved = true;
+        yield return new WaitForSeconds(5);
+    }
+    
+    IEnumerator MaintainSpeedTrigger(MaintainSpeedChallenge challenge)
     {
         challenge.Active = false;
         challenge.Achieved = true;
         yield return new WaitForSeconds(5);
     }
 
-    IEnumerator Challenge02Tracker(float time)
+    IEnumerator RacePlacementTrigger(RacePlacementChallenge challenge)
+    {
+        challenge.Achieved = true;
+        yield return new WaitForSeconds(5);
+    }
+
+    IEnumerator MaintainSpeedTracker(MaintainSpeedChallenge challenge, float time)
     {
         float deltaTime = Time.time - time;
         float speed = calculateSpeed();
         
-        if(deltaTime >= challenge02.Time)
+        if(deltaTime >= challenge.Time)
         {
-            StartCoroutine(ChallengerTrigger(challenge02));
+            StartCoroutine(MaintainSpeedTrigger(challenge));
             yield break;
         }
-        else if (speed >= challenge02.Speed)
+        else if (speed >= challenge.Speed)
         {
             yield return new WaitForSeconds(1);
         }
         else
         {
-            challenge02.Active = false;
+            challenge.Active = false;
             yield break;
         }
     }
 
-    // May want to put this in one spot
     private float calculateSpeed()
     {
         // Trying to hard code pi
@@ -84,35 +82,81 @@ public class ChallengeSystem : MonoBehaviour
     }
 }
 
-public class CustomChallenge
+// Challenges for reaching a certain speed
+public class TopSpeedChallenge
 {
     public GameObject Image { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
+    public float Speed { get; set; }
+    public bool Achieved { get; set; }
 
+    public TopSpeedChallenge(GameObject image, float speed)
+    {
+        this.Title = "Top Speed Challenge";
+        this.Image = image;
+        this.Description = "Reach a top speed of " + speed.ToString() + " mph";
+        this.Speed = speed;
+        this.Achieved = false;
+    }
+}
+
+// Challenges for maintaining a certain speed for a certain amount of time
+public class MaintainSpeedChallenge
+{
+    public GameObject Image { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
     public float Speed { get; set; }
     public float Time { get; set; }
     public bool Active { get; set; }
     public bool Achieved { get; set; }
 
-    public CustomChallenge(GameObject image, float speed)
-    {
-        this.Title = "Top Speed Challenge";
-        this.Image = image;
-        this.Description = "Reach a top speed of " + speed.ToString();
-        this.Speed = speed;
-        this.Active = true;
-        this.Achieved = false;
-    }
-
-    public CustomChallenge(GameObject image, float speed, float time)
+    public MaintainSpeedChallenge(GameObject image, float speed, float time)
     {
         this.Title = "Maintain Speed Challenge";
         this.Image = image;
-        this.Description = "Maintain a speed of " + speed.ToString() + " for " + time.ToString() + " seconds";
+        this.Description = "Maintain a speed of " + speed.ToString() + " or higher for " + time.ToString() + " seconds";
         this.Speed = speed;
         this.Time = time;
         this.Active = false;
+        this.Achieved = false;
+    }
+}
+
+// Challenges for getting a certain rank after a race finishes
+public class RacePlacementChallenge
+{
+    public GameObject Image { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public int Rank { get; set; }
+    public bool Achieved { get; set; }
+
+    public RacePlacementChallenge(GameObject image, int rank)
+    {
+        string rankString = "";
+        switch (rank)
+        {
+            case 1:
+                rankString = rank.ToString() + "st";
+                break;
+            case 2:
+                rankString = Rank.ToString() + "nd";
+                break;
+            case 3:
+                rankString = Rank.ToString() + "rd";
+                break;
+            default:
+                rankString = Rank.ToString() + "th";
+                break; 
+
+        }
+
+        this.Title = "Final Placement Challenge";
+        this.Image = image;
+        this.Description = "Finish in " + rankString + " place";
+        this.Rank = rank;
         this.Achieved = false;
     }
 }
