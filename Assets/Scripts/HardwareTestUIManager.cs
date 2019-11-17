@@ -8,10 +8,10 @@ public class HardwareTestUIManager : MonoBehaviour
     public void Start()
     {
         _bikeListener = new TestBikeListener();
-        RequestBLE();
-        Scan();
-        ConnectTestRealBike();
-        DiscoverServices();
+        //RequestBLE();
+        //Scan();
+        //ConnectTestRealBike();
+        //DiscoverServices();
     }
     public void RequestBLE()
     {
@@ -107,7 +107,7 @@ public class HardwareTestUIManager : MonoBehaviour
 #if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.IncreaseResistanceLevel();
 #else
-        // Add one level, propery will auto clamp to valid range
+        // Add one level, property will auto clamp to valid range
         ++Workout.Instance.ResistanceLevel;
         Bike.Instance.Set(BLEProtocol.ActionCode.SetResistanceLevel, Workout.Instance.ResistanceLevel);
 #endif

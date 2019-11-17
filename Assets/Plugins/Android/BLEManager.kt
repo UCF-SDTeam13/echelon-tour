@@ -64,7 +64,7 @@ object BLEManager {
         // is rated dangerous and needs to be asked for at runtime
         // even though it is already in the manifest
 
-        // NOTE: Ideally we would request that here but we 
+        // NOTE: Ideally we would request that here but we
         // request on Unity side due to AndroidX issue
     }
 
@@ -156,10 +156,13 @@ object BLEManager {
                 ScanSettings.CALLBACK_TYPE_MATCH_LOST -> BLEDebug.logInfo("CALLBACK_TYPE_MATCH_LOST")
             }
             BLEDebug.logInfo("Scan Result Received")
-            // TODO - Notify Unity of Scan Results
+            // Notify Unity of Scan Results
             result?.apply {
-                val scanRecord = result.scanRecord.toString()
-                BLEDebug.logInfo("Scan Record: {$scanRecord}")
+                val scanRecordLog = result.scanRecord.toString()
+                val scanName = result.scanRecord.deviceName
+                val scanAddress = result.device.address
+                BLEDebug.logInfo("Match Found Name: $scanName|$scanAddress")
+                UnityPlayer.UnitySendMessage("DontDestroyOnLoad", "ReceiveMatch", "$scanName|$scanAddress")
             }
         }
         // TODO - Notify Unity of Scan Errors
