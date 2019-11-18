@@ -1,12 +1,15 @@
-﻿[System.Serializable]
+﻿using System;
+
+[System.Serializable]
 public class PlayerData
 {
     public float avgSpeed;
     public float avgRPM;
     public float avgCalories;
+    public float totalDistance;
     // Other things depending on what personal stats we want to show
 
-    public PlayerData(float speed, float rpm, float calories)
+    public PlayerData(float speed, float rpm, float calories, float distance)
     {
         if(speed > avgSpeed)
         {
@@ -22,6 +25,8 @@ public class PlayerData
         {
             avgCalories = calories;
         }
+
+        totalDistance += distance;
     }
 }
 
@@ -29,8 +34,18 @@ public class PlayerData
 public class ChallengeData
 {
     public bool[] challengeStatuses;
+    public float distanceTraveled;
 
-    public ChallengeData(bool[] statuses)
+    public ChallengeData()
+    {
+        if(challengeStatuses != null)
+        {
+            challengeStatuses = new bool[challengeStatuses.Length];
+            distanceTraveled = 0;
+        }
+    }
+
+    public ChallengeData(bool[] statuses, float distance)
     {
         // Check if the challenges array is null
         if (challengeStatuses == null)
@@ -48,5 +63,7 @@ public class ChallengeData
                 challengeStatuses[i] = true;
             }
         }
+
+        distanceTraveled += distance;
     }
 }

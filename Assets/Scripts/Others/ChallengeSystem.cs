@@ -23,6 +23,7 @@ public class ChallengeSystem : MonoBehaviour
 
     private void Start()
     {
+        ChallengeData data = SaveSystem.LoadChallengeData();
         challengeStatuses = new bool[numChallenges];
     }
     
@@ -157,6 +158,24 @@ public class RacePlacementChallenge
         this.Image = image;
         this.Description = "Finish in " + rankString + " place";
         this.Rank = rank;
+        this.Achieved = false;
+    }
+}
+
+public class TotalDistanceChallenge
+{
+    public GameObject Image { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public float distance { get; set; }
+    public bool Achieved { get; set; }
+
+    public TotalDistanceChallenge(GameObject image, float distance)
+    {
+        this.Title = "Total Distance Challenge";
+        this.Image = image;
+        this.Description = "Travel at least " + distance.ToString() + " miles";
+        this.distance = distance;
         this.Achieved = false;
     }
 }
