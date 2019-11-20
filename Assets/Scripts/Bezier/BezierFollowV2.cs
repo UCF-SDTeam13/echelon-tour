@@ -9,6 +9,7 @@ public class BezierFollowV2 : MonoBehaviour
     private float wheelDiameter = (78 * 2.54f) / 100000;
 
     public float speed;
+    public bool isPlayer = false;
 
     private void Start()
     {
@@ -18,8 +19,8 @@ public class BezierFollowV2 : MonoBehaviour
 
     private void Update()
     {
-        // Calculate speed (echelon way)
-        calculateSpeed();
+        int rpm = isPlayer ? Bike.Instance.RPM : 0;
+        calculateSpeed(rpm); //Get rpm from server
     }
 
     private void FixedUpdate()
@@ -47,16 +48,15 @@ public class BezierFollowV2 : MonoBehaviour
         }
     }
 
-    private void calculateSpeed()
+    private void calculateSpeed(int rpm)
     {
         // Trying to hard code pi
         float distancePerCount = wheelDiameter * 3.14f * rpmRatio;
         float speedMultiplier = distancePerCount * 60;
-        float mph = Bike.Instance.RPM * speedMultiplier;
+        float mph = rpm * speedMultiplier;
 
         // mph to ms
         speed = mph / 0.621f * 1000 / 60 / 60;
     }
-
 }
 
