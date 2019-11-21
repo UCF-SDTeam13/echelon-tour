@@ -37,12 +37,12 @@ public class ChallengeSystem : MonoBehaviour
     private void Update()
     {
         // MAY NEED TO CHECK IF MATCH IS FINISHED FIRST
-        if (tsc01.Achieved == false && calculateSpeed() >= tsc01.Speed)
+        if (tsc01.Achieved == false && CalculateSpeed() >= tsc01.Speed)
         {
             StartCoroutine(TopSpeedTrigger(tsc01));
         }
 
-        if (msc01.Achieved == false && msc01.Active == false && calculateSpeed() >= msc01.Speed)
+        if (msc01.Achieved == false && msc01.Active == false && CalculateSpeed() >= msc01.Speed)
         {
             float startTime = Time.time;
             msc01.Active = true;
@@ -56,7 +56,7 @@ public class ChallengeSystem : MonoBehaviour
         }
         */
 
-        if(tdc01.Achieved == false && calculateDistance() >= tdc01.Distance)
+        if(tdc01.Achieved == false && CalculateDistance() >= tdc01.Distance)
         {
             StartCoroutine(TotalDistanceTrigger(tdc01));
         }
@@ -168,7 +168,7 @@ public class ChallengeSystem : MonoBehaviour
     {
         for (float deltaTime = 0; ; deltaTime = Time.time - time)
         {
-            float speed = calculateSpeed();
+            float speed = CalculateSpeed();
 
             if (deltaTime >= challenge.Time && speed >= challenge.Speed)
             {
@@ -187,7 +187,7 @@ public class ChallengeSystem : MonoBehaviour
         }
     }
 
-    private float calculateSpeed()
+    private float CalculateSpeed()
     {
         // Trying to hard code pi
         float rpmRatio = 1;
@@ -197,7 +197,7 @@ public class ChallengeSystem : MonoBehaviour
         return Bike.Instance.RPM * speedMultiplier;
     }
 
-    private float calculateDistance()
+    private float CalculateDistance()
     {
         // Trying to hard code pi
         float wheelDiameter = (78 * 2.54f) / 100000;
