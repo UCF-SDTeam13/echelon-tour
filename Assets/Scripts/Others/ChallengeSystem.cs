@@ -4,10 +4,9 @@ using UnityEngine.UI;
 
 public class ChallengeSystem : MonoBehaviour
 {
-    public GameObject challengeBackground;
+    public GameObject challengePanel;
     public AudioSource challengeSound;
     public GameObject challengeTitle;
-    public GameObject challengeImage;
     public GameObject challengeDescription;
 
     public GameObject TopSpeedImage;
@@ -30,9 +29,9 @@ public class ChallengeSystem : MonoBehaviour
         //challengeStatuses = new bool[numChallenges];
 
         tsc01 = new TopSpeedChallenge(TopSpeedImage, 30);
-        msc01 = new MaintainSpeedChallenge(MaintainSpeedImage, 30, 60);
+        msc01 = new MaintainSpeedChallenge(MaintainSpeedImage, 30, 30);
         rpc01 = new RacePlacementChallenge(RacePlacementImage, 3);
-        tdc01 = new TotalDistanceChallenge(TotalDistanceImage, 100); //Not sure of value
+        tdc01 = new TotalDistanceChallenge(TotalDistanceImage, 10); //Not sure of value
     }
     
     private void Update()
@@ -100,28 +99,69 @@ public class ChallengeSystem : MonoBehaviour
     }
     */
 
+    // DEFINITELY CAN PUT THIS ALL INTO A SINGLE CUSTOM CHALLENGE
     IEnumerator TopSpeedTrigger(TopSpeedChallenge challenge)
     {
         challenge.Achieved = true;
-        yield return new WaitForSeconds(5);
+        challenge.Image.SetActive(true);
+        challengeTitle.GetComponent<Text>().text = challenge.Title;
+        challengeDescription.GetComponent<Text>().text = challenge.Description;
+        challengePanel.SetActive(true);
+
+        yield return new WaitForSeconds(7);
+
+        challengePanel.SetActive(false);
+        challenge.Image.SetActive(false);
+        challengeTitle.GetComponent<Text>().text = "";
+        challengeDescription.GetComponent<Text>().text = "";
     }
     
     IEnumerator MaintainSpeedTrigger(MaintainSpeedChallenge challenge)
     {
         challenge.Achieved = true;
-        yield return new WaitForSeconds(5);
+        challenge.Image.SetActive(true);
+        challengeTitle.GetComponent<Text>().text = challenge.Title;
+        challengeDescription.GetComponent<Text>().text = challenge.Description;
+        challengePanel.SetActive(true);
+
+        yield return new WaitForSeconds(7);
+
+        challengePanel.SetActive(false);
+        challenge.Image.SetActive(false);
+        challengeTitle.GetComponent<Text>().text = "";
+        challengeDescription.GetComponent<Text>().text = "";
     }
 
     IEnumerator RacePlacementTrigger(RacePlacementChallenge challenge)
     {
         challenge.Achieved = true;
-        yield return new WaitForSeconds(5);
+        challenge.Image.SetActive(true);
+        challengeTitle.GetComponent<Text>().text = challenge.Title;
+        challengeDescription.GetComponent<Text>().text = challenge.Description;
+        challengePanel.SetActive(true);
+
+        yield return new WaitForSeconds(7);
+
+        challengePanel.SetActive(false);
+        challenge.Image.SetActive(false);
+        challengeTitle.GetComponent<Text>().text = "";
+        challengeDescription.GetComponent<Text>().text = "";
     }
 
     IEnumerator TotalDistanceTrigger(TotalDistanceChallenge challenge)
     {
         challenge.Achieved = true;
-        yield return new WaitForSeconds(5);
+        challenge.Image.SetActive(true);
+        challengeTitle.GetComponent<Text>().text = challenge.Title;
+        challengeDescription.GetComponent<Text>().text = challenge.Description;
+        challengePanel.SetActive(true);
+
+        yield return new WaitForSeconds(7);
+
+        challengePanel.SetActive(false);
+        challenge.Image.SetActive(false);
+        challengeTitle.GetComponent<Text>().text = "";
+        challengeDescription.GetComponent<Text>().text = "";
     }
 
     IEnumerator MaintainSpeedTracker(MaintainSpeedChallenge challenge, float time)
@@ -352,4 +392,9 @@ public class TotalDistanceChallenge
         this.Distance = distance;
         this.Achieved = false;
     }
+}
+
+public interface IChallenge
+{
+    IEnumerator AchievedTrigger();
 }

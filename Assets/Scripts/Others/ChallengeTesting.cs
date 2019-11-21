@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChallengeTesting : MonoBehaviour
 {
     public FakeBLE fakeBLE;
+
+    public GameObject challengePanel;
+    public AudioSource challengeSound;
+    public GameObject challengeTitle;
+    public GameObject challengeDescription;
 
     public TopSpeedChallenge tsc01;
     public MaintainSpeedChallenge msc01;
@@ -47,23 +53,50 @@ public class ChallengeTesting : MonoBehaviour
 
     IEnumerator TopSpeedTrigger(TopSpeedChallenge challenge)
     {
-        challenge.Achieved = true;
         Debug.Log("TOPSPEEDACHIEVED");
-        yield return new WaitForSeconds(5);
+
+        challenge.Achieved = true;
+        challenge.Image.SetActive(true);
+        challengeTitle.GetComponent<Text>().text = challenge.Title;
+        challengeDescription.GetComponent<Text>().text = challenge.Description;
+        challengePanel.SetActive(true);
+
+        yield return new WaitForSeconds(7);
+
+        challengePanel.SetActive(false);
+        challenge.Image.SetActive(false);
     }
 
     IEnumerator MaintainSpeedTrigger(MaintainSpeedChallenge challenge)
     {
-        challenge.Achieved = true;
         Debug.Log("MAINTAINSPEEDACHIEVED");
-        yield return new WaitForSeconds(5);
+
+        challenge.Achieved = true;
+        challenge.Image.SetActive(true);
+        challengeTitle.GetComponent<Text>().text = challenge.Title;
+        challengeDescription.GetComponent<Text>().text = challenge.Description;
+        challengePanel.SetActive(true);
+
+        yield return new WaitForSeconds(7);
+
+        challengePanel.SetActive(false);
+        challenge.Image.SetActive(false);
     }
 
     IEnumerator TotalDistanceTrigger(TotalDistanceChallenge challenge)
     {
-        challenge.Achieved = true;
         Debug.Log("TOTALDISTANCEACHIEVED");
-        yield return new WaitForSeconds(5);
+
+        challenge.Achieved = true;
+        challenge.Image.SetActive(true);
+        challengeTitle.GetComponent<Text>().text = challenge.Title;
+        challengeDescription.GetComponent<Text>().text = challenge.Description;
+        challengePanel.SetActive(true);
+
+        yield return new WaitForSeconds(7);
+
+        challengePanel.SetActive(false);
+        challenge.Image.SetActive(false);
     }
 
     IEnumerator MaintainSpeedTracker(MaintainSpeedChallenge challenge, float time)
