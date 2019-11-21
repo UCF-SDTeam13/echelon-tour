@@ -53,6 +53,7 @@ public static class BLEAction
     public static void ProcessReceiveData(byte[] data)
     {
         BLEDebug.LogInfo("BLEAction Processing Received Data");
+        Console.WriteLine("[{0}]", string.Join(", ", data));
         // Ignore and log invalid data
         if (!BLEProtocol.ValidateData(data))
         {
@@ -193,7 +194,13 @@ public static class BLEAction
 
         public void OnReceiveWorkoutStatus(int timestamp, int count, int rpm, int heartrate)
         {
-            BLEDebug.LogWarning("Warning - Bike Listener Not Registered");
+            BLEDebug.LogInfo($"Timestamp: {timestamp}, Count: {count}, RPM: {rpm}, Heart rate {heartrate}");
+            Bike.Instance.Timestamp = timestamp;
+            Bike.Instance.Count = count;
+            Bike.Instance.RPM = rpm;
+            Bike.Instance.Heartrate = heartrate;
+            BLEDebug.LogInfo($"Timestamp: {Bike.Instance.Timestamp}, Count: {Bike.Instance.Count}, RPM: {Bike.Instance.RPM}, Heart rate {Bike.Instance.Heartrate}");
+            // TODO - Feed this to workout for calculations
         }
     }
 }

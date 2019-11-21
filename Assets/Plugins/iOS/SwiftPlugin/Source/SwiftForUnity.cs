@@ -3,13 +3,14 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 public class SwiftForUnity : MonoBehaviour
 {
 
     #region Declare external C interface
 
-    #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
         
         [DllImport("__Internal")]
         private static extern string _sayHiToUnity();
@@ -40,8 +41,11 @@ public class SwiftForUnity : MonoBehaviour
 
         [DllImport("__Internal")]
         private static extern void _decreaseResistanceLevel();
+
+        [DllImport("__Internal")]
+        private static extern void _sendConnectIdentifier(string identifier);
     
-    #endif
+#endif
 
     #endregion
 
@@ -49,92 +53,101 @@ public class SwiftForUnity : MonoBehaviour
 
     public static string HiFromSwift()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             return _sayHiToUnity();
-        #else
-            return "No Swift found!";
-        #endif
+#else
+        return "No Swift found!";
+#endif
     }
 
     public static void StartScan()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _startScan();
-        #else
-            Debug.Log("error stop scanning");
-        #endif
+#else
+        Debug.Log("error stop scanning");
+#endif
     }
 
     public static void StopScan()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _stopScan();
-        #else
-            Debug.Log("error stop scanning");
-        #endif
+#else
+        Debug.Log("error stop scanning");
+#endif
     }
 
     public static void Connect()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _connect();
-        #else
-            Debug.Log("error scanning");
-        #endif
+#else
+        Debug.Log("error scanning");
+#endif
+    }
+
+    public static void ConnectWithIdentifier(string identifier)
+    {
+#if UNITY_IOS && !UNITY_EDITOR
+            _sendConnectIdentifier(identifier);
+#else
+        Debug.Log("error scanning");
+#endif
     }
 
     public static void DiscoverServices()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _discoverServices();
-        #else
-            Debug.Log("error discovering services");
-        #endif
+#else
+        Debug.Log("error discovering services");
+#endif
     }
 
     public static void StopWorkout()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _stopWorkout();
-        #else
-            Debug.Log("error stopping workout");
-        #endif
+#else
+        Debug.Log("error stopping workout");
+#endif
     }
 
     public static void StartWorkout()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _startWorkout();
-        #else
-            Debug.Log("error starting workout");
-        #endif
+#else
+        Debug.Log("error starting workout");
+#endif
     }
 
     public static void PauseWorkout()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _pauseWorkout();
-        #else
-            Debug.Log("error pausing workout");
-        #endif
+#else
+        Debug.Log("error pausing workout");
+#endif
     }
 
     public static void IncreaseResistanceLevel()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _increaseResistanceLevel();
-        #else
-            Debug.Log("error increasing resistance");
-        #endif 
+#else
+        Debug.Log("error increasing resistance");
+#endif
     }
 
     public static void DecreaseResistanceLevel()
     {
-        #if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             _decreaseResistanceLevel();
-        #else
-            Debug.Log("error decreasing resistance");
-        #endif
+#else
+        Debug.Log("error decreasing resistance");
+#endif
     }
 
     #endregion
@@ -170,10 +183,18 @@ public class SwiftForUnity : MonoBehaviour
     #endregion
 
     #region Delegates
-    public void OnDiscoverServices(string test)
+    public void OnDiscoverServices(string byteData)
     {
-        Debug.Log(test);
-        Debug.Log("OnDiscoverServices");
+        Debug.Log("StartOnDiscover");
+        BLEAction.ProcessReceiveData(BLEProtocol.ConvertStringToBytes(byteData));
+        Debug.Log("EndOnDiscover");
+    }
+
+    public void OnReceivePeripherals(string peripheral)
+    {
+        Debug.Log("StartReceivePeripherals");
+        Debug.Log(peripheral);
+        Debug.Log("EndReceivePeripherals");
     }
     #endregion
 }
