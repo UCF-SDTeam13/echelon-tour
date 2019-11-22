@@ -5,8 +5,6 @@ public class BezierFollowV2 : MonoBehaviour
     [SerializeField] private Transform target;
 
     private BezierTracker tracker;
-    private float rpmRatio = 1;
-    private float wheelDiameter = (78 * 2.54f) / 100000;
 
     public float speed;
     public bool isPlayer = false;
@@ -19,8 +17,8 @@ public class BezierFollowV2 : MonoBehaviour
 
     private void Update()
     {
-        int rpm = isPlayer ? Bike.Instance.RPM : 0;
-        calculateSpeed(rpm); //Get rpm from server
+        int rpm = isPlayer ? Bike.Instance.RPM : 0; //0 needs to be replaced with the status update
+        CalculateSpeed(rpm); //Get rpm from server
     }
 
     private void FixedUpdate()
@@ -48,14 +46,16 @@ public class BezierFollowV2 : MonoBehaviour
         }
     }
 
-    private void calculateSpeed(int rpm)
+    private void CalculateSpeed(int rpm)
     {
         // Trying to hard code pi
+        float rpmRatio = 1;
+        float wheelDiameter = (78 * 2.54f) / 100000;
         float distancePerCount = wheelDiameter * 3.14f * rpmRatio;
         float speedMultiplier = distancePerCount * 60;
         float mph = rpm * speedMultiplier;
 
-        // mph to ms
+        // mph to ms, I know fun right
         speed = mph / 0.621f * 1000 / 60 / 60;
     }
 }

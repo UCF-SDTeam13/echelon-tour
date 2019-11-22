@@ -4,21 +4,25 @@ using UnityEngine.UI;
 
 public class ChallengeSystem : MonoBehaviour
 {
+    // Univeral Variables
     public GameObject challengePanel;
     public AudioSource challengeSound;
     public GameObject challengeTitle;
     public GameObject challengeDescription;
 
+    // Individual challenges images
     public GameObject TopSpeedImage;
     public GameObject MaintainSpeedImage;
     public GameObject RacePlacementImage;
     public GameObject TotalDistanceImage;
 
+    // Creation of challenges
     public TopSpeedChallenge tsc01;
     public MaintainSpeedChallenge msc01;
     public RacePlacementChallenge rpc01;
     public TotalDistanceChallenge tdc01;
 
+    // Statuses and number of challenges
     public bool[] challengeStatuses;
     public int numChallenges;
 
@@ -28,6 +32,7 @@ public class ChallengeSystem : MonoBehaviour
         //ChallengeData data = SaveSystem.LoadChallengeData();
         //challengeStatuses = new bool[numChallenges];
 
+        // Initialize the challenges with certain stats
         tsc01 = new TopSpeedChallenge(TopSpeedImage, 30);
         msc01 = new MaintainSpeedChallenge(MaintainSpeedImage, 30, 30);
         rpc01 = new RacePlacementChallenge(RacePlacementImage, 3);
@@ -37,11 +42,14 @@ public class ChallengeSystem : MonoBehaviour
     private void Update()
     {
         // MAY NEED TO CHECK IF MATCH IS FINISHED FIRST
+        
+        // Checks if the top speed is correct
         if (tsc01.Achieved == false && CalculateSpeed() >= tsc01.Speed)
         {
             StartCoroutine(TopSpeedTrigger(tsc01));
         }
 
+        // Checks if the speed is above a certain amount
         if (msc01.Achieved == false && msc01.Active == false && CalculateSpeed() >= msc01.Speed)
         {
             float startTime = Time.time;
@@ -56,6 +64,7 @@ public class ChallengeSystem : MonoBehaviour
         }
         */
 
+        // Checks if a certain amount of distance is achieved
         if(tdc01.Achieved == false && CalculateDistance() >= tdc01.Distance)
         {
             StartCoroutine(TotalDistanceTrigger(tdc01));
@@ -164,12 +173,16 @@ public class ChallengeSystem : MonoBehaviour
         challengeDescription.GetComponent<Text>().text = "";
     }
 
+    // Tracks the speed every second
     IEnumerator MaintainSpeedTracker(MaintainSpeedChallenge challenge, float time)
     {
+        // Loops and calculate the time that has passed
         for (float deltaTime = 0; ; deltaTime = Time.time - time)
         {
+            // Calculate the current speed
             float speed = CalculateSpeed();
 
+            // Check if the speed is correct and the time is achieved
             if (deltaTime >= challenge.Time && speed >= challenge.Speed)
             {
                 StartCoroutine(MaintainSpeedTrigger(challenge));
@@ -177,16 +190,19 @@ public class ChallengeSystem : MonoBehaviour
             }
             else if (speed >= challenge.Speed)
             {
+                // speed is correct, time is not achieved, wait for a second and check again
                 yield return new WaitForSeconds(1);
             }
             else
             {
+                // Resets the challenges as the player failed
                 challenge.Active = false;
                 yield break;
             }
         }
     }
 
+    // Calculate the speed bsaed off the bluetooth rpm
     private float CalculateSpeed()
     {
         // Trying to hard code pi
@@ -197,6 +213,7 @@ public class ChallengeSystem : MonoBehaviour
         return Bike.Instance.RPM * speedMultiplier;
     }
 
+    // Calculate the distance based off the bluetooth rotation
     private float CalculateDistance()
     {
         // Trying to hard code pi
