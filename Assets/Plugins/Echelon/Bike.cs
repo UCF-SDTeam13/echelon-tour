@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 
 public sealed class Bike
 {
     private static readonly Lazy<Bike>
     _Bike = new Lazy<Bike>(() => new Bike());
     public static Bike Instance => _Bike.Value;
+
+    public HashSet<string> Matches {get; } = new HashSet<string>();
+    public Dictionary<string,  string> Addresses {get; } = new Dictionary<string, string>();
 
     private Bike()
     {
