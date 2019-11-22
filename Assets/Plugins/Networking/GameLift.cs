@@ -59,6 +59,9 @@ public class RealTimeClient
 
         // Initiate a connection with the Realtime server with the given connection information
         Client.Connect(endpoint, remoteTcpPort, listeningUdpPort, connectionToken);
+
+        // Register Placeholder GameListener
+        gameListener = new PlaceholderGameListener();
     }
 
     public void Disconnect()
@@ -92,12 +95,18 @@ public class RealTimeClient
     }
     */
 
-    public void UpdateStats(int rotations, int rpm)
+    public void UpdateStats(int rotations, int rpm, float playerX, float playerY, float playerZ, float targetX, float targetY, float targetZ)
     {
         StatUpdate su = new StatUpdate()
         {
             rotations = rotations,
-            rpm = rpm
+            rpm = rpm,
+            playerX = playerX,
+            playerY = playerY,
+            playerZ = playerZ,
+            targetX = targetX,
+            targetY = targetY,
+            targetZ = targetZ
         };
 
         Client.SendMessage(Client.NewMessage(OP_CODE_STATS_UPDATE)
@@ -137,6 +146,7 @@ public class RealTimeClient
      */
     public void OnDataReceived(object sender, DataReceivedEventArgs e)
     {
+        BLEDebug.LogInfo("OPCODE " + e.OpCode + " Received, Data:" + BytesToString(e.Data));
         switch (e.OpCode)
         {
             // handle message based on OpCode
@@ -171,9 +181,9 @@ public class RealTimeClient
                 break;
 
             default:
+                BLEDebug.LogWarning("Unknown OPCODE Received");
                 break;
         }
-        BLEDebug.LogInfo("OPCODE " + e.OpCode + " Received, Data:" + BytesToString(e.Data));
     }
 
     /**
@@ -206,6 +216,41 @@ public interface IGameListener
 [Serializable]
 public class StatUpdate
 {
+    public string username;
     public int rotations;
     public int rpm;
+    public float playerX;
+    public float playerY;
+    public float playerZ;
+    public float targetX;
+    public float targetY;
+    public float targetZ;
+}
+
+class PlaceholderGameListener : IGameListener
+{
+    public void OnPlayerAccepted(int peerId)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnPlayerDisconnected(int peerId)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnRaceStart()
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnRaceEnd()
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void NotifyTimeTillTerminate(int time)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnStatsUpdate(int rotations, int rpm)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
 }
