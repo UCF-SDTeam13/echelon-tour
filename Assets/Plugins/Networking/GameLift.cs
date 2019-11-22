@@ -24,7 +24,9 @@ public class RealTimeClient
     private const int OP_CODE_RACE_END = 116;
     private const int OP_CODE_TIME_TILL_TERMINATE = 117;
     private const int OP_CODE_STATS_UPDATE = 118;
-
+    private const int OP_CODE_CUSTOMIZATION_UPDATE = 119;
+    private readonly string PlayerId;
+    private int peerId;
     private IGameListener gameListener;
 
     /// Initialize a client for GameLift Realtime and connect to a player session.
@@ -34,15 +36,16 @@ public class RealTimeClient
     /// <param name="connectionType">Type of connection to establish between client and the Realtime server</param>
     /// <param name="playerSessionId">The player session ID that is assiged to the game client for a game session </param>
     /// <param name="connectionPayload">Developer-defined data to be used during client connection, such as for player authentication</param>
-    public RealTimeClient(string endpoint, int remoteTcpPort, int listeningUdpPort, ConnectionType connectionType,
+    public RealTimeClient(string _PlayerId, string endpoint, int remoteTcpPort, int listeningUdpPort, ConnectionType connectionType,
                  string playerSessionId, byte[] connectionPayload)
     {
+        PlayerId = _PlayerId;
         // Create a client configuration to specify a secure or unsecure connection type
         // Best practice is to set up a secure connection using the connection type RT_OVER_WSS_DTLS_TLS12.
-        ClientConfiguration clientConfiguration = new ClientConfiguration(
-         // C# notation to set the field ConnectionType in the new instance of ClientConfiguration
-         connectionType
-        );
+        ClientConfiguration clientConfiguration = new ClientConfiguration
+        {
+            ConnectionType = connectionType
+        };
 
         // Create a Realtime client with the client configuration            
         Client = new Client(clientConfiguration);
@@ -59,6 +62,9 @@ public class RealTimeClient
 
         // Initiate a connection with the Realtime server with the given connection information
         Client.Connect(endpoint, remoteTcpPort, listeningUdpPort, connectionToken);
+
+        // Register Placeholder GameListener
+        gameListener = new PlaceholderGameListener();
     }
 
     public void Disconnect()
@@ -84,26 +90,36 @@ public class RealTimeClient
     /*
     public void SendMessage(DeliveryIntent intent, string payload)
     {
-        
+
         Client.SendMessage(Client.NewMessage(OP_CODE_CUSTOM_OP1)
             .WithDeliveryIntent(intent)
             .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
             .WithPayload(StringToBytes(payload)));
     }
     */
-
-    public void UpdateStats(int rotations, int rpm)
+    public void UpdateCustomization(string characterModelId)
     {
-        StatUpdate su = new StatUpdate()
-        {
-            rotations = rotations,
-            rpm = rpm
-        };
+        FlatJSON fJSON = new FlatJSON();
+        fJSON.Add("PlayerId", PlayerId);
+        fJSON.Add("characterModelId", characterModelId);
+
+        Client.SendMessage(Client.NewMessage(OP_CODE_CUSTOMIZATION_UPDATE)
+            .WithDeliveryIntent(DeliveryIntent.Reliable)
+            .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
+            .WithPayload(StringToBytes(fJSON.ToString())));
+    }
+    public void UpdateStats(int rotations, int rpm, float[] playerPosition, float[] targetPosition)
+    {
+        FlatJSON fJSON = new FlatJSON();
+        fJSON.Add("rotations", rotations);
+        fJSON.Add("rpm", rpm);
+        fJSON.Add("playerPosition", playerPosition);
+        fJSON.Add("targetPosition", targetPosition);
 
         Client.SendMessage(Client.NewMessage(OP_CODE_STATS_UPDATE)
             .WithDeliveryIntent(DeliveryIntent.Reliable)
             .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
-            .WithPayload(StringToBytes(JsonUtility.ToJson(su))));
+            .WithPayload(StringToBytes(fJSON.ToString())));
     }
 
     /**
@@ -137,13 +153,15 @@ public class RealTimeClient
      */
     public void OnDataReceived(object sender, DataReceivedEventArgs e)
     {
+        FlatJSON fJSON = new FlatJSON();
+
+        BLEDebug.LogInfo("OPCODE " + e.OpCode + " Received, Data:" + BytesToString(e.Data));
         switch (e.OpCode)
         {
             // handle message based on OpCode
             case OP_CODE_PLAYER_ACCEPTED:
-                int peerId;
-                Int32.TryParse(BytesToString(e.Data), out peerId);
-                gameListener.OnPlayerAccepted(peerId);
+                peerId = e.Sender;
+                gameListener.OnPlayerAccepted(e.Sender);
                 break;
 
             case OP_CODE_PLAYER_DISCONNECTED:
@@ -166,14 +184,23 @@ public class RealTimeClient
                 break;
 
             case OP_CODE_STATS_UPDATE:
-                StatUpdate su = JsonUtility.FromJson<StatUpdate>(BytesToString(e.Data));
-                gameListener.OnStatsUpdate(su.rotations, su.rpm);
+                fJSON.Deserialize(BytesToString(e.Data));
+                fJSON.TryGetIntValue("rotations", out int rotations);
+                fJSON.TryGetIntValue("rpm", out int rpm);
+                fJSON.TryGetFloatArray("playerPosition", out float[] playerPosition);
+                fJSON.TryGetFloatArray("targetPosition", out float[] targetPosition);
+                gameListener.OnStatsUpdate(e.Sender, rotations, rpm, playerPosition, targetPosition);
                 break;
-
+            case OP_CODE_CUSTOMIZATION_UPDATE:
+                fJSON.Deserialize(BytesToString(e.Data));
+                fJSON.TryGetStringValue("PlayerId", out string customplayer);
+                fJSON.TryGetStringValue("CharacterModelId", out string characterModel);
+                gameListener.OnCustomizationUpdate(e.Sender, customplayer, characterModel);
+                break;
             default:
+                BLEDebug.LogWarning("Unknown OPCODE Received");
                 break;
         }
-        BLEDebug.LogInfo("OPCODE " + e.OpCode + " Received, Data:" + BytesToString(e.Data));
     }
 
     /**
@@ -200,12 +227,38 @@ public interface IGameListener
     void OnRaceStart();
     void OnRaceEnd();
     void NotifyTimeTillTerminate(int time);
-    void OnStatsUpdate(int rotations, int rpm);
+    void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float[] targetPosition);
+    void OnCustomizationUpdate(int peerId, string PlayerId, string characterModelId);
 }
 
-[Serializable]
-public class StatUpdate
+class PlaceholderGameListener : IGameListener
 {
-    public int rotations;
-    public int rpm;
+    public void OnPlayerAccepted(int peerId)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnPlayerDisconnected(int peerId)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnRaceStart()
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnRaceEnd()
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void NotifyTimeTillTerminate(int time)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float[] targetPosition)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
+    public void OnCustomizationUpdate(int peerId, string PlayerId, string characterModelId)
+    {
+        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+    }
 }
