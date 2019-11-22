@@ -64,6 +64,19 @@ public sealed class API
             return _PlayerSessionId;
         }
     }
+
+    private string _CharacterModelId;
+    public string CharacterModelId
+    {
+        get
+        {
+            return _CharacterModelId;
+        }
+        set
+        {
+            _CharacterModelId = value;
+        }
+    }
     private API()
     {
         client = new HttpClient();
@@ -127,5 +140,33 @@ public sealed class API
             fJSON.TryGetStringValue("Port", out _Port);
             fJSON.TryGetStringValue("PlayerSessionId", out _PlayerSessionId);
         }
+    }
+
+    public async Task GetCustomization()
+    {
+        BLEDebug.LogInfo("Getting CharacterModelId");
+        FlatJSON fJSON = new FlatJSON();
+        HttpResponseMessage result = await client.GetAsync("https://echelon.3pointlabs.org/profile/customization");
+
+        string body = await result.Content.ReadAsStringAsync();
+        BLEDebug.LogInfo("CharacterModel " + body);
+        fJSON.Deserialize(body);
+
+        fJSON.TryGetStringValue("characterModelId", out _CharacterModelId);
+    }
+
+    public async Task SetCustomization()
+    {
+        BLEDebug.LogInfo("Setting CharacterModelId");
+        FlatJSON fJSON = new FlatJSON();
+        fJSON.Add("characterModelId", _CharacterModelId);
+        HttpContent req = fJSON.SerializeContent();
+        HttpResponseMessage result = await client.PutAsync("https://echelon.3pointlabs.org/profile/customization", req);
+
+        string body = await result.Content.ReadAsStringAsync();
+        BLEDebug.LogInfo("CharacterModel " + body);
+        fJSON.Deserialize(body);
+
+        fJSON.TryGetStringValue("characterModelId", out _CharacterModelId);
     }
 }

@@ -29,6 +29,15 @@ public class Connect : MonoBehaviour
     async void ConnectClient()
     {
         await API.Instance.Login("test", "password");
+        await API.Instance.GetCustomization();
+        BLEDebug.LogInfo(API.Instance.CharacterModelId);
+        API.Instance.CharacterModelId = "model2";
+        await API.Instance.SetCustomization();
+        BLEDebug.LogInfo(API.Instance.CharacterModelId);
+        API.Instance.CharacterModelId = "model1";
+        await API.Instance.SetCustomization();
+        BLEDebug.LogInfo(API.Instance.CharacterModelId);
+
         await API.Instance.CreateMatchmakingTicket();
         do
         {
@@ -40,7 +49,7 @@ public class Connect : MonoBehaviour
             int iPort = 1900;
 
             Int32.TryParse(API.Instance.Port, out iPort);
-            rc = new RealTimeClient(API.Instance.IpAddress, iPort, 33400, ConnectionType.RT_OVER_WEBSOCKET, API.Instance.PlayerSessionId, new byte[0]);
+            rc = new RealTimeClient(API.Instance.PlayerId, API.Instance.IpAddress, iPort, 33400, ConnectionType.RT_OVER_WEBSOCKET, API.Instance.PlayerSessionId, new byte[0]);
 
         }
 
