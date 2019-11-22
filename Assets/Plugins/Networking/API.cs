@@ -2,6 +2,9 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Net.NetworkInformation;
+using System.Linq;
+using System.Collections.Generic;
 
 public sealed class API
 {
@@ -9,6 +12,8 @@ public sealed class API
     _API = new Lazy<API>(() => new API());
     public static API Instance => _API.Value;
 
+    private const int firstPort = 33400;
+    private const int lastPort = 33500;
     private readonly HttpClient client;
     private string idToken = "";
     private string refreshToken = "";
@@ -48,13 +53,18 @@ public sealed class API
             return _IpAddress;
         }
     }
-    private string _Port;
-    public string Port
+    private int _TcpPort;
+    public int TcpPort
     {
         get
         {
-            return _Port;
+            return _TcpPort;
         }
+    }
+    public int UdpPort
+    {
+        get;
+        private set;
     }
     private string _PlayerSessionId;
     public string PlayerSessionId
@@ -75,6 +85,19 @@ public sealed class API
         set
         {
             _CharacterModelId = value;
+        }
+    }
+
+    private string _DnsName;
+    public string DnsName
+    {
+        get
+        {
+            return _DnsName;
+        }
+        set
+        {
+            DnsName = value;
         }
     }
     private API()
@@ -137,8 +160,10 @@ public sealed class API
         {
             fJSON.TryGetStringValue("GameSessionArn", out _GameSessionArn);
             fJSON.TryGetStringValue("IpAddress", out _IpAddress);
-            fJSON.TryGetStringValue("Port", out _Port);
+            fJSON.TryGetStringValue("DnsName", out _DnsName);
+            fJSON.TryGetIntValue("Port", out _TcpPort);
             fJSON.TryGetStringValue("PlayerSessionId", out _PlayerSessionId);
+            FindAvailableUDPPort();
         }
     }
 
@@ -168,5 +193,23 @@ public sealed class API
         fJSON.Deserialize(body);
 
         fJSON.TryGetStringValue("characterModelId", out _CharacterModelId);
+    }
+    // Given a starting and ending range, finds an open UDP port to use as the listening port
+    private void FindAvailableUDPPort()
+    {
+        var UDPEndPoints = IPGlobalProperties.GetIPGlobalProperties().GetActiveUdpListeners();
+        List<int> usedPorts = new List<int>();
+        usedPorts.AddRange(from n in UDPEndPoints where n.Port >= firstPort && n.Port <= lastPort select n.Port);
+        usedPorts.Sort();
+        for (int testPort = firstPort; testPort <= lastPort; ++testPort)
+
+        {
+            if (!usedPorts.Contains(testPort))
+            {
+                UdpPort = testPort;
+                return;
+            }
+        }
+        UdpPort = -1;
     }
 }

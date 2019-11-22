@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Net.Http;
-using System.Collections.Generic;
 using UnityEngine;
 using Aws.GameLift.Realtime.Types;
-using System.Threading.Tasks;
+
 
 public class Connect : MonoBehaviour
 {
     private HttpClient client = new HttpClient();
     RealTimeClient rc;
-    Ping east1;
-    Ping east2;
+    UnityEngine.Ping east1;
+    UnityEngine.Ping east2;
 
     float timer = 0.0f;
     readonly float pingInterval = 1.0f;
@@ -22,8 +21,8 @@ public class Connect : MonoBehaviour
     {
         client = new HttpClient();
         ConnectClient();
-        east1 = new Ping("3.208.0.0");
-        east2 = new Ping("3.14.0.0");
+        east1 = new UnityEngine.Ping("3.208.0.0");
+        east2 = new UnityEngine.Ping("3.14.0.0");
     }
 
     async void ConnectClient()
@@ -46,11 +45,11 @@ public class Connect : MonoBehaviour
         } while (API.Instance.Status == "SEARCHING" || API.Instance.Status == "PLACING");
         if (API.Instance.Status == "COMPLETED")
         {
-            int iPort = 1900;
-
-            Int32.TryParse(API.Instance.Port, out iPort);
-            rc = new RealTimeClient(API.Instance.PlayerId, API.Instance.IpAddress, iPort, 33400, ConnectionType.RT_OVER_WEBSOCKET, API.Instance.PlayerSessionId, new byte[0]);
-
+            BLEDebug.LogInfo("Connecting to GameLift Realtime Session");
+            BLEDebug.LogInfo($"DNS: {API.Instance.DnsName}");
+            BLEDebug.LogInfo($"TCP Port: {API.Instance.TcpPort}");
+            BLEDebug.LogInfo($"UDP Port: {API.Instance.UdpPort}");
+            rc = new RealTimeClient(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
         }
 
     }
@@ -79,12 +78,14 @@ public class Connect : MonoBehaviour
             if (rc != null && rc.IsConnected())
             {
                 BLEDebug.LogInfo("Connection Status:" + rc.IsConnected());
-                rc.UpdateStats(0, 0, 1, 2, 3, 1, 2, 3);
+                float[] playerPos = { 1, 2, 3 };
+                float[] targetPos = { 4, 5, 6 };
+                rc.UpdateStats(0, 0, playerPos, targetPos);
             }
             //BLEDebug.LogInfo("East1 Ping" + pingEast1);
             //BLEDebug.LogInfo("East2 Ping" + pingEast2);
-            east1 = new Ping("3.208.0.0");
-            east2 = new Ping("3.14.0.0");
+            east1 = new UnityEngine.Ping("3.208.0.0");
+            east2 = new UnityEngine.Ping("3.14.0.0");
             timer = 0.0f;
         }
     }
