@@ -1,4 +1,5 @@
 
+using System;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,9 @@ using System.Net.Http.Headers;
 
 // Flat JSON Serializer / Deserializer to avoid Reflection for IL2CPP
 // Flat Only: No Child Objects
-// Supports Strings / Arrays of Strings (No Numbers)
+// Supports Strings
+// Supports ints / floats (NOTE: Currently Respresents Those As Strings Internally - TODO Fix)
+// Supports Arrays of Above
 
 public class FlatJSON
 {
@@ -236,17 +239,79 @@ public class FlatJSON
     {
         stringValues.TryGetValue(k, out v);
     }
+    public void TryGetIntValue(string k, out int v)
+    {
+        stringValues.TryGetValue(k, out string value);
+        Int32.TryParse(value, out v);
+    }
+    public void TryGetFloatValue(string k, out float v)
+    {
+        stringValues.TryGetValue(k, out string sv);
+        Single.TryParse(sv, out v);
+    }
     public void TryGetStringArray(string k, out string[] v)
     {
         stringArrays.TryGetValue(k, out v);
+    }
+    public void TryGetIntArray(string k, out int[] v)
+    {
+        List<int> iArr = new List<int>();
+
+        stringArrays.TryGetValue(k, out string[] sArr);
+        foreach (string s in sArr)
+        {
+            Int32.TryParse(s, out int i);
+            iArr.Add(i);
+        }
+        v = iArr.ToArray();
+    }
+    public void TryGetFloatArray(string k, out float[] v)
+    {
+        List<float> fArr = new List<float>();
+
+        stringArrays.TryGetValue(k, out string[] sArr);
+        foreach (string s in sArr)
+        {
+            Single.TryParse(s, out float f);
+            fArr.Add(f);
+        }
+        v = fArr.ToArray();
     }
     public void Add(string k, string v)
     {
         stringValues.Add(k, v);
     }
+    public void Add(string k, int v)
+    {
+        stringValues.Add(k, $"{v}");
+    }
+    public void Add(string k, float v)
+    {
+        stringValues.Add(k, $"{v}");
+    }
     public void Add(string k, string[] v)
     {
         stringArrays.Add(k, v);
+    }
+    public void Add(string k, int[] v)
+    {
+        List<string> sArr = new List<string>();
+
+        foreach (int i in v)
+        {
+            sArr.Add($"{i}");
+        }
+        stringArrays.Add(k, sArr.ToArray());
+    }
+    public void Add(string k, float[] v)
+    {
+        List<string> sArr = new List<string>();
+
+        foreach (float f in v)
+        {
+            sArr.Add($"{f}");
+        }
+        stringArrays.Add(k, sArr.ToArray());
     }
     public void Clear()
     {
