@@ -31,8 +31,10 @@ public class RealTimeClient
     private string PlayerId;
 
     private int _peerId;
-    public int peerId {
-        get {
+    public int peerId
+    {
+        get
+        {
             return _peerId;
         }
     }
@@ -43,7 +45,7 @@ public class RealTimeClient
     public event EventHandler<PlayerEventArgs> PlayerDisconnect;
     public event EventHandler<CustomizationUpdateEventArgs> CustomizationUpdate;
     public event EventHandler<StatsUpdateEventArgs> StatsUpdate;
-    
+
     public event EventHandler<NotifyTimeTillTerminateEventArgs> NotifyTimeTillTerminate;
 
     /// Initialize a client for GameLift Realtime and connect to a player session.
@@ -54,7 +56,8 @@ public class RealTimeClient
     /// <param name="playerSessionId">The player session ID that is assiged to the game client for a game session </param>
     /// <param name="connectionPayload">Developer-defined data to be used during client connection, such as for player authentication</param>
 
-    private RealTimeClient() {
+    private RealTimeClient()
+    {
 
     }
     public void Connect(string _PlayerId, string endpoint, int remoteTcpPort, int listeningUdpPort, ConnectionType connectionType,
@@ -126,13 +129,13 @@ public class RealTimeClient
             .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
             .WithPayload(StringToBytes(fJSON.ToString())));
     }
-    public void UpdateStats(int rotations, int rpm, float[] playerPosition, float[] targetPosition)
+    public void UpdateStats(int rotations, int rpm, float[] playerPosition, float progressDistance)
     {
         FlatJSON fJSON = new FlatJSON();
         fJSON.Add("rotations", rotations);
         fJSON.Add("rpm", rpm);
         fJSON.Add("playerPosition", playerPosition);
-        fJSON.Add("targetPosition", targetPosition);
+        fJSON.Add("progressDistance", progressDistance);
 
         Client.SendMessage(Client.NewMessage(OP_CODE_STATS_UPDATE)
             .WithDeliveryIntent(DeliveryIntent.Reliable)
@@ -201,8 +204,8 @@ public class RealTimeClient
                 fJSON.TryGetIntValue("rotations", out int rotations);
                 fJSON.TryGetIntValue("rpm", out int rpm);
                 fJSON.TryGetFloatArray("playerPosition", out float[] playerPosition);
-                fJSON.TryGetFloatArray("targetPosition", out float[] targetPosition);
-                OnStatsUpdate(e.Sender, rotations, rpm, playerPosition, targetPosition);
+                fJSON.TryGet("progressDistance", out float progressDistance);
+                OnStatsUpdate(e.Sender, rotations, rpm, playerPosition, progressDistance);
                 break;
             case OP_CODE_CUSTOMIZATION_UPDATE:
                 fJSON.Deserialize(BytesToString(e.Data));
@@ -250,11 +253,11 @@ public class RealTimeClient
     }
     private void OnNotifyTimeTillTerminate(int time)
     {
-        NotifyTimeTillTerminate?.Invoke(this, new  NotifyTimeTillTerminateEventArgs(time));
+        NotifyTimeTillTerminate?.Invoke(this, new NotifyTimeTillTerminateEventArgs(time));
     }
-    private void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float[] targetPosition)
+    private void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float progressDistance)
     {
-        StatsUpdate?.Invoke(this, new StatsUpdateEventArgs(peerId, rotations, rpm, playerPosition, targetPosition));
+        StatsUpdate?.Invoke(this, new StatsUpdateEventArgs(peerId, rotations, rpm, playerPosition, progressDistance));
     }
     private void OnCustomizationUpdate(int peerId, string PlayerId, string characterModelId)
     {
@@ -262,42 +265,49 @@ public class RealTimeClient
     }
 }
 
-public class PlayerEventArgs : EventArgs {
-    public int peerId {get; private set;}
+public class PlayerEventArgs : EventArgs
+{
+    public int peerId { get; private set; }
     public PlayerEventArgs(int pId)
     {
         peerId = pId;
     }
 }
 
-public class CustomizationUpdateEventArgs : EventArgs {
-    public int peerId {get; private set;}
-    public string PlayerId {get; private set;}
-    public string characterModelId {get; private set;}
-    public CustomizationUpdateEventArgs(int pId, string PId, string cId) {
+public class CustomizationUpdateEventArgs : EventArgs
+{
+    public int peerId { get; private set; }
+    public string PlayerId { get; private set; }
+    public string characterModelId { get; private set; }
+    public CustomizationUpdateEventArgs(int pId, string PId, string cId)
+    {
         peerId = pId;
         PlayerId = PId;
         characterModelId = cId;
     }
 }
-public class StatsUpdateEventArgs: EventArgs {
-    public int peerId {get; private set;}
-    public int rotations {get; private set;}
-    public int rpm {get; private set;}
-    public float[] playerPosition {get; private set;}
-    public float[] targetPosition {get; private set;}
-    public StatsUpdateEventArgs(int pId, int rot, int rm, float[] pPos, float[] tPos) {
+public class StatsUpdateEventArgs : EventArgs
+{
+    public int peerId { get; private set; }
+    public int rotations { get; private set; }
+    public int rpm { get; private set; }
+    public float[] playerPosition { get; private set; }
+    public float progressDistance { get; private set; }
+    public StatsUpdateEventArgs(int pId, int rot, int rm, float[] pPos, float pDis)
+    {
         peerId = pId;
         rotations = rot;
         rpm = rm;
         playerPosition = pPos;
-        targetPosition = tPos;
+        progressDistance = pDis;
     }
 }
 
-public class NotifyTimeTillTerminateEventArgs: EventArgs {
-    public int time {get; set;}
-    public NotifyTimeTillTerminateEventArgs (int t) {
+public class NotifyTimeTillTerminateEventArgs : EventArgs
+{
+    public int time { get; set; }
+    public NotifyTimeTillTerminateEventArgs(int t)
+    {
         time = t;
     }
 }
