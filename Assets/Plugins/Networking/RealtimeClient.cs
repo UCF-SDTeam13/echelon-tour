@@ -204,7 +204,7 @@ public class RealTimeClient
                 fJSON.TryGetIntValue("rotations", out int rotations);
                 fJSON.TryGetIntValue("rpm", out int rpm);
                 fJSON.TryGetFloatArray("playerPosition", out float[] playerPosition);
-                fJSON.TryGet("progressDistance", out float progressDistance);
+                fJSON.TryGetFloatValue("progressDistance", out float progressDistance);
                 OnStatsUpdate(e.Sender, rotations, rpm, playerPosition, progressDistance);
                 break;
             case OP_CODE_CUSTOMIZATION_UPDATE:
