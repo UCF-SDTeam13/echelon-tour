@@ -15,6 +15,9 @@ using UnityEngine;
  */
 public class RealTimeClient
 {
+    private static readonly Lazy<RealTimeClient>
+    _RealTimeClient = new Lazy<RealTimeClient>(() => new RealTimeClient());
+    public static RealTimeClient Instance => _RealTimeClient.Value;
     public Aws.GameLift.Realtime.Client Client { get; private set; }
 
     // An opcode defined by client and your server script that represents a custom message type
@@ -25,9 +28,25 @@ public class RealTimeClient
     private const int OP_CODE_TIME_TILL_TERMINATE = 117;
     private const int OP_CODE_STATS_UPDATE = 118;
     private const int OP_CODE_CUSTOMIZATION_UPDATE = 119;
-    private readonly string PlayerId;
-    private int peerId;
-    private IGameListener gameListener;
+    private string PlayerId;
+
+    private int _peerId;
+    public int peerId
+    {
+        get
+        {
+            return _peerId;
+        }
+    }
+
+    public event EventHandler RaceStart;
+    public event EventHandler RaceEnd;
+    public event EventHandler<PlayerEventArgs> PlayerConnect;
+    public event EventHandler<PlayerEventArgs> PlayerDisconnect;
+    public event EventHandler<CustomizationUpdateEventArgs> CustomizationUpdate;
+    public event EventHandler<StatsUpdateEventArgs> StatsUpdate;
+
+    public event EventHandler<NotifyTimeTillTerminateEventArgs> NotifyTimeTillTerminate;
 
     /// Initialize a client for GameLift Realtime and connect to a player session.
     /// <param name="endpoint">The DNS name that is assigned to Realtime server</param>
@@ -36,7 +55,12 @@ public class RealTimeClient
     /// <param name="connectionType">Type of connection to establish between client and the Realtime server</param>
     /// <param name="playerSessionId">The player session ID that is assiged to the game client for a game session </param>
     /// <param name="connectionPayload">Developer-defined data to be used during client connection, such as for player authentication</param>
-    public RealTimeClient(string _PlayerId, string endpoint, int remoteTcpPort, int listeningUdpPort, ConnectionType connectionType,
+
+    private RealTimeClient()
+    {
+
+    }
+    public void Connect(string _PlayerId, string endpoint, int remoteTcpPort, int listeningUdpPort, ConnectionType connectionType,
                  string playerSessionId, byte[] connectionPayload)
     {
         PlayerId = _PlayerId;
@@ -62,9 +86,6 @@ public class RealTimeClient
 
         // Initiate a connection with the Realtime server with the given connection information
         Client.Connect(endpoint, remoteTcpPort, listeningUdpPort, connectionToken);
-
-        // Register Placeholder GameListener
-        gameListener = new PlaceholderGameListener();
     }
 
     public void Disconnect()
@@ -108,13 +129,13 @@ public class RealTimeClient
             .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
             .WithPayload(StringToBytes(fJSON.ToString())));
     }
-    public void UpdateStats(int rotations, int rpm, float[] playerPosition, float[] targetPosition)
+    public void UpdateStats(int rotations, int rpm, float[] playerPosition, float progressDistance)
     {
         FlatJSON fJSON = new FlatJSON();
         fJSON.Add("rotations", rotations);
         fJSON.Add("rpm", rpm);
         fJSON.Add("playerPosition", playerPosition);
-        fJSON.Add("targetPosition", targetPosition);
+        fJSON.Add("progressDistance", progressDistance);
 
         Client.SendMessage(Client.NewMessage(OP_CODE_STATS_UPDATE)
             .WithDeliveryIntent(DeliveryIntent.Reliable)
@@ -125,33 +146,28 @@ public class RealTimeClient
     /**
      * Handle connection open events
      */
-    public void OnOpenEvent(object sender, EventArgs e)
+    private void OnOpenEvent(object sender, EventArgs e)
     {
     }
 
     /**
      * Handle connection close events
      */
-    public void OnCloseEvent(object sender, EventArgs e)
+    private void OnCloseEvent(object sender, EventArgs e)
     {
     }
 
     /**
      * Handle Group membership update events 
      */
-    public void OnGroupMembershipUpdate(object sender, GroupMembershipEventArgs e)
+    private void OnGroupMembershipUpdate(object sender, GroupMembershipEventArgs e)
     {
-    }
-
-    public void RegisterGameListener(IGameListener gListener)
-    {
-        gameListener = gListener;
     }
 
     /**
      *  Handle data received from the Realtime server 
      */
-    public void OnDataReceived(object sender, DataReceivedEventArgs e)
+    private void OnDataReceived(object sender, DataReceivedEventArgs e)
     {
         FlatJSON fJSON = new FlatJSON();
 
@@ -160,27 +176,27 @@ public class RealTimeClient
         {
             // handle message based on OpCode
             case OP_CODE_PLAYER_ACCEPTED:
-                peerId = e.Sender;
-                gameListener.OnPlayerAccepted(e.Sender);
+                _peerId = e.Sender;
+                OnPlayerAccepted(peerId);
                 break;
 
             case OP_CODE_PLAYER_DISCONNECTED:
-                Int32.TryParse(BytesToString(e.Data), out peerId);
-                gameListener.OnPlayerDisconnected(peerId);
+                Int32.TryParse(BytesToString(e.Data), out _peerId);
+                OnPlayerDisconnected(peerId);
                 break;
 
             case OP_CODE_RACE_START:
-                gameListener.OnRaceStart();
+                OnRaceStart();
                 break;
 
             case OP_CODE_RACE_END:
-                gameListener.OnRaceEnd();
+                OnRaceEnd();
                 break;
 
             case OP_CODE_TIME_TILL_TERMINATE:
                 int time;
                 Int32.TryParse(BytesToString(e.Data), out time);
-                gameListener.NotifyTimeTillTerminate(time);
+                OnNotifyTimeTillTerminate(time);
                 break;
 
             case OP_CODE_STATS_UPDATE:
@@ -188,14 +204,14 @@ public class RealTimeClient
                 fJSON.TryGetIntValue("rotations", out int rotations);
                 fJSON.TryGetIntValue("rpm", out int rpm);
                 fJSON.TryGetFloatArray("playerPosition", out float[] playerPosition);
-                fJSON.TryGetFloatArray("targetPosition", out float[] targetPosition);
-                gameListener.OnStatsUpdate(e.Sender, rotations, rpm, playerPosition, targetPosition);
+                fJSON.TryGet("progressDistance", out float progressDistance);
+                OnStatsUpdate(e.Sender, rotations, rpm, playerPosition, progressDistance);
                 break;
             case OP_CODE_CUSTOMIZATION_UPDATE:
                 fJSON.Deserialize(BytesToString(e.Data));
                 fJSON.TryGetStringValue("PlayerId", out string customplayer);
                 fJSON.TryGetStringValue("CharacterModelId", out string characterModel);
-                gameListener.OnCustomizationUpdate(e.Sender, customplayer, characterModel);
+                OnCustomizationUpdate(e.Sender, customplayer, characterModel);
                 break;
             default:
                 BLEDebug.LogWarning("Unknown OPCODE Received");
@@ -206,7 +222,7 @@ public class RealTimeClient
     /**
      * Helper method to simplify task of sending/receiving payloads.
      */
-    public static byte[] StringToBytes(string str)
+    private static byte[] StringToBytes(string str)
     {
         return Encoding.UTF8.GetBytes(str);
     }
@@ -214,51 +230,84 @@ public class RealTimeClient
     /**
      * Helper method to simplify task of sending/receiving payloads.
      */
-    public static string BytesToString(byte[] bytes)
+    private static string BytesToString(byte[] bytes)
     {
         return Encoding.UTF8.GetString(bytes);
     }
+    private void OnPlayerAccepted(int peerId)
+    {
+        PlayerConnect?.Invoke(this, new PlayerEventArgs(peerId));
+    }
+    private void OnPlayerDisconnected(int peerId)
+    {
+        PlayerDisconnect?.Invoke(this, new PlayerEventArgs(peerId));
+    }
+    private void OnRaceStart()
+    {
+        RaceStart?.Invoke(this, null);
+
+    }
+    private void OnRaceEnd()
+    {
+        RaceEnd?.Invoke(this, null);
+    }
+    private void OnNotifyTimeTillTerminate(int time)
+    {
+        NotifyTimeTillTerminate?.Invoke(this, new NotifyTimeTillTerminateEventArgs(time));
+    }
+    private void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float progressDistance)
+    {
+        StatsUpdate?.Invoke(this, new StatsUpdateEventArgs(peerId, rotations, rpm, playerPosition, progressDistance));
+    }
+    private void OnCustomizationUpdate(int peerId, string PlayerId, string characterModelId)
+    {
+        CustomizationUpdate?.Invoke(this, new CustomizationUpdateEventArgs(peerId, PlayerId, characterModelId));
+    }
 }
 
-public interface IGameListener
+public class PlayerEventArgs : EventArgs
 {
-    void OnPlayerAccepted(int peerId);
-    void OnPlayerDisconnected(int peerId);
-    void OnRaceStart();
-    void OnRaceEnd();
-    void NotifyTimeTillTerminate(int time);
-    void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float[] targetPosition);
-    void OnCustomizationUpdate(int peerId, string PlayerId, string characterModelId);
+    public int peerId { get; private set; }
+    public PlayerEventArgs(int pId)
+    {
+        peerId = pId;
+    }
 }
 
-class PlaceholderGameListener : IGameListener
+public class CustomizationUpdateEventArgs : EventArgs
 {
-    public void OnPlayerAccepted(int peerId)
+    public int peerId { get; private set; }
+    public string PlayerId { get; private set; }
+    public string characterModelId { get; private set; }
+    public CustomizationUpdateEventArgs(int pId, string PId, string cId)
     {
-        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+        peerId = pId;
+        PlayerId = PId;
+        characterModelId = cId;
     }
-    public void OnPlayerDisconnected(int peerId)
+}
+public class StatsUpdateEventArgs : EventArgs
+{
+    public int peerId { get; private set; }
+    public int rotations { get; private set; }
+    public int rpm { get; private set; }
+    public float[] playerPosition { get; private set; }
+    public float progressDistance { get; private set; }
+    public StatsUpdateEventArgs(int pId, int rot, int rm, float[] pPos, float pDis)
     {
-        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+        peerId = pId;
+        rotations = rot;
+        rpm = rm;
+        playerPosition = pPos;
+        progressDistance = pDis;
     }
-    public void OnRaceStart()
+}
+
+public class NotifyTimeTillTerminateEventArgs : EventArgs
+{
+    public int time { get; set; }
+    public NotifyTimeTillTerminateEventArgs(int t)
     {
-        BLEDebug.LogWarning("Warning - GameListener Not Registered");
-    }
-    public void OnRaceEnd()
-    {
-        BLEDebug.LogWarning("Warning - GameListener Not Registered");
-    }
-    public void NotifyTimeTillTerminate(int time)
-    {
-        BLEDebug.LogWarning("Warning - GameListener Not Registered");
-    }
-    public void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float[] targetPosition)
-    {
-        BLEDebug.LogWarning("Warning - GameListener Not Registered");
-    }
-    public void OnCustomizationUpdate(int peerId, string PlayerId, string characterModelId)
-    {
-        BLEDebug.LogWarning("Warning - GameListener Not Registered");
+        time = t;
     }
 }

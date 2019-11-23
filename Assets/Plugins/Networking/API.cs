@@ -11,7 +11,8 @@ public sealed class API
     private static readonly Lazy<API>
     _API = new Lazy<API>(() => new API());
     public static API Instance => _API.Value;
-
+    public enum LoginStatus {TOKEN_EXPIRED, LOGGING_IN, LOGGED_IN, FAILED};
+    public LoginStatus CurrentLoginStatus{get; set;} = LoginStatus.TOKEN_EXPIRED;
     private const int firstPort = 33400;
     private const int lastPort = 33500;
     private readonly HttpClient client;
@@ -107,6 +108,7 @@ public sealed class API
 
     public async Task Login(string username, string password)
     {
+        CurrentLoginStatus = LoginStatus.LOGGING_IN;
         BLEDebug.LogInfo("Logging In");
         FlatJSON fJSON = new FlatJSON();
         fJSON.Add("username", username);
@@ -121,9 +123,14 @@ public sealed class API
         fJSON.TryGetStringValue("idToken", out idToken);
         fJSON.TryGetStringValue("refreshToken", out refreshToken);
         fJSON.TryGetStringValue("accessToken", out accessToken);
-
-        // Set Token for Authentication
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(idToken);
+        if (idToken != null) {
+            // Set Token for Authentication
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(idToken);
+            CurrentLoginStatus = LoginStatus.LOGGED_IN;
+        }
+        else {
+            CurrentLoginStatus = LoginStatus.FAILED;
+        }
     }
 
     public async Task CreateMatchmakingTicket()

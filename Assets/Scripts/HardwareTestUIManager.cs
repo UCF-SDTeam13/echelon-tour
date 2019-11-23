@@ -1,9 +1,14 @@
 ﻿
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class HardwareTestUIManager : MonoBehaviour
 {
+    public GameObject DropdownBox;
+
     private TestBikeListener _bikeListener;
+    private List<string> found = new List<string>();
 
     public void Start()
     {
@@ -12,6 +17,35 @@ public class HardwareTestUIManager : MonoBehaviour
         //Scan();
         //ConnectTestRealBike();
         //DiscoverServices();
+    }
+    private int lastsize = 0;
+
+    public void Update()
+    {
+        if (Bike.Instance.Matches.Count != lastsize)
+        {
+            DropdownBox.GetComponent<Dropdown>().options.Clear();
+            found.Clear();
+            foreach (string s in Bike.Instance.Matches)
+            {
+                BLEDebug.LogInfo($"Dropdown Option: {s}");
+                DropdownBox.GetComponent<Dropdown>().options.Add(new Dropdown.OptionData(s));
+                found.Add(s);
+            }
+            lastsize = Bike.Instance.Matches.Count;
+        }
+
+    }
+
+    public void OnDropdownSelect(Dropdown change)
+    {
+        BLEDebug.LogInfo("Changed #: " + change.value);
+        BLEDebug.LogInfo("Name: " + found.ToArray()[change.value]);
+        Bike.Instance.Addresses.TryGetValue(found.ToArray()[change.value], out string address);
+        BLEDebug.LogInfo("Address: " + address);
+        BLEPlugin.Instance.Connect(address);
+        Bike.Instance.RegisterBikeListener(_bikeListener);
+
     }
     public void RequestBLE()
     {

@@ -2,8 +2,8 @@
 
 public class SpawnManagerV2 : MonoBehaviour
 {
-    [SerializeField] private GameObject femalePrefab = null;
-    [SerializeField] private GameObject malePrefab = null;
+    [SerializeField] private GameObject maleModel1 = null;
+    [SerializeField] private GameObject femaleModel1 = null;
 
     [SerializeField] private int numRoutes = 8;
 
@@ -17,21 +17,32 @@ public class SpawnManagerV2 : MonoBehaviour
 
     [SerializeField] private GameObject multiCircuit;
 
+    [SerializeField] private GameObject minimapCam;
+
+    private void Awake()
+    {
+        players = new GameObject[numRoutes];
+        RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
+    }
+
     private void Start()
     {
-        // Testing values, needs to be adjusted depending on Gamelift
-        players = new GameObject[numRoutes];
-        for (int i = 0; i < numRoutes; i++)
-        {
-            int j = i % 2;
-            Spawn(j, i);
-        }
-        cam.GetComponent<CameraPivot>().SetTarget(players[1]);
+        Spawn(API.Instance.CharacterModelId, RealTimeClient.Instance.peerId - 1);
+        cam.GetComponent<CameraPivot>().SetTarget(players[RealTimeClient.Instance.peerId - 1]);
+        minimapCam.GetComponent<MinimapFollow>().target = players[RealTimeClient.Instance.peerId - 1];
+
+        RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
+    }
+
+    private void SpawnPlayer(object sender, CustomizationUpdateEventArgs e)
+    {
+        Spawn(e.characterModelId, e.peerId - 1);
     }
 
     // Spawn function (needs to get adjusted)
-    private void Spawn(int gender, int index)
+    private void Spawn(string model, int index)
     {
+        Debug.Log("THIS IS THE INDEX " + index);
         // Ranges between 2 points
         float xRange = lineEnd.position.x - lineStart.position.x;
         float yRange = lineEnd.position.y - lineStart.position.y;
@@ -55,8 +66,27 @@ public class SpawnManagerV2 : MonoBehaviour
                                                             transform.rotation.w);
 
         // Check which prefab needs to be used
-        GameObject prefab = gender == 0 ? malePrefab : femalePrefab;
+        GameObject prefab = null;
+        switch (model)
+        {
+            case "maleModel1":
+                prefab = maleModel1;
+                break;
+            case "femaleModel1":
+                prefab = femaleModel1;
+                break;
+            default:
+                Debug.Log("Model does not exist");
+                break;
+        }
+
+        if(prefab == null)
+        {
+            prefab = maleModel1;
+        }
+
         prefab.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index);
+        prefab.GetComponent<BezierFollowV2>().isMultiplayer = true;
         players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
         //GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
     }
