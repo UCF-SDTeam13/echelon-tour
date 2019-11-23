@@ -6,19 +6,45 @@ public class BezierFollowV2 : MonoBehaviour
 
     private BezierTracker tracker;
 
+    public int currentRPM = 0;
+    public int updatedRPM = 0;
     public float speed;
-    public bool isPlayer = false;
+    public int peerId = 0;
+    public bool isMultiplayer = false;
 
     private void Start()
     {
         // Find the tracker component
         tracker = GetComponent<BezierTracker>();
+
+        if(isMultiplayer == true && peerId != RealTimeClient.Instance.peerId)
+        {
+            // Need to unsubscribe
+            RealTimeClient.Instance.StatsUpdate += GetPlayerStats;
+        }
     }
 
     private void Update()
     {
-        int rpm = isPlayer ? Bike.Instance.RPM : 0; //0 needs to be replaced with the status update
-        CalculateSpeed(rpm); //Get rpm from server
+        if (isMultiplayer == true)
+        {
+            if (peerId == RealTimeClient.Instance.peerId)
+            {
+                updatedRPM = Bike.Instance.RPM;
+            }
+        }
+        else
+        {
+            currentRPM = Bike.Instance.RPM;
+        }
+
+        currentRPM = updatedRPM;
+        CalculateSpeed(currentRPM); //Get rpm from server
+    }
+
+    private void GetPlayerStats(object sender, StatsUpdateEventArgs e)
+    {
+        updatedRPM = e.rpm;
     }
 
     private void FixedUpdate()
