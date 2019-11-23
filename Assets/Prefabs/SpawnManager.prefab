@@ -45,15 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b228994ad442ba46af829e37586f961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  femalePrefab: {fileID: 3887045885762571563, guid: 328f1994689f5a54599100bd764b7dd3,
+  maleModel1: {fileID: 8120283039703925668, guid: 5b8b06472b026204ba277a4b614fa7fb,
     type: 3}
-  malePrefab: {fileID: 4352215826839558514, guid: 10bfd11df97504b458b89ae1d61d6c60,
+  femaleModel1: {fileID: 933111136308885887, guid: 59d85c5bd4b25bc40bce272171afce00,
     type: 3}
   numRoutes: 8
   lineStart: {fileID: 9012987267271323451}
   lineEnd: {fileID: 9012987266772512502}
   cam: {fileID: 0}
   players: []
+  multiCircuit: {fileID: 0}
 --- !u!1 &9012987266772512503
 GameObject:
   m_ObjectHideFlags: 0
