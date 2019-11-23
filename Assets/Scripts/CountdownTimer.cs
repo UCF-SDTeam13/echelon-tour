@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,6 @@ public class CountdownTimer : MonoBehaviour
     float currentTime = 0f;
     float startingTime = raceTime * 60f;
     [SerializeField] Text countdownText;
-
     public GameObject highscoreTable;
     public GameObject livestats;
     public GameObject optionsButton;
@@ -21,7 +21,11 @@ public class CountdownTimer : MonoBehaviour
 
     void Update()
     {
-        setUIText();
+        string currentScene = SceneManager.GetActiveScene().name;
+        if(currentScene != "MainMenu")
+        {
+            setUIText();
+        }
     }
 
     // Sets the UI text
