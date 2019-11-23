@@ -1565,7 +1565,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1697517468}
+      - m_Target: {fileID: 720691937}
         m_MethodName: setTimer
         m_Mode: 4
         m_Arguments:
@@ -4071,7 +4071,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1697517468}
+      - m_Target: {fileID: 720691937}
         m_MethodName: setTimer
         m_Mode: 4
         m_Arguments:
@@ -4731,7 +4731,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1697517468}
+      - m_Target: {fileID: 720691937}
         m_MethodName: setTimer
         m_Mode: 4
         m_Arguments:
@@ -4917,7 +4917,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 971348180}
-  - component: {fileID: 971348179}
   - component: {fileID: 971348177}
   - component: {fileID: 971348178}
   m_Layer: 0
@@ -4997,14 +4996,25 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 971348177}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 953925036}
+        m_MethodName: LoadLevel
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MatchMakingLobby
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &971348179
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971348176}
+  m_GameObject: {fileID: 1128581790}
   m_CullTransparentMesh: 0
 --- !u!224 &971348180
 RectTransform:
@@ -5640,8 +5650,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1128581791}
-  - component: {fileID: 1128581793}
   - component: {fileID: 1128581792}
+  - component: {fileID: 971348179}
   m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
@@ -5696,7 +5706,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!222 &1128581793
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8283,7 +8292,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1697517467}
-  - component: {fileID: 1697517468}
   m_Layer: 0
   m_Name: Times
   m_TagString: Untagged
@@ -8314,22 +8322,6 @@ RectTransform:
   m_AnchoredPosition: {x: -449, y: -371}
   m_SizeDelta: {x: 749.2, y: 197.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1697517468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1697517466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03bfc55b1902e4e6d89420e512397646, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  countdownText: {fileID: 0}
-  highscoreTable: {fileID: 0}
-  livestats: {fileID: 0}
-  optionsButton: {fileID: 0}
 --- !u!1 &1697625668
 GameObject:
   m_ObjectHideFlags: 0
@@ -10605,7 +10597,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1697517468}
+      - m_Target: {fileID: 720691937}
         m_MethodName: setTimer
         m_Mode: 4
         m_Arguments:
