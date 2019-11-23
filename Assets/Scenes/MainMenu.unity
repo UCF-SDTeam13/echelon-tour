@@ -1565,7 +1565,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 720691937}
         m_MethodName: setTimer
         m_Mode: 4
         m_Arguments:
@@ -4071,7 +4071,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 720691937}
         m_MethodName: setTimer
         m_Mode: 4
         m_Arguments:
@@ -4731,7 +4731,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 720691937}
         m_MethodName: setTimer
         m_Mode: 4
         m_Arguments:
@@ -4917,7 +4917,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 971348180}
-  - component: {fileID: 971348179}
   - component: {fileID: 971348177}
   - component: {fileID: 971348178}
   m_Layer: 0
@@ -4997,14 +4996,25 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 971348177}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 953925036}
+        m_MethodName: LoadLevel
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MatchMakingLobby
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &971348179
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971348176}
+  m_GameObject: {fileID: 1128581790}
   m_CullTransparentMesh: 0
 --- !u!224 &971348180
 RectTransform:
@@ -5640,8 +5650,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1128581791}
-  - component: {fileID: 1128581793}
   - component: {fileID: 1128581792}
+  - component: {fileID: 971348179}
   m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
@@ -5696,68 +5706,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &971348178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971348176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 971348177}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 953925036}
-        m_MethodName: LoadLevel
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: MatchMakingLobby
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!222 &971348179
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128581790}
-  m_CullTransparentMesh: 0
 --- !u!1 &1148963809
 GameObject:
   m_ObjectHideFlags: 0
@@ -8337,7 +8285,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1697517467}
-  - component: {fileID: 1697517468}
   m_Layer: 0
   m_Name: Times
   m_TagString: Untagged
@@ -8368,18 +8315,6 @@ RectTransform:
   m_AnchoredPosition: {x: -449, y: -371}
   m_SizeDelta: {x: 749.2, y: 197.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1697517468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1697517466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fad9657da67a745719859d400c29e525, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1697625668
 GameObject:
   m_ObjectHideFlags: 0
@@ -10655,7 +10590,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 720691937}
         m_MethodName: setTimer
         m_Mode: 4
         m_Arguments:
