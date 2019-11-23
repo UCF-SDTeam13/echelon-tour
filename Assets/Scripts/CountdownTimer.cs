@@ -12,6 +12,7 @@ public class CountdownTimer : MonoBehaviour
 
     public GameObject highscoreTable;
     public GameObject livestats;
+    public GameObject optionsButton;
 
     void Start ()
     {
@@ -65,6 +66,11 @@ public class CountdownTimer : MonoBehaviour
         miniseconds = (int)((time - hours * 3600 - minutes * 60 - seconds) * 100);
     }
 
+    public void setTimer(float buttonTime)
+    {
+        raceTime = raceTime * buttonTime;
+    }
+
     // This cotrols what will happen when timer runs out
     public void finishAction()
     {
@@ -73,6 +79,7 @@ public class CountdownTimer : MonoBehaviour
 
         highscoreTable.SetActive(true);
         livestats.SetActive(false);
+        optionsButton.SetActive(false);
 
         //SceneManager.LoadSceneAsync("Loss");
         //Application.Quit();

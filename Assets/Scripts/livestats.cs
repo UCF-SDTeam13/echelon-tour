@@ -10,7 +10,6 @@ public class livestats : MonoBehaviour
     public Text speedText;
     public Text resistanceText;
     public Text wattsText;
-    public Text caloriesText;
     public Text distanceText;
     public Text totalOutputText;
 
@@ -18,7 +17,6 @@ public class livestats : MonoBehaviour
     float speed = 0f;
     float resistance = 1f;
     float watts = 0f;
-    float calories = 0f;
     float distance = 0f;
     float totalOutput = 0f;
 
@@ -48,11 +46,12 @@ public class livestats : MonoBehaviour
     {
         rpm = Bike.Instance.RPM;
         speed = rpm * speedMultiplier;
+        distance =  rpm * wheelDiameter * 3.14f;
 
         rpmText.text = rpm.ToString();
         speedText.text = speed.ToString();
+        resistanceText.text = resistance.ToString();
         wattsText.text = watts.ToString();
-        caloriesText.text = calories.ToString();
         distanceText.text = distance.ToString();
         totalOutputText.text = totalOutput.ToString();
     }
