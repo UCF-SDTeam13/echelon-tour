@@ -22,7 +22,7 @@ public class BezierTracker : MonoBehaviour
 
     public bool isMultiplayer = false;
     public Vector3 serverPlayerPosition;
-    public Vector3 serverTargetPosition;
+    public float serverProgressDistance;
 
     private void Awake()
     {
@@ -77,16 +77,17 @@ public class BezierTracker : MonoBehaviour
         progressPoint = circuit.GetTrackPoint(progressDistance);
         Vector3 progressDelta = progressPoint.position - transform.position;
 
-        // REORDER LATER TOMORROW
         // Compare progressDelta with server progressDelta
         if(isMultiplayer == true)
         {
-            Vector3 serverProgressDelta = serverTargetPosition - serverPlayerPosition;
-            if (Vector3.Distance(progressDelta, serverProgressDelta) > 10) //Distance
+            BezierCircuit.TrackPoint serverProgressPoint = circuit.GetTrackPoint(serverProgressDistance);
+
+            if (Mathf.Abs(serverProgressDistance - progressDistance) > 10) //Distance
             {
                 transform.position = serverPlayerPosition;
-                progressPoint = circuit.GetTrackPoint(serverProgressDelta.magnitude);
-                progressDelta = serverProgressDelta;
+                progressDistance = serverProgressDistance;
+                progressPoint = serverProgressPoint;
+                progressDelta = serverProgressPoint.position - serverPlayerPosition;
             }
         }
 
@@ -106,16 +107,15 @@ public class BezierTracker : MonoBehaviour
     private void GetPositions(object sender, StatsUpdateEventArgs e)
     {
         Vector3 newPlayerPos = new Vector3();
-        Vector3 newTargetPos = new Vector3();
+        float newProgressDis = e.progressDistance;
 
         for(int i = 0; i < 3; i++)
         {
             newPlayerPos[i] = e.playerPosition[i];
-            newTargetPos[i] = e.targetPosition[i];
         }
 
         serverPlayerPosition = newPlayerPos;
-        serverTargetPosition = newTargetPos;
+        serverProgressDistance = newProgressDis;
     }
 
     IEnumerator UpdateServerStats()
@@ -123,9 +123,9 @@ public class BezierTracker : MonoBehaviour
         while (true)
         {
             float[] playerPos = { transform.position.x, transform.position.y, transform.position.z };
-            float[] targetPos = { progressPoint.position.x, progressPoint.position.y, progressPoint.position.z };
+            float progressDis = progressDistance;
 
-            RealTimeClient.Instance.UpdateStats(Bike.Instance.Count, Bike.Instance.RPM, playerPos, targetPos);
+            RealTimeClient.Instance.UpdateStats(Bike.Instance.Count, Bike.Instance.RPM, playerPos, progressDis);
             yield return new WaitForSeconds(0.5f);
         }
     }

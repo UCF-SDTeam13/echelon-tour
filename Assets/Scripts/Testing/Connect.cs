@@ -80,7 +80,7 @@ public class Connect : MonoBehaviour
                 BLEDebug.LogInfo("Connection Status:" + rc.IsConnected());
                 float[] playerPos = { 1, 2, 3 };
                 float[] targetPos = { 4, 5, 6 };
-                rc.UpdateStats(0, 0, playerPos, targetPos);
+                //rc.UpdateStats(0, 0, playerPos, targetPos);
             }
             //BLEDebug.LogInfo("East1 Ping" + pingEast1);
             //BLEDebug.LogInfo("East2 Ping" + pingEast2);
