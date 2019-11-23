@@ -29,7 +29,13 @@ public class RealTimeClient
     private const int OP_CODE_STATS_UPDATE = 118;
     private const int OP_CODE_CUSTOMIZATION_UPDATE = 119;
     private string PlayerId;
-    private int peerId;
+
+    private int _peerId;
+    public int peerId {
+        get {
+            return _peerId;
+        }
+    }
 
     public event EventHandler RaceStart;
     public event EventHandler RaceEnd;
@@ -167,12 +173,12 @@ public class RealTimeClient
         {
             // handle message based on OpCode
             case OP_CODE_PLAYER_ACCEPTED:
-                peerId = e.Sender;
+                _peerId = e.Sender;
                 OnPlayerAccepted(peerId);
                 break;
 
             case OP_CODE_PLAYER_DISCONNECTED:
-                Int32.TryParse(BytesToString(e.Data), out peerId);
+                Int32.TryParse(BytesToString(e.Data), out _peerId);
                 OnPlayerDisconnected(peerId);
                 break;
 
