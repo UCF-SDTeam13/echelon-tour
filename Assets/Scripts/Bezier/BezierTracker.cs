@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class BezierTracker : MonoBehaviour
 {
@@ -19,11 +20,21 @@ public class BezierTracker : MonoBehaviour
     public Vector3 targetLookAhead;
     public float speed = 0;
 
+    public bool isMultiplayer = false;
+    public Vector3 serverPlayerPosition;
+    public Vector3 serverTargetPosition;
+
     private void Awake()
     {
         // May not need anymore (Use editor for singleplayer, use spawm manager for multiplayer)
         // Find the bezier circuit in the scene
         // circuit = GameObject.FindGameObjectWithTag("Circuit").GetComponent<BezierCircuit>();
+
+        if(isMultiplayer == true)
+        {
+            RealTimeClient.Instance.StatsUpdate += GetPositions;
+            StartCoroutine("UpdateServerStats");
+        }
 
         if(circuit == null)
         {
@@ -66,6 +77,19 @@ public class BezierTracker : MonoBehaviour
         progressPoint = circuit.GetTrackPoint(progressDistance);
         Vector3 progressDelta = progressPoint.position - transform.position;
 
+        // REORDER LATER TOMORROW
+        // Compare progressDelta with server progressDelta
+        if(isMultiplayer == true)
+        {
+            Vector3 serverProgressDelta = serverTargetPosition - serverPlayerPosition;
+            if (Vector3.Distance(progressDelta, serverProgressDelta) > 10) //Distance
+            {
+                transform.position = serverPlayerPosition;
+                progressPoint = circuit.GetTrackPoint(serverProgressDelta.magnitude);
+                progressDelta = serverProgressDelta;
+            }
+        }
+
         // Checks if less than 0 and increment the progressDistance
         if(Vector3.Dot(progressDelta, progressPoint.direction) < 0)
         {
@@ -77,6 +101,33 @@ public class BezierTracker : MonoBehaviour
 
         // Save the last position
         lastPosition = transform.position;
+    }
+    
+    private void GetPositions(object sender, StatsUpdateEventArgs e)
+    {
+        Vector3 newPlayerPos = new Vector3();
+        Vector3 newTargetPos = new Vector3();
+
+        for(int i = 0; i < 3; i++)
+        {
+            newPlayerPos[i] = e.playerPosition[i];
+            newTargetPos[i] = e.targetPosition[i];
+        }
+
+        serverPlayerPosition = newPlayerPos;
+        serverTargetPosition = newTargetPos;
+    }
+
+    IEnumerator UpdateServerStats()
+    {
+        while (true)
+        {
+            float[] playerPos = { transform.position.x, transform.position.y, transform.position.z };
+            float[] targetPos = { progressPoint.position.x, progressPoint.position.y, progressPoint.position.z };
+
+            RealTimeClient.Instance.UpdateStats(Bike.Instance.Count, Bike.Instance.RPM, playerPos, targetPos);
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     private void OnDrawGizmos()
