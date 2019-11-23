@@ -4919,6 +4919,7 @@ GameObject:
   - component: {fileID: 971348180}
   - component: {fileID: 971348177}
   - component: {fileID: 971348178}
+  - component: {fileID: 971348181}
   m_Layer: 0
   m_Name: Map 1
   m_TagString: Untagged
@@ -5035,6 +5036,14 @@ RectTransform:
   m_AnchoredPosition: {x: -440.85, y: 16}
   m_SizeDelta: {x: 869.7, y: 672.6}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &971348181
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971348176}
+  m_CullTransparentMesh: 0
 --- !u!1 &981305225
 GameObject:
   m_ObjectHideFlags: 0
@@ -5706,13 +5715,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128581790}
-  m_CullTransparentMesh: 0
 --- !u!1 &1148963809
 GameObject:
   m_ObjectHideFlags: 0
