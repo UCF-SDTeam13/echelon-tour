@@ -15,6 +15,9 @@ using UnityEngine;
  */
 public class RealTimeClient
 {
+    private static readonly Lazy<RealTimeClient>
+    _RealTimeClient = new Lazy<RealTimeClient>(() => new RealTimeClient());
+    public static RealTimeClient Instance => _RealTimeClient.Value;
     public Aws.GameLift.Realtime.Client Client { get; private set; }
 
     // An opcode defined by client and your server script that represents a custom message type
@@ -25,7 +28,7 @@ public class RealTimeClient
     private const int OP_CODE_TIME_TILL_TERMINATE = 117;
     private const int OP_CODE_STATS_UPDATE = 118;
     private const int OP_CODE_CUSTOMIZATION_UPDATE = 119;
-    private readonly string PlayerId;
+    private string PlayerId;
     private int peerId;
 
     public event EventHandler RaceStart;
@@ -44,7 +47,11 @@ public class RealTimeClient
     /// <param name="connectionType">Type of connection to establish between client and the Realtime server</param>
     /// <param name="playerSessionId">The player session ID that is assiged to the game client for a game session </param>
     /// <param name="connectionPayload">Developer-defined data to be used during client connection, such as for player authentication</param>
-    public RealTimeClient(string _PlayerId, string endpoint, int remoteTcpPort, int listeningUdpPort, ConnectionType connectionType,
+
+    private RealTimeClient() {
+
+    }
+    public void Connect(string _PlayerId, string endpoint, int remoteTcpPort, int listeningUdpPort, ConnectionType connectionType,
                  string playerSessionId, byte[] connectionPayload)
     {
         PlayerId = _PlayerId;
@@ -130,28 +137,28 @@ public class RealTimeClient
     /**
      * Handle connection open events
      */
-    public void OnOpenEvent(object sender, EventArgs e)
+    private void OnOpenEvent(object sender, EventArgs e)
     {
     }
 
     /**
      * Handle connection close events
      */
-    public void OnCloseEvent(object sender, EventArgs e)
+    private void OnCloseEvent(object sender, EventArgs e)
     {
     }
 
     /**
      * Handle Group membership update events 
      */
-    public void OnGroupMembershipUpdate(object sender, GroupMembershipEventArgs e)
+    private void OnGroupMembershipUpdate(object sender, GroupMembershipEventArgs e)
     {
     }
 
     /**
      *  Handle data received from the Realtime server 
      */
-    public void OnDataReceived(object sender, DataReceivedEventArgs e)
+    private void OnDataReceived(object sender, DataReceivedEventArgs e)
     {
         FlatJSON fJSON = new FlatJSON();
 
@@ -206,7 +213,7 @@ public class RealTimeClient
     /**
      * Helper method to simplify task of sending/receiving payloads.
      */
-    public static byte[] StringToBytes(string str)
+    private static byte[] StringToBytes(string str)
     {
         return Encoding.UTF8.GetBytes(str);
     }
@@ -214,15 +221,15 @@ public class RealTimeClient
     /**
      * Helper method to simplify task of sending/receiving payloads.
      */
-    public static string BytesToString(byte[] bytes)
+    private static string BytesToString(byte[] bytes)
     {
         return Encoding.UTF8.GetString(bytes);
     }
-    public void OnPlayerAccepted(int peerId)
+    private void OnPlayerAccepted(int peerId)
     {
         PlayerConnect?.Invoke(this, new PlayerEventArgs(peerId));
     }
-    public void OnPlayerDisconnected(int peerId)
+    private void OnPlayerDisconnected(int peerId)
     {
         PlayerDisconnect?.Invoke(this, new PlayerEventArgs(peerId));
     }
@@ -235,15 +242,15 @@ public class RealTimeClient
     {
         RaceEnd?.Invoke(this, null);
     }
-    public void OnNotifyTimeTillTerminate(int time)
+    private void OnNotifyTimeTillTerminate(int time)
     {
         NotifyTimeTillTerminate?.Invoke(this, new  NotifyTimeTillTerminateEventArgs(time));
     }
-    public void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float[] targetPosition)
+    private void OnStatsUpdate(int peerId, int rotations, int rpm, float[] playerPosition, float[] targetPosition)
     {
         StatsUpdate?.Invoke(this, new StatsUpdateEventArgs(peerId, rotations, rpm, playerPosition, targetPosition));
     }
-    public void OnCustomizationUpdate(int peerId, string PlayerId, string characterModelId)
+    private void OnCustomizationUpdate(int peerId, string PlayerId, string characterModelId)
     {
         CustomizationUpdate?.Invoke(this, new CustomizationUpdateEventArgs(peerId, PlayerId, characterModelId));
     }

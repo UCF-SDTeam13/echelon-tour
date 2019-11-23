@@ -49,7 +49,7 @@ public class Connect : MonoBehaviour
             BLEDebug.LogInfo($"DNS: {API.Instance.DnsName}");
             BLEDebug.LogInfo($"TCP Port: {API.Instance.TcpPort}");
             BLEDebug.LogInfo($"UDP Port: {API.Instance.UdpPort}");
-            rc = new RealTimeClient(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
+            RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
         }
 
     }
