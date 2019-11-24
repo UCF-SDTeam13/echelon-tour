@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -19,6 +20,12 @@ public class SubmitCheck : MonoBehaviour
         TMP_InputField passwordInputField = password.GetComponent<TMP_InputField>();
         Button submitButton = submit.GetComponent<Button>();
 
+        if(usernameInputField.text == "" || passwordInputField.text == "")
+        {
+            StartCoroutine("MissingDialogBox");
+            return;
+        }
+
         usernameInputField.interactable = false;
         passwordInputField.interactable = false;
         submitButton.interactable = false;
@@ -34,10 +41,31 @@ public class SubmitCheck : MonoBehaviour
         else
         {
             // Need to set active a dialog box, may need to move the interactable somewhere else
+            StartCoroutine("CredentialDialogBox");
             usernameInputField.interactable = true;
             passwordInputField.interactable = true;
             submitButton.interactable = true;
             Debug.Log("Login fail");
         }
+    }
+
+    IEnumerator CredentialDialogBox()
+    {
+        errorDialogBox.GetComponent<Text>().text = "Could not connect with current credentials";
+        errorDialogBox.SetActive(true);
+
+        yield return new WaitForSeconds(3);
+
+        errorDialogBox.SetActive(false);
+    }
+
+    IEnumerator MissingDialogBox()
+    {
+        errorDialogBox.GetComponent<Text>().text = "Username or password cannot be empty";
+        errorDialogBox.SetActive(true);
+
+        yield return new WaitForSeconds(3);
+
+        errorDialogBox.SetActive(false);
     }
 }
