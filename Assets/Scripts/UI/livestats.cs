@@ -40,19 +40,29 @@ public class livestats : MonoBehaviour
     void Update()
     {
         updateUIText();
+        storeinDB();
     }
 
     public void updateUIText()
     {
-        rpm = Bike.Instance.RPM;
+        //rpm = Bike.Instance.RPM;
+
+        // FOR TESTING
+        rpm = 30;
+
         speed = rpm * speedMultiplier;
-        distance =  rpm * wheelDiameter * 3.14f;
+        distance +=  rpm * wheelDiameter * 3.14f;
 
         rpmText.text = rpm.ToString();
         speedText.text = speed.ToString();
         resistanceText.text = resistance.ToString();
         wattsText.text = watts.ToString();
-        distanceText.text = distance.ToString();
+        distanceText.text = distance.ToString("F2");
         totalOutputText.text = totalOutput.ToString();
+    }
+
+    public void storeinDB()
+    {
+        
     }
 }
