@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/NetworkTestScene.unity
+    guid: 9337b3c97941288418d761e1b81949cf
+  - enabled: 1
     path: Assets/Scenes/Preload.unity
     guid: 34865583f8bac354887fe641fec93190
   - enabled: 1
@@ -23,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameUI.unity
     guid: 8fcb08b36f5f440d3b67b32f4ebc04d6
+  - enabled: 1
+    path: Assets/Scenes/MatchMakingLobby.unity
+    guid: 23a3ef98084c72143bcb243b34726dcc
   m_configObjects: {}

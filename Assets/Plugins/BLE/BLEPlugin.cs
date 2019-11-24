@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 //Use BLEPlugin.Instance 
 public sealed class BLEPlugin : MonoBehaviour
@@ -32,8 +33,12 @@ public sealed class BLEPlugin : MonoBehaviour
         {
             BLEDebug.LogWarning("BLE Already Enabled, Ignoring Request");
         }
-    }
 
+        RequestEnableLocation();
+    }
+    public void RequestEnableLocation() {
+        _nativePluginInstance.RequestEnableLocation();
+    }
     public void Scan()
     {
         _nativePluginInstance.Scan();
@@ -59,7 +64,20 @@ public sealed class BLEPlugin : MonoBehaviour
         BLEDebug.LogInfo("Plugin Received Message: " + message);
         BLEAction.ProcessReceiveData(BLEProtocol.ConvertStringToBytes(message));
     }
+    public void ReceiveMatch (string matchRecord) {
+        string[] sep = {"|"};
+        string[] matchSplit = matchRecord.Split(sep, 2, StringSplitOptions.RemoveEmptyEntries);
 
+        
+        Bike.Instance.Matches.Add(matchSplit[0]);
+        if (!Bike.Instance.Addresses.ContainsKey(matchSplit[0])) {
+            Bike.Instance.Addresses.Add(matchSplit[0], matchSplit[1]);
+        }
+        // Test Value Was Added
+        string s = "";
+        Bike.Instance.Addresses.TryGetValue(matchSplit[0], out s);
+        BLEDebug.LogInfo("Match Received: " + matchSplit[0] + " " + s);
+    }
     public void SendPluginMessage(string message)
     {
         BLEDebug.LogInfo("Plugin Sending Message: " + message);
@@ -77,6 +95,7 @@ interface INativePlugin
     bool EnabledBLE { get; }
 
     void RequestEnableBLE();
+    void RequestEnableLocation();
     void Scan();
     void StopScan();
     void Connect(string address);

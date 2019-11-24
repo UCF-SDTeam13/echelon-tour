@@ -1,15 +1,50 @@
 ﻿
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class HardwareTestUIManager : MonoBehaviour
 {
+    public GameObject DropdownBox;
+
     private TestBikeListener _bikeListener;
+    private List<string> found = new List<string>();
 
     public void Start()
     {
         _bikeListener = new TestBikeListener();
-        RequestBLE();
-        Scan();
+        //RequestBLE();
+        //Scan();
+        //ConnectTestRealBike();
+        //DiscoverServices();
+    }
+    private int lastsize = 0;
+
+    public void Update()
+    {
+        if (Bike.Instance.Matches.Count != lastsize)
+        {
+            DropdownBox.GetComponent<Dropdown>().options.Clear();
+            found.Clear();
+            foreach (string s in Bike.Instance.Matches)
+            {
+                BLEDebug.LogInfo($"Dropdown Option: {s}");
+                DropdownBox.GetComponent<Dropdown>().options.Add(new Dropdown.OptionData(s));
+                found.Add(s);
+            }
+            lastsize = Bike.Instance.Matches.Count;
+        }
+
+    }
+
+    public void OnDropdownSelect(Dropdown change)
+    {
+        BLEDebug.LogInfo("Changed #: " + change.value);
+        BLEDebug.LogInfo("Name: " + found.ToArray()[change.value]);
+        Bike.Instance.Addresses.TryGetValue(found.ToArray()[change.value], out string address);
+        BLEDebug.LogInfo("Address: " + address);
+        BLEPlugin.Instance.Connect(address);
+        Bike.Instance.RegisterBikeListener(_bikeListener);
     }
     public void RequestBLE()
     {
@@ -105,7 +140,7 @@ public class HardwareTestUIManager : MonoBehaviour
 #if UNITY_IOS && !UNITY_EDITOR
             SwiftForUnity.IncreaseResistanceLevel();
 #else
-        // Add one level, propery will auto clamp to valid range
+        // Add one level, property will auto clamp to valid range
         ++Workout.Instance.ResistanceLevel;
         Bike.Instance.Set(BLEProtocol.ActionCode.SetResistanceLevel, Workout.Instance.ResistanceLevel);
 #endif
