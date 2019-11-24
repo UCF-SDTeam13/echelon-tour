@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class ChallengeSystem : MonoBehaviour
 {
-    // Univeral Variables
+    // Universal Variables
     public GameObject challengePanel;
     public AudioSource challengeSound;
     public GameObject challengeTitle;
@@ -26,6 +29,8 @@ public class ChallengeSystem : MonoBehaviour
     public bool[] challengeStatuses;
     public int numChallenges;
 
+    public GameObject spawnManager;
+
     private void Awake()
     {
         // Need to find out how to change certain statuses
@@ -37,6 +42,8 @@ public class ChallengeSystem : MonoBehaviour
         msc01 = new MaintainSpeedChallenge(MaintainSpeedImage, 30, 30);
         rpc01 = new RacePlacementChallenge(RacePlacementImage, 3);
         tdc01 = new TotalDistanceChallenge(TotalDistanceImage, 10); //Not sure of value
+
+        //RealTimeClient.Instance.RaceEnd += RaceEndTrigger;
     }
     
     private void Update()
@@ -58,7 +65,7 @@ public class ChallengeSystem : MonoBehaviour
         }
 
         /*
-        if(rpc01.Achieved == false && FINALRANKPLACEHOLDER <= rpc01.Rank && MATCHFINISH == true)
+        if(rpc01.Achieved == false && FINALRANKPLACEHOLDER <= rpc01.Rank && raceEnd == true)
         {
             StartCoroutine(RacePlacementTrigger(rpc01));
         }
@@ -76,6 +83,16 @@ public class ChallengeSystem : MonoBehaviour
             SaveSystem.SaveChallengeData(challengeStatuses, calculateDistance());
         }
         */
+    }
+
+    private void RaceEndTrigger(object sender, EventArgs e)
+    {
+
+
+        if(rpc01.Achieved == false)
+        {
+            StartCoroutine(RacePlacementTrigger(rpc01));
+        }
     }
 
     /*

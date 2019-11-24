@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class SpawnManagerV2 : MonoBehaviour
 {
@@ -11,38 +12,48 @@ public class SpawnManagerV2 : MonoBehaviour
     [SerializeField] private Transform lineStart = null;
     [SerializeField] private Transform lineEnd = null;
 
-    [SerializeField] private GameObject cam = null;
+    [SerializeField] private GameObject playerCam = null;
+    [SerializeField] private GameObject minimapCam = null;
 
-    [SerializeField] private GameObject[] players;
+    //NEED TO CHECK TO LIST
+    //[SerializeField] private GameObject[] players;
+    [SerializeField] private Dictionary<int, GameObject> players;
 
     [SerializeField] private GameObject multiCircuit;
 
-    [SerializeField] private GameObject minimapCam;
+    [SerializeField] private bool isMultiplayer;
 
     private void Awake()
     {
-        players = new GameObject[numRoutes];
+        //players = new GameObject[numRoutes];
+        players = new Dictionary<int, GameObject>();
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
+        RealTimeClient.Instance.PlayerDisconnect += DespawnPlayer;
+        RealTimeClient.Instance.UpdateCustomization(PlayerPrefs.GetString("Model"));
     }
 
     private void Start()
     {
-        Spawn(API.Instance.CharacterModelId, RealTimeClient.Instance.peerId - 1);
-        cam.GetComponent<CameraPivot>().SetTarget(players[RealTimeClient.Instance.peerId - 1]);
-        minimapCam.GetComponent<MinimapFollow>().target = players[RealTimeClient.Instance.peerId - 1];
+        Spawn(API.Instance.CharacterModelId, RealTimeClient.Instance.peerId);
+        playerCam.GetComponent<CameraPivot>().SetTarget(players[RealTimeClient.Instance.peerId]);
+        minimapCam.GetComponent<MinimapFollow>().target = players[RealTimeClient.Instance.peerId];
 
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
     }
 
     private void SpawnPlayer(object sender, CustomizationUpdateEventArgs e)
     {
-        Spawn(e.characterModelId, e.peerId - 1);
+        Spawn(e.characterModelId, e.peerId);
+    }
+
+    private void DespawnPlayer(object sender, PlayerEventArgs e)
+    {
+        Despawn(e.peerId);
     }
 
     // Spawn function (needs to get adjusted)
     private void Spawn(string model, int index)
     {
-        Debug.Log("THIS IS THE INDEX " + index);
         // Ranges between 2 points
         float xRange = lineEnd.position.x - lineStart.position.x;
         float yRange = lineEnd.position.y - lineStart.position.y;
@@ -53,7 +64,7 @@ public class SpawnManagerV2 : MonoBehaviour
         float partition = 1f / (numRoutes - 1);
         float value;
 
-        value = partition * index;
+        value = partition * (index - 1);
         // The position where the player will spawn
         Vector3 spawnLocation = new Vector3(lineStart.position.x + (xRange * value),
                                                 lineStart.position.y + (yRange * value),
@@ -76,19 +87,31 @@ public class SpawnManagerV2 : MonoBehaviour
                 prefab = femaleModel1;
                 break;
             default:
+                prefab = maleModel1;
                 Debug.Log("Model does not exist");
                 break;
         }
 
-        if(prefab == null)
+        prefab.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index);
+
+        if(isMultiplayer == true)
         {
-            prefab = maleModel1;
+            prefab.GetComponent<BezierFollowV2>().isMultiplayer = true;
+            prefab.GetComponent<BezierTracker>().isMultiplayer = true;
+            prefab.GetComponent<PlayerStats>().peerId = index;
         }
 
-        prefab.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index);
-        prefab.GetComponent<BezierFollowV2>().isMultiplayer = true;
-        players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
+        //players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
+        players.Add(index, Instantiate(prefab, spawnLocation, spawnRotation));
         //GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
+    }
+
+    // Despawn
+    private void Despawn(int index)
+    {
+        // Set active to false and remove the reference
+        players[index].SetActive(false);
+        players.Remove(index);
     }
 
     private void OnDrawGizmos()

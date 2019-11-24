@@ -1686,7 +1686,7 @@ PrefabInstance:
         type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 5592960720381770512}
+      objectReference: {fileID: 809180910}
     - target: {fileID: 6750644253053422870, guid: 20a55d588159c4d429b7f3174fa5cc61,
         type: 3}
       propertyPath: turnSpeed
@@ -2485,6 +2485,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 798877415}
   m_CullTransparentMesh: 0
+--- !u!4 &809180910 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1982974874}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &820870632
 GameObject:
   m_ObjectHideFlags: 0
@@ -7708,6 +7714,80 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa2de362fdffb2b489b154d95b1dfda6, type: 3}
+--- !u!1001 &1982974874
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8120283039703925668, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_Name
+      value: MalePlayerV4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 26.97
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5096963433032624732, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8120283039703925669, guid: 5b8b06472b026204ba277a4b614fa7fb,
+        type: 3}
+      propertyPath: circuit
+      value: 
+      objectReference: {fileID: 1713081626}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5b8b06472b026204ba277a4b614fa7fb, type: 3}
 --- !u!1 &2030712180
 GameObject:
   m_ObjectHideFlags: 0
@@ -11832,7 +11912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8904521904546599657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11854,6 +11934,9 @@ MonoBehaviour:
   circuit: {fileID: 1713081626}
   targetLookAhead: {x: 0, y: 0, z: 0}
   speed: 0
+  isMultiplayer: 0
+  serverPlayerPosition: {x: 0, y: 0, z: 0}
+  serverProgressDistance: 0
 --- !u!114 &8904521904546599658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11867,4 +11950,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 572904995040410814}
+  currentRPM: 0
+  updatedRPM: 0
   speed: 0
+  peerId: 0
+  isMultiplayer: 0
