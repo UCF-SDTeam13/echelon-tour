@@ -2,7 +2,7 @@ import CoreBluetooth
 import Foundation
 import UIKit
 
-let kCallbackTarget = "SwiftForUnity"
+let kCallbackTarget = "DontDestroyOnLoad"
 
 let bikeDeviceCBUUID = CBUUID(string: "0bf669f0-45f2-11e7-9598-0800200c9a66")
 let bikeServiceCBUUID = CBUUID(string: "0bf669f1-45f2-11e7-9598-0800200c9a66")
@@ -15,8 +15,10 @@ let MinCmdLen = 4
 
 @objc class SwiftForUnity: UIViewController {
     @objc static let shared = SwiftForUnity()
+    @objc var identifierString = ""
     @objc var centralManager: CBCentralManager!
     @objc var bikePeripheral: CBPeripheral!
+    @objc var bikePeripheralList = [CBPeripheral]()
     @objc var writeCharacteristic: CBCharacteristic!
     
     @objc var resistanceLevel:Int = 0
@@ -36,61 +38,101 @@ let MinCmdLen = 4
     
     @objc func connect() {
         stopScan()
-        centralManager.connect(bikePeripheral)
+        if (bikePeripheral != nil) {
+            centralManager.connect(bikePeripheral)
+        }
+        else {
+            print("bike peripheral nil")
+        }
+    }
+    
+    @objc func connectWithIdentifier() {
+        print(identifierString)
+        
+        for peripheral in bikePeripheralList {
+            if identifierString == peripheral.identifier.uuidString {
+                bikePeripheral = peripheral
+                bikePeripheral.delegate = self
+                bikePeripheralList = [CBPeripheral]()
+                centralManager.connect(bikePeripheral)
+            }
+        }
     }
     
     @objc func discoverServices() {
-        bikePeripheral.discoverServices([bikeServiceCBUUID])
-    }
-    
-    @objc func message(unityString: String) {
-        
+        if (bikePeripheral != nil) {
+            bikePeripheral.discoverServices([bikeServiceCBUUID])
+        }
+        else {
+            print("bike peripheral nil")
+        }
     }
     
     @objc func stopWorkout() {
-        let data:[UInt8] = [0xF0, 0xB0, 0x01, UInt8(0), 0x00]
-        handleSendData(from: data)
-    }
-    
-    @objc func startWorkout() {
-        let data:[UInt8] = [0xF0, 0xB0, 0x01, UInt8(1), 0x00]
-        handleSendData(from: data)
-    }
-    
-    @objc func pauseWorkout() {
-        let data:[UInt8] = [0xF0, 0xB0, 0x01, UInt8(2), 0x00]
-        handleSendData(from: data)
-    }
-    
-    @objc func increaseResistanceLevel() {
-        if (resistanceLevel+1 <= 32) {
-            resistanceLevel += 1
-            
-            print("Resistance level: ", resistanceLevel)
-            let data:[UInt8] = [0xF0, 0xB1, 0x01, UInt8(resistanceLevel), 0x00]
+        if (bikePeripheral != nil) {
+            let data:[UInt8] = [0xF0, 0xB0, 0x01, UInt8(0), 0x00]
             handleSendData(from: data)
         }
         else {
-            print("Resistence Level at max")
+            print("bike peripheral nil")
+        }
+    }
+    
+    @objc func startWorkout() {
+        if (bikePeripheral != nil) {
+            let data:[UInt8] = [0xF0, 0xB0, 0x01, UInt8(1), 0x00]
+            handleSendData(from: data)
+        }
+        else {
+            print("bike peripheral nil")
+        }
+    }
+    
+    @objc func pauseWorkout() {
+        if (bikePeripheral != nil) {
+            let data:[UInt8] = [0xF0, 0xB0, 0x01, UInt8(2), 0x00]
+            handleSendData(from: data)
+        }
+        else {
+            print("bike peripheral nil")
+        }
+    }
+    
+    @objc func increaseResistanceLevel() {
+        if (bikePeripheral != nil) {
+            if (resistanceLevel+1 <= 32) {
+                resistanceLevel += 1
+                
+                print("Resistance level: ", resistanceLevel)
+                let data:[UInt8] = [0xF0, 0xB1, 0x01, UInt8(resistanceLevel), 0x00]
+                handleSendData(from: data)
+            }
+            else {
+                print("Resistence Level at max")
+            }
+        }
+        else {
+            print("bike peripheral nil")
         }
     }
     
     @objc func decreaseResistanceLevel() {
-        if (resistanceLevel-1 >= 0) {
-            resistanceLevel -= 1
-            
-            print("Resistance level: ", resistanceLevel)
-            let data:[UInt8] = [0xF0, 0xB1, 0x01, UInt8(resistanceLevel), 0x00]
-            handleSendData(from: data)
-        }
-        else {
-            print("Resistence Level at min")
+        if (bikePeripheral != nil) {
+            if (resistanceLevel-1 >= 0) {
+                resistanceLevel -= 1
+                
+                print("Resistance level: ", resistanceLevel)
+                let data:[UInt8] = [0xF0, 0xB1, 0x01, UInt8(resistanceLevel), 0x00]
+                handleSendData(from: data)
+            }
+            else {
+                print("Resistence Level at min")
+            }
         }
     }
     
     @objc func getResistanceLevel() {
-        //    let data:[UInt8] = [0xF0, 0xA5, 0x01, 0x00, 0x00]
-        //    handleSendData(from: data)
+        
     }
     
     @objc func getWorkoutStatus() {
@@ -123,13 +165,35 @@ let MinCmdLen = 4
             print("central.state is .unauthorized")
         case .poweredOff:
             print("central.state is .poweredOff")
-            if (self.bikePeripheral != nil) {
-                self.bikePeripheral = nil;
+            if (bikePeripheral != nil) {
+                bikePeripheral = nil;
             }
+            let alert = UIAlertController(title: "Bluetooth is off", message: "Please turn on your bluetooth", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Settings",
+                                          style: UIAlertAction.Style.default,
+                                          handler: {(alert: UIAlertAction!) in
+                                            switch alert.style {
+                                            case .default:
+                                                if let url = URL(string: "App-Prefs:root=General") {
+                                                    if #available(iOS 10.0, *) {
+                                                        UIApplication.shared.open(url)
+                                                    } else {
+                                                        // Fallback on earlier versions
+                                                        UIApplication.shared.openURL(url)
+                                                    }
+                                                }
+                                            case .cancel:
+                                                print("cancel")
+                                            case .destructive:
+                                                print("destructive")
+                                            @unknown default:
+                                                print("unknown default")
+                                            }
+            }))
         case .poweredOn:
             print("central.state is .poweredOn")
             print(bikeDeviceCBUUID)
-            centralManager.scanForPeripherals(withServices: [bikeDeviceCBUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey: true])
+            centralManager.scanForPeripherals(withServices: [bikeDeviceCBUUID], options: [CBCentralManagerScanOptionAllowDuplicatesKey: false])
         @unknown default:
             print("default")
         }
@@ -137,31 +201,38 @@ let MinCmdLen = 4
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print(peripheral)
-        bikePeripheral = peripheral
-        bikePeripheral.delegate = self
-        centralManager.stopScan()
-        //    centralManager.connect(bikePeripheral)
+        bikePeripheralList.append(peripheral)
+        var unityPeripheralString = ""
+        if (peripheral.name != nil) {
+            unityPeripheralString = peripheral.name! + "|" + peripheral.identifier.uuidString
+        }
+        else {
+            unityPeripheralString = "null|" + peripheral.identifier.uuidString
+        }
+        UnitySendMessage(kCallbackTarget, "ReceiveMatch", unityPeripheralString)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected!")
+        discoverServices()
     }
     
     func cancelConnection() {
-        centralManager.cancelPeripheralConnection(self.bikePeripheral)
-        self.bikePeripheral = nil
+        if (bikePeripheral != nil) {
+            centralManager.cancelPeripheralConnection(bikePeripheral)
+            bikePeripheral = nil
+        }
+        else {
+            print("bike peripheral nil")
+        }
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("Failed to connect")
         
         if(bikePeripheral != nil) {
-            //reset
+            bikePeripheral = nil
         }
-        // todo?
-        //    if (bikePeripheral != nil) {
-        //      bikePeripheral = nil
-        //    }
     }
 }
 
@@ -210,14 +281,17 @@ let MinCmdLen = 4
         case bikeReadCBUUID:
             print("read")
         case bikeNotifyCBUUID:
-            let bikeNotifyValue = bikeNotifyHandler(from: characteristic)
-            
-//            if (bikeNotifyValue == -1) {
-//                UnitySendMessage(kCallbackTarget, "OnDiscoverServices", "test")
-//            }
-//            else {
-//                print("error! bikeNotifyValue = -1")
-//            }
+            let bikeStatusUpdate = bikeNotifyHandler(from: characteristic)
+            if (bikeStatusUpdate == nil) {
+                break
+            }
+            else {
+                let byteArrayAsString = byteArrayToString(byteArray: bikeStatusUpdate!)
+                print(byteArrayAsString)
+                UnitySendMessage(kCallbackTarget,
+                                 "OnDiscoverServices",
+                                 byteArrayAsString)
+            }
         default:
             print("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
@@ -231,37 +305,33 @@ let MinCmdLen = 4
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         if (bikePeripheral != nil) {
             self.bikePeripheral = nil
-            
-            // todo?
         }
     }
     
-    private func bikeNotifyHandler(from characteristic: CBCharacteristic) -> Int {
-        guard let characteristicData = characteristic.value else { return -1 }
+    private func bikeNotifyHandler(from characteristic: CBCharacteristic) -> [UInt8]? {
+        guard let characteristicData = characteristic.value else { return nil }
         
         let byteArray = [UInt8](characteristicData)
         let totalLength = byteArray.count
         
         if (byteArray.count < MinCmdLen) {
             print("Array size is smaller than the Minimum Command Length")
-            return -1
+            return nil
         }
         
         let dataLength = Int(byteArray[LengthIndex]) + MinCmdLen
         
         if(totalLength < dataLength) {
             print("Array size below Minimum Command Length")
-            return -1
+            return nil
         }
         
         if(verifyChecksum(from: byteArray)) {
-            //send unity message
-            processCommand(from: byteArray)
-            return 1
+            return byteArray
         }
         else {
             print("byteArray failed validation.")
-            return -1
+            return nil
         }
     }
     
@@ -300,8 +370,13 @@ let MinCmdLen = 4
         return UInt8(sum & 0xff)
     }
     
-    private func processCommand(from byteArray: [UInt8]) {
+    private func byteArrayToString(byteArray: [UInt8]) -> String {
         
+        let base64String = byteArray.withUnsafeBufferPointer { buffer -> String in
+            let data = NSData(bytes: buffer.baseAddress, length: buffer.count)
+            return data.base64EncodedString(options: [])
+        }
+        
+        return base64String
     }
 }
-
