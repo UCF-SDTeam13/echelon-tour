@@ -31,7 +31,7 @@ public sealed class iOSPlugin : INativePlugin
     }
     public void Connect(string message)
     {
-        SwiftForUnity.Connect();
+        SwiftForUnity.ConnectWithIdentifier(message);
     }
     public void DiscoverServices()
     {

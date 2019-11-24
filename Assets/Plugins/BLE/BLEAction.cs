@@ -53,7 +53,6 @@ public static class BLEAction
     public static void ProcessReceiveData(byte[] data)
     {
         BLEDebug.LogInfo("BLEAction Processing Received Data");
-        Console.WriteLine("[{0}]", string.Join(", ", data));
         // Ignore and log invalid data
         if (!BLEProtocol.ValidateData(data))
         {

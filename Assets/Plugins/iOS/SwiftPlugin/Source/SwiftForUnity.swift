@@ -60,11 +60,12 @@ let MinCmdLen = 4
     }
     
     @objc func discoverServices() {
-        bikePeripheral.discoverServices([bikeServiceCBUUID])
-    }
-    
-    @objc func message(unityString: String) {
-        
+        if (bikePeripheral != nil) {
+            bikePeripheral.discoverServices([bikeServiceCBUUID])
+        }
+        else {
+            print("bike peripheral nil")
+        }
     }
     
     @objc func stopWorkout() {
@@ -131,8 +132,7 @@ let MinCmdLen = 4
     }
     
     @objc func getResistanceLevel() {
-        //    let data:[UInt8] = [0xF0, 0xA5, 0x01, 0x00, 0x00]
-        //    handleSendData(from: data)
+        
     }
     
     @objc func getWorkoutStatus() {
@@ -202,12 +202,19 @@ let MinCmdLen = 4
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print(peripheral)
         bikePeripheralList.append(peripheral)
-        UnitySendMessage(kCallbackTarget, "OnReceivePeripherals", peripheral.identifier.uuidString)
+        var unityPeripheralString = ""
+        if (peripheral.name != nil) {
+            unityPeripheralString = peripheral.name! + "|" + peripheral.identifier.uuidString
+        }
+        else {
+            unityPeripheralString = "null|" + peripheral.identifier.uuidString
+        }
+        UnitySendMessage(kCallbackTarget, "ReceiveMatch", unityPeripheralString)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected!")
-        peripheral.discoverServices([bikeServiceCBUUID])
+        discoverServices()
     }
     
     func cancelConnection() {
@@ -270,25 +277,20 @@ let MinCmdLen = 4
         switch characteristic.uuid {
         case bikeWriteCBUUID:
             print("write")
-            var bikeWriteValue = bikeNotifyHandler(from: characteristic)
+            let bikeWriteValue = bikeNotifyHandler(from: characteristic)
         case bikeReadCBUUID:
             print("read")
         case bikeNotifyCBUUID:
-            var bikeStatusUpdate = bikeNotifyHandler(from: characteristic)
+            let bikeStatusUpdate = bikeNotifyHandler(from: characteristic)
             if (bikeStatusUpdate == nil) {
                 break
             }
             else {
                 let byteArrayAsString = byteArrayToString(byteArray: bikeStatusUpdate!)
-                if (byteArrayAsString == nil) {
-                    break
-                }
-                else {
-                    print(byteArrayAsString)
-                    UnitySendMessage(kCallbackTarget,
-                                     "OnDiscoverServices",
-                                     byteArrayAsString)
-                }
+                print(byteArrayAsString)
+                UnitySendMessage(kCallbackTarget,
+                                 "OnDiscoverServices",
+                                 byteArrayAsString)
             }
         default:
             print("Unhandled Characteristic UUID: \(characteristic.uuid)")
@@ -325,8 +327,6 @@ let MinCmdLen = 4
         }
         
         if(verifyChecksum(from: byteArray)) {
-            //send unity message
-            //processCommand(from: byteArray)
             return byteArray
         }
         else {
@@ -368,10 +368,6 @@ let MinCmdLen = 4
         }
         
         return UInt8(sum & 0xff)
-    }
-    
-    private func processCommand(from byteArray: [UInt8]) {
-        
     }
     
     private func byteArrayToString(byteArray: [UInt8]) -> String {
