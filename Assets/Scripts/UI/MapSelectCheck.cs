@@ -1,18 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MapSelectCheck : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void SetMap(string map)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        PlayerPrefs.SetString("MapName", map);
     }
 }
