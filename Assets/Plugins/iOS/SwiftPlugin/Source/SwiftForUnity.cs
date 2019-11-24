@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 public class SwiftForUnity : MonoBehaviour
 {
@@ -40,6 +41,9 @@ public class SwiftForUnity : MonoBehaviour
 
         [DllImport("__Internal")]
         private static extern void _decreaseResistanceLevel();
+
+        [DllImport("__Internal")]
+        private static extern void _sendConnectIdentifier(string identifier);
     
     #endif
 
@@ -78,6 +82,15 @@ public class SwiftForUnity : MonoBehaviour
     {
         #if UNITY_IOS && !UNITY_EDITOR
             _connect();
+        #else
+            Debug.Log("error scanning");
+        #endif
+    }
+
+    public static void ConnectWithIdentifier(string identifier)
+    {
+        #if UNITY_IOS && !UNITY_EDITOR
+                _sendConnectIdentifier(identifier);
         #else
             Debug.Log("error scanning");
         #endif
@@ -125,7 +138,7 @@ public class SwiftForUnity : MonoBehaviour
             _increaseResistanceLevel();
         #else
             Debug.Log("error increasing resistance");
-        #endif 
+        #endif
     }
 
     public static void DecreaseResistanceLevel()
@@ -170,10 +183,18 @@ public class SwiftForUnity : MonoBehaviour
     #endregion
 
     #region Delegates
-    public void OnDiscoverServices(string test)
+    public void OnDiscoverServices(string byteData)
     {
-        Debug.Log(test);
-        Debug.Log("OnDiscoverServices");
+        Debug.Log("StartOnDiscover");
+        BLEAction.ProcessReceiveData(BLEProtocol.ConvertStringToBytes(byteData));
+        Debug.Log("EndOnDiscover");
+    }
+
+    public void OnReceivePeripherals(string peripheral)
+    {
+        Debug.Log("StartReceivePeripherals");
+        Debug.Log(peripheral);
+        Debug.Log("EndReceivePeripherals");
     }
     #endregion
 }

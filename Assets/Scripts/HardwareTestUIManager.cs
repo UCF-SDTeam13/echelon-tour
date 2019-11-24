@@ -45,7 +45,6 @@ public class HardwareTestUIManager : MonoBehaviour
         BLEDebug.LogInfo("Address: " + address);
         BLEPlugin.Instance.Connect(address);
         Bike.Instance.RegisterBikeListener(_bikeListener);
-
     }
     public void RequestBLE()
     {
@@ -226,7 +225,7 @@ class TestBikeListener : IBikeListener
     }
     public void OnReceiveWorkoutStatus(int timestamp, int count, int rpm, int heartrate)
     {
-        //BLEDebug.LogInfo($"Timestamp: {timestamp}, Count: {count}, RPM: {rpm}, Heart rate {heartrate}");
+        BLEDebug.LogInfo($"Timestamp: {timestamp}, Count: {count}, RPM: {rpm}, Heart rate {heartrate}");
         Bike.Instance.Timestamp = timestamp;
         Bike.Instance.Count = count;
         Bike.Instance.RPM = rpm;

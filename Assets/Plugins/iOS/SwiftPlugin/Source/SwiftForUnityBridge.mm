@@ -22,6 +22,11 @@ extern "C" {
         [[SwiftForUnity shared] connect];
     }
     
+    void _sendConnectIdentifier(const char* identifier) {
+        [SwiftForUnity shared].identifierString = [NSString stringWithCString:identifier encoding:NSUTF8StringEncoding];
+        [[SwiftForUnity shared] connectWithIdentifier];
+    }
+    
     void _discoverServices() {
         [[SwiftForUnity shared] discoverServices];
     }

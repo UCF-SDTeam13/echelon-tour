@@ -1,5 +1,6 @@
 ﻿#if UNITY_IOS
 
+using System;
 using UnityEngine;
 
 public sealed class iOSPlugin : INativePlugin
@@ -22,19 +23,19 @@ public sealed class iOSPlugin : INativePlugin
 
     public void Scan()
     {
-
+        SwiftForUnity.StartScan();
     }
     public void StopScan()
     {
-
+        SwiftForUnity.StopScan();
     }
     public void Connect(string message)
     {
-        
+        SwiftForUnity.ConnectWithIdentifier(message);
     }
     public void DiscoverServices()
     {
-        
+        SwiftForUnity.DiscoverServices();
     }
 
     public void SendPluginMessage()
@@ -44,6 +45,11 @@ public sealed class iOSPlugin : INativePlugin
     public void OnApplicationQuit()
     {
         
+    }
+
+    public void SendPluginMessage(string message)
+    {
+        Instance.SendPluginMessage(message);
     }
 }
 
