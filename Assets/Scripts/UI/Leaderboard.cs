@@ -15,6 +15,13 @@ public class Leaderboard : MonoBehaviour
     public static int place;
     public static float distance;
 
+    private void Awake()
+    {
+        RealTimeClient.Instance.StatsUpdate += UpdateLiveStats;
+        RealTimeClient.Instance.PlayerDisconnect += DecrementPlayerSize;
+        RealTimeClient.Instance.CustomizationUpdate += IncrementPlayerSize;
+    }
+
     private void Start()
     {
         // Initialize the number of players that joined game
@@ -87,16 +94,49 @@ public class Leaderboard : MonoBehaviour
 
     public void collapseLeaderboard()
     {
-        for(int i = 1; i < numplayers + 1; i++)
+        for(int i = 1; i < 9; i++)
         {
             entryContainter.Find("Player" + i).gameObject.SetActive(false);
         }
     }
     public void expandLeaderboard()
     {
-        for(int i = 1; i < numplayers + 1; i++)
+        for(int i = 1; i < 9; i++)
         {
             entryContainter.Find("Player" + i).gameObject.SetActive(true);
         }
+    }
+
+    private void UpdateLiveStats(object sender, StatsUpdateEventArgs e)
+    {
+        // Determines who is who (Values from 1-8)
+        // Probably have to keep track of which id exists
+        //e.peerId;
+
+        // Determines the number of rotation for the specific id from above
+        //e.rotations;
+    }
+
+    private void IncrementPlayerSize(object sender, CustomizationUpdateEventArgs e)
+    {
+        numplayers += 1;
+
+        // Determine the username of the player
+        // Probably need to keep track of which player id
+        // e.PlayerId
+    }
+
+    private void DecrementPlayerSize(object sender, PlayerEventArgs e)
+    {
+        numplayers -= 1;
+    }
+
+    // Calculate the distance based off the bluetooth rotation
+    private float CalculateDistance(int rotations)
+    {
+        // Trying to hard code pi
+        float wheelDiameter = (78 * 2.54f) / 100000;
+        float wheelCircumference = wheelDiameter * 3.14f;
+        return rotations * wheelCircumference;
     }
 }
