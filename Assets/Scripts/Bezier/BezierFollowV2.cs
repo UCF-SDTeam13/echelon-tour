@@ -44,7 +44,11 @@ public class BezierFollowV2 : MonoBehaviour
 
     private void GetPlayerStats(object sender, StatsUpdateEventArgs e)
     {
-        updatedRPM = e.rpm;
+        // Check if the peerId is the same to see if the rpm is going to change
+        if(peerId == e.peerId)
+        {
+            updatedRPM = e.rpm;
+        }
     }
 
     private void FixedUpdate()

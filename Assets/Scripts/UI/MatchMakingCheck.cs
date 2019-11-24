@@ -61,6 +61,10 @@ public class MatchMakingCheck : MonoBehaviour
     // NEED TO CHECK IF WE FAILED IF TOO MUCH TIME HAS PASSED
     IEnumerator CheckConnectionV2()
     {
+        // Need to restart workout, not sure if info is reseted
+        GameObject g = GameObject.FindGameObjectWithTag("NODESTROY");
+        g.SendMessage("StopWorkout");
+
         yield return new WaitForSeconds(1);
 
         if (RealTimeClient.Instance.IsConnected() == true)
