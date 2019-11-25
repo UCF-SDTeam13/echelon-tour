@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Preload.unity
     guid: 34865583f8bac354887fe641fec93190
   - enabled: 1
-    path: Assets/Scenes/NetworkTestScene.unity
-    guid: 9337b3c97941288418d761e1b81949cf
+    path: Assets/Scenes/LoginMenu.unity
+    guid: 9f87e5650bd77284c93f8a5891fb9787
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 608b1cd8c6ccf45ddaf922f1d16ffb54
@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MatchMakingLobby.unity
     guid: 23a3ef98084c72143bcb243b34726dcc
+  - enabled: 1
+    path: Assets/Scenes/NetworkTestScene.unity
+    guid: 9337b3c97941288418d761e1b81949cf
   m_configObjects: {}
