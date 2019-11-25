@@ -78,6 +78,11 @@ public class CountdownTimer : MonoBehaviour
         raceTime = raceTime * buttonTime;
     }
 
+    public void setTimerToDefault()
+    {
+        raceTime = 1f;
+    }
+
     // This cotrols what will happen when timer runs out
     public void finishAction()
     {
