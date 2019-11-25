@@ -1544,6 +1544,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2099478731}
+        m_MethodName: StopWorkout
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &364679864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3518,7 +3529,7 @@ PrefabInstance:
     - target: {fileID: 4377411571161331259, guid: 04bae65aee68e4c48bf6dcc93dfbee4c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4377411571161331259, guid: 04bae65aee68e4c48bf6dcc93dfbee4c,
         type: 3}
@@ -4306,7 +4317,7 @@ GameObject:
   - component: {fileID: 1012074386}
   - component: {fileID: 1012074385}
   m_Layer: 5
-  m_Name: Logout Text
+  m_Name: Main Menu Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8531,7 +8542,7 @@ RectTransform:
   m_Children:
   - {fileID: 1498220073}
   m_Father: {fileID: 2099478730}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -10179,6 +10190,7 @@ GameObject:
   - component: {fileID: 2099478726}
   - component: {fileID: 2099478725}
   - component: {fileID: 2099478732}
+  - component: {fileID: 2099478731}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -10295,8 +10307,8 @@ RectTransform:
   - {fileID: 2057926233}
   - {fileID: 2108542349}
   - {fileID: 1105557269}
-  - {fileID: 1351915382}
   - {fileID: 1747643683}
+  - {fileID: 1351915382}
   - {fileID: 964886931}
   - {fileID: 772788844}
   m_Father: {fileID: 0}
@@ -10307,6 +10319,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2099478731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2099478724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0f22d4959d08a84ca244cce0f0e8a5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2099478732
 MonoBehaviour:
   m_ObjectHideFlags: 0
