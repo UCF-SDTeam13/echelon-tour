@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Aws.GameLift.Realtime.Types;
 
 public class SpawnManagerV2 : MonoBehaviour
 {
@@ -29,18 +31,26 @@ public class SpawnManagerV2 : MonoBehaviour
         players = new Dictionary<int, GameObject>();
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         RealTimeClient.Instance.PlayerDisconnect += DespawnPlayer;
-        RealTimeClient.Instance.UpdateCustomization(PlayerPrefs.GetString("Model"));
+        RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
+        BLEDebug.LogInfo($"Realtime PlayerId: {API.Instance.PlayerId}, PlayerSessionId: {API.Instance.PlayerSessionId}");
+        // RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
     }
 
     private void Start()
     {
+        StartCoroutine("SpawnCoroutine");
+    }
+
+    IEnumerator SpawnCoroutine()
+    {
+        RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
+        yield return new WaitForSecondsRealtime(10.0f);
+        RealTimeClient.Instance.UpdateCustomization(PlayerPrefs.GetString("Model"));
+        BLEDebug.LogInfo($"peerId :{RealTimeClient.Instance.peerId}");
         Spawn(API.Instance.CharacterModelId, RealTimeClient.Instance.peerId);
         playerCam.GetComponent<CameraPivot>().SetTarget(players[RealTimeClient.Instance.peerId]);
         minimapCam.GetComponent<MinimapFollow>().target = players[RealTimeClient.Instance.peerId];
-
-        RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
     }
-
     private void SpawnPlayer(object sender, CustomizationUpdateEventArgs e)
     {
         Spawn(e.characterModelId, e.peerId);
@@ -94,7 +104,7 @@ public class SpawnManagerV2 : MonoBehaviour
 
         prefab.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index - 1);
 
-        if(isMultiplayer == true)
+        if (isMultiplayer == true)
         {
             prefab.GetComponent<BezierFollowV2>().isMultiplayer = true;
             prefab.GetComponent<BezierTracker>().isMultiplayer = true;

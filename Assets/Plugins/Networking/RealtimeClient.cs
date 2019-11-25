@@ -30,7 +30,7 @@ public class RealTimeClient
     private const int OP_CODE_CUSTOMIZATION_UPDATE = 119;
     private string PlayerId;
 
-    private int _peerId;
+    private int _peerId = 0;
     public int peerId
     {
         get
@@ -98,7 +98,15 @@ public class RealTimeClient
 
     public bool IsConnected()
     {
-        return Client.Connected;
+        if (Client != null)
+        {
+            return Client.Connected;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
     /// <summary>
@@ -120,6 +128,7 @@ public class RealTimeClient
     */
     public void UpdateCustomization(string characterModelId)
     {
+        BLEDebug.LogInfo("Sending Customization Update");
         FlatJSON fJSON = new FlatJSON();
         fJSON.Add("PlayerId", PlayerId);
         fJSON.Add("characterModelId", characterModelId);
@@ -131,6 +140,7 @@ public class RealTimeClient
     }
     public void UpdateStats(int rotations, int rpm, float[] playerPosition, float progressDistance)
     {
+        BLEDebug.LogInfo("Sending Stats Update");
         FlatJSON fJSON = new FlatJSON();
         fJSON.Add("rotations", rotations);
         fJSON.Add("rpm", rpm);

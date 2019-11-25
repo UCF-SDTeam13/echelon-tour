@@ -7,7 +7,6 @@ using Aws.GameLift.Realtime.Types;
 public class Connect : MonoBehaviour
 {
     private HttpClient client = new HttpClient();
-    RealTimeClient rc;
     UnityEngine.Ping east1;
     UnityEngine.Ping east2;
 
@@ -49,6 +48,7 @@ public class Connect : MonoBehaviour
             BLEDebug.LogInfo($"DNS: {API.Instance.DnsName}");
             BLEDebug.LogInfo($"TCP Port: {API.Instance.TcpPort}");
             BLEDebug.LogInfo($"UDP Port: {API.Instance.UdpPort}");
+            BLEDebug.LogInfo($"PlayerSessionId: {API.Instance.PlayerSessionId}");
             RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
         }
 
@@ -57,10 +57,6 @@ public class Connect : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        if (rc != null && rc.IsConnected())
-        {
-            //BLEDebug.LogInfo("Connection Status:" + rc.IsConnected());
-        }
         timer += Time.deltaTime;
 
         if (east1.isDone)
@@ -75,12 +71,12 @@ public class Connect : MonoBehaviour
         }
         if (timer >= pingInterval)
         {
-            if (rc != null && rc.IsConnected())
+            if (RealTimeClient.Instance.IsConnected())
             {
-                BLEDebug.LogInfo("Connection Status:" + rc.IsConnected());
+                BLEDebug.LogInfo("Connected");
                 float[] playerPos = { 1, 2, 3 };
                 float[] targetPos = { 4, 5, 6 };
-                //rc.UpdateStats(0, 0, playerPos, targetPos);
+                RealTimeClient.Instance.UpdateStats(0, 0, playerPos, 0.0f);
             }
             //BLEDebug.LogInfo("East1 Ping" + pingEast1);
             //BLEDebug.LogInfo("East2 Ping" + pingEast2);
