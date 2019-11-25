@@ -92,7 +92,7 @@ public class SpawnManagerV2 : MonoBehaviour
                 break;
         }
 
-        prefab.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index);
+        prefab.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index - 1);
 
         if(isMultiplayer == true)
         {

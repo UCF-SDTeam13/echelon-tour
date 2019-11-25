@@ -62,8 +62,8 @@ public class MatchMakingCheck : MonoBehaviour
     IEnumerator CheckConnectionV2()
     {
         // Need to restart workout, not sure if info is reseted
-        GameObject g = GameObject.FindGameObjectWithTag("NODESTROY");
-        g.SendMessage("StopWorkout");
+        //GameObject g = GameObject.FindGameObjectWithTag("NODESTROY");
+        //g.SendMessage("StopWorkout");
 
         yield return new WaitForSeconds(1);
 

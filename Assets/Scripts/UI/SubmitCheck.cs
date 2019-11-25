@@ -34,6 +34,10 @@ public class SubmitCheck : MonoBehaviour
 
         if(API.Instance.CurrentLoginStatus == API.LoginStatus.LOGGED_IN)
         {
+            usernameInputField.interactable = true;
+            passwordInputField.interactable = true;
+            submitButton.interactable = true;
+
             // If statement added here later when we keep it stored in playerpref
             modelSelect.SetActive(true);
             login.SetActive(false);
@@ -54,7 +58,7 @@ public class SubmitCheck : MonoBehaviour
         errorDialogBox.GetComponent<Text>().text = "Could not connect with current credentials";
         errorDialogBox.SetActive(true);
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(7);
 
         errorDialogBox.SetActive(false);
     }
@@ -64,7 +68,7 @@ public class SubmitCheck : MonoBehaviour
         errorDialogBox.GetComponent<Text>().text = "Username or password cannot be empty";
         errorDialogBox.SetActive(true);
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(7);
 
         errorDialogBox.SetActive(false);
     }
