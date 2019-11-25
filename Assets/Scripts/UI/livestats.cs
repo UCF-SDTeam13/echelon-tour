@@ -26,7 +26,7 @@ public class livestats : MonoBehaviour
     void Start()
     {
         getUpdatedStats = uiStatsUpdate.GetComponent<UiStatsUpdate>();
-        BLEPlugin.Instance.StartWorkout();
+        //BLEPlugin.Instance.StartWorkout();
     }
 
     // Update is called once per frame
@@ -37,22 +37,23 @@ public class livestats : MonoBehaviour
 
     public void updateUIText()
     {
-        rpm = getUpdatedStats.CalculateRPM();
+        //rpm = getUpdatedStats.CalculateRPM();
         rpmText.text = rpm.ToString();
 
-        speed = getUpdatedStats.CalculateSpeed();
+        //speed = getUpdatedStats.CalculateSpeed();
         speedText.text = speed.ToString();
 
-        resistance = getUpdatedStats.CalculateResistance();
+        //resistance = getUpdatedStats.CalculateResistance();
         resistanceText.text = resistance.ToString();
 
         watts = getUpdatedStats.CalculatePowerOutput();
         wattsText.text = watts.ToString();
 
-        distance = getUpdatedStats.CalculateDistance();
+        //distance = getUpdatedStats.CalculateDistance();
         distanceText.text = distance.ToString("F2");
 
-        calories += getUpdatedStats.CalculateCalories();
-        caloriesText.text = calories.ToString();
+        // Need to be event for this one
+        //calories += getUpdatedStats.CalculateCalories();
+        caloriesText.text = "TBD"; //calories.ToString();
     }
 }

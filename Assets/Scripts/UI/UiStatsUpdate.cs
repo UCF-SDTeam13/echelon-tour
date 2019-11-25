@@ -77,6 +77,37 @@ public class UiStatsUpdate : MonoBehaviour
         1.105f
     };
 
+    // The NEED THE f
+    public struct Ratio
+    {
+        public const float MinutesToSeconds = 60.0f;
+        public const float SecondsToMinutes = 1 / 60f;
+        public const float RPMToSpeedLevel = 1 / 10f;
+    }
+
+    public struct Min
+    {
+        public const int ResistanceLevel = 1;
+        public const int SpeedLevel = 0;
+    }
+    public struct Max
+    {
+        public const int ResistanceLevel = 32;
+        public const int SpeedLevel = 10;
+    }
+    public static int ClampValueToRange(int value, int rangeStart, int rangeEnd)
+    {
+        if (value > rangeEnd)
+        {
+            value = rangeEnd;
+        }
+        else if (value < rangeStart)
+        {
+            value = rangeStart;
+        }
+        return value;
+    }
+
     public float PowerOutput { get; private set; } = 0;
 
     private int _resistanceLevel = 1;
@@ -89,8 +120,8 @@ public class UiStatsUpdate : MonoBehaviour
         set
         {
             // Clamp resistance level to 0 - 32
-            _resistanceLevel = Units.ClampValueToRange(value,
-                Units.Min.ResistanceLevel, Units.Max.ResistanceLevel);
+            _resistanceLevel = ClampValueToRange(value,
+                Min.ResistanceLevel, Max.ResistanceLevel);
         }
     }
 
@@ -103,13 +134,13 @@ public class UiStatsUpdate : MonoBehaviour
         }
         private set
         {
-            _speedLevel = Units.ClampValueToRange(value, Units.Min.SpeedLevel, Units.Max.SpeedLevel);
+            _speedLevel = ClampValueToRange(value, Min.SpeedLevel, Max.SpeedLevel);
         }
     }
 
     public float CalculatePowerOutput()
     {
-        SpeedLevel = (int) Math.Round(Bike.Instance.RPM * Units.Ratio.RPMToSpeedLevel);
+        SpeedLevel = Mathf.RoundToInt(Bike.Instance.RPM * Ratio.RPMToSpeedLevel);
         return PowerOutputTable[ResistanceLevel][SpeedLevel];
     }
 

@@ -38,8 +38,8 @@ public class ChallengeSystem : MonoBehaviour
         //challengeStatuses = new bool[numChallenges];
 
         // Initialize the challenges with certain stats
-        tsc01 = new TopSpeedChallenge(TopSpeedImage, 40);
-        msc01 = new MaintainSpeedChallenge(MaintainSpeedImage, 30, 30);
+        tsc01 = new TopSpeedChallenge(TopSpeedImage, 20);
+        msc01 = new MaintainSpeedChallenge(MaintainSpeedImage, 10, 30);
         rpc01 = new RacePlacementChallenge(RacePlacementImage, 3);
         tdc01 = new TotalDistanceChallenge(TotalDistanceImage, 1); //Not sure of value
 
@@ -226,7 +226,7 @@ public class ChallengeSystem : MonoBehaviour
         float rpmRatio = 1;
         float wheelDiameter = (78 * 2.54f) / 100000;
         float distancePerCount = wheelDiameter * 3.14f * rpmRatio;
-        float speedMultiplier = distancePerCount * 60;
+        float speedMultiplier = distancePerCount * 60 / 2;
         return Bike.Instance.RPM * speedMultiplier;
     }
 
