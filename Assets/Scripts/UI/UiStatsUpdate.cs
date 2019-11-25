@@ -80,7 +80,7 @@ public class UiStatsUpdate : MonoBehaviour
     // The NEED THE f
     public struct Ratio
     {
-        public const float MinutesToSeconds = 60.0f;
+        public const float MinutesToSeconds = 60;
         public const float SecondsToMinutes = 1 / 60f;
         public const float RPMToSpeedLevel = 1 / 10f;
     }
