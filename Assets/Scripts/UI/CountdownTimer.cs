@@ -89,11 +89,18 @@ public class CountdownTimer : MonoBehaviour
         Debug.Log("Game has ended");
         countdownText.text = "00:00";
 
-        highscoreTable.SetActive(true);
-        livestats.SetActive(false);
-        optionsButton.SetActive(false);
-        time.SetActive(false);
-        leaderboard.SetActive(false);
+        if(SceneManager.GetActiveScene().name == "SoloRide")
+        {
+            highscoreTable.SetActive(true);
+        }
+        else
+        {
+            highscoreTable.SetActive(true);
+            livestats.SetActive(false);
+            optionsButton.SetActive(false);
+            time.SetActive(false);
+            leaderboard.SetActive(false);
+        }
 
         //SceneManager.LoadSceneAsync("Loss");
         //Application.Quit();
