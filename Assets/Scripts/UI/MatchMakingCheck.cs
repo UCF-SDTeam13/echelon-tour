@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Aws.GameLift.Realtime.Types;
 
 public class MatchMakingCheck : MonoBehaviour
 {
@@ -24,16 +23,16 @@ public class MatchMakingCheck : MonoBehaviour
             BLEDebug.LogInfo("Checking Matchmaking Ticket Status");
             await API.Instance.CheckMatchmakingTicketStatus();
         } while (API.Instance.Status == "SEARCHING" || API.Instance.Status == "PLACING");
-        
+
         if (API.Instance.Status == "COMPLETED")
         {
             BLEDebug.LogInfo("Connecting to GameLift Realtime Session");
             BLEDebug.LogInfo($"DNS: {API.Instance.DnsName}");
             BLEDebug.LogInfo($"TCP Port: {API.Instance.TcpPort}");
             BLEDebug.LogInfo($"UDP Port: {API.Instance.UdpPort}");
-            RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
+            levelLoader.GetComponent<LevelLoader>().LoadLevel("EchelonDomeTrack");
 
-            StartCoroutine("CheckConnectionV2");
+            // StartCoroutine("CheckConnectionV2");
         }
         else
         {
@@ -62,8 +61,7 @@ public class MatchMakingCheck : MonoBehaviour
     IEnumerator CheckConnectionV2()
     {
         // Need to restart workout, not sure if info is reseted
-        //GameObject g = GameObject.FindGameObjectWithTag("NODESTROY");
-        //g.SendMessage("StopWorkout");
+        BLEPlugin.Instance.StopScan();
 
         yield return new WaitForSeconds(1);
 
