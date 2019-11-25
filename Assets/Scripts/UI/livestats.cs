@@ -39,15 +39,11 @@ public class livestats : MonoBehaviour
     void Update()
     {
         updateUIText();
-        storeinDB();
     }
 
     public void updateUIText()
     {
         rpm = Bike.Instance.RPM;
-
-        // FOR TESTING
-        //rpm = 30;
 
         speed = rpm * speedMultiplier;
         distance += rpm * wheelDiameter * 3.14f;
@@ -58,10 +54,5 @@ public class livestats : MonoBehaviour
         wattsText.text = watts.ToString();
         distanceText.text = distance.ToString("F2");
         totalOutputText.text = totalOutput.ToString();
-    }
-
-    public void storeinDB()
-    {
-
     }
 }
