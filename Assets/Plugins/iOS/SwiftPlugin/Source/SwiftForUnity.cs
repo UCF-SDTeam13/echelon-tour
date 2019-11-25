@@ -181,20 +181,4 @@ public class SwiftForUnity : MonoBehaviour
     }
 
     #endregion
-
-    #region Delegates
-    public void OnDiscoverServices(string byteData)
-    {
-        Debug.Log("StartOnDiscover");
-        BLEAction.ProcessReceiveData(BLEProtocol.ConvertStringToBytes(byteData));
-        Debug.Log("EndOnDiscover");
-    }
-
-    public void OnReceivePeripherals(string peripheral)
-    {
-        Debug.Log("StartReceivePeripherals");
-        Debug.Log(peripheral);
-        Debug.Log("EndReceivePeripherals");
-    }
-    #endregion
 }

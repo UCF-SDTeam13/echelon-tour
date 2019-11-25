@@ -51,6 +51,11 @@ public sealed class iOSPlugin : INativePlugin
     {
         Instance.SendPluginMessage(message);
     }
+
+    public void RequestEnableLocation()
+    {
+
+    }
 }
 
 #endif

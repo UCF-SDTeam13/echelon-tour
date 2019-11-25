@@ -289,7 +289,7 @@ let MinCmdLen = 4
                 let byteArrayAsString = byteArrayToString(byteArray: bikeStatusUpdate!)
                 print(byteArrayAsString)
                 UnitySendMessage(kCallbackTarget,
-                                 "OnDiscoverServices",
+                                 "ReceivePluginMessage",
                                  byteArrayAsString)
             }
         default:
