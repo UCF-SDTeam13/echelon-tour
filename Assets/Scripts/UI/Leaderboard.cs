@@ -5,15 +5,19 @@ using UnityEngine.UI;
 
 public class Leaderboard : MonoBehaviour
 {
+    // Set to true when testing locally
+    bool testing = true;
     private Transform entryContainter;
     private Transform entryTemplate;
     private static float wheelDiameter = 78 * 2.54f / 100000;
     private static float rpmRatio = 1f;
     int rpm = 0;
-    int numplayers = 8;
+    int numplayers = 0;
     public static string playerName;
     public static int place;
     public static float distance;
+
+    Dictionary <int, float> players = new Dictionary<int, float>();
 
     private void Awake()
     {
@@ -23,24 +27,21 @@ public class Leaderboard : MonoBehaviour
     }
 
     private void Start()
-    {
-        // Initialize the number of players that joined game
-        // numplayers = ;
-        
+    {        
         entryContainter = transform.Find("LeaderboardEntryContainer");
         entryTemplate = entryContainter.Find("LeaderboardEntryTemplate");
         
         entryTemplate.gameObject.SetActive(false);
 
         float templateHeight = 20f;
-        for (int i = 0; i < numplayers; i++)
+        for (int i = 0; i < 8; i++)
         {
             initializeBoard(i+1);
             Transform entryTransform = Instantiate(entryTemplate, entryContainter);
             entryTransform.name = "Player" + (i+1);
             RectTransform entryReactTransform = entryTransform.GetComponent<RectTransform>();
             entryReactTransform.anchoredPosition = new Vector2(0, -templateHeight * i);
-            entryTransform.gameObject.SetActive(true);
+            entryTransform.gameObject.SetActive(testing); 
         }
     }
 
@@ -53,25 +54,21 @@ public class Leaderboard : MonoBehaviour
         int nextDistance; 
         Vector3 temp;
 
-        // For each num of players, get info from gamelift and update leaderboard accordingly
+        // For each player, check the player for ditance
         for (int i = 1; i < numplayers; i++)
         {
-            // Find gamelift player with currentPlace = i;
-            //currentDistance = valueFromGameLift(withPlace(i));
-            //nextDistance = valueFromGameLift(withPlace(i+1));
-
-            // Display new Distance
-            //entryContainter.Find("Player" + i).GetComponent<Text>().text = currentDistance.ToString();
-
             // Check if next player has higher distance. If so move this one down and next up
-            //if(currentDistance < nextDistance)
-            //{
-                Debug.Log(entryContainter.Find("Player"+ i).name);
+            if(players[i] < players[i+1])
+            {
                 temp = entryContainter.Find("Player" + i).transform.position;
                 entryContainter.Find("Player" + i).transform.position = entryContainter.Find("Player" + (i+1)).transform.position;
                 entryContainter.Find("Player" + (i+1)).transform.position = temp;
                 updatePlace(i, i+1);
-            //}
+
+                //testing
+                if(i == 6)
+                    players[7] = 3;
+            }
         }
     }
 
@@ -80,16 +77,47 @@ public class Leaderboard : MonoBehaviour
         entryTemplate.Find("Place").GetComponent<Text>().text = i.ToString();
         entryTemplate.Find("Username").GetComponent<Text>().text = "test" + i;
         entryTemplate.Find("Distance").GetComponent<Text>().text = "test" + i;
+
+        players[i+1] = 0;
     }
 
     private void updatePlace(int currentPlace, int newPlace)
     {
-        // Use CurrentPos to determine which element to grab and then transform it
-        //entryContainter.Find("Player" + currentPlace).GetComponent<Text>().text = newPlace.ToString();
-        //entryContainter.Find("Player" + newPlace).GetComponent<Text>().text = currentPlace.ToString();
+        entryContainter.Find("Player" + currentPlace).GetComponent<Text>().text = newPlace.ToString();
+        entryContainter.Find("Player" + newPlace).GetComponent<Text>().text = currentPlace.ToString();
+    }
 
-        // Update position of player with currPlace to newPlace and player of newPlace to currPlace
-        // TODO
+    private void UpdateLiveStats(object sender, StatsUpdateEventArgs e)
+    {
+        // Update player table when players make changes
+        updatePlayersTable(e.peerId, e.rotations);
+    }
+
+    // When a player enters the lobby, their 
+    private void IncrementPlayerSize(object sender, CustomizationUpdateEventArgs e)
+    {
+        numplayers += 1;
+        entryContainter.Find("Player" + e.peerId).gameObject.SetActive(true);
+        entryContainter.Find("Player" + e.peerId).GetComponent<Text>().text = e.PlayerId;
+    }
+
+    private void DecrementPlayerSize(object sender, PlayerEventArgs e)
+    {
+        numplayers -= 1;
+    }
+
+    // Calculate the distance based off the bluetooth rotation
+    private float CalculateDistance(int rotations)
+    {
+        // Trying to hard code pi
+        float wheelDiameter = (78 * 2.54f) / 100000;
+        float wheelCircumference = wheelDiameter * 3.14f;
+        return rotations * wheelCircumference;
+    }
+
+    private void updatePlayersTable(int ID, int rotations)
+    {
+
     }
 
     public void collapseLeaderboard()
@@ -105,38 +133,5 @@ public class Leaderboard : MonoBehaviour
         {
             entryContainter.Find("Player" + i).gameObject.SetActive(true);
         }
-    }
-
-    private void UpdateLiveStats(object sender, StatsUpdateEventArgs e)
-    {
-        // Determines who is who (Values from 1-8)
-        // Probably have to keep track of which id exists
-        //e.peerId;
-
-        // Determines the number of rotation for the specific id from above
-        //e.rotations;
-    }
-
-    private void IncrementPlayerSize(object sender, CustomizationUpdateEventArgs e)
-    {
-        numplayers += 1;
-
-        // Determine the username of the player
-        // Probably need to keep track of which player id
-        // e.PlayerId
-    }
-
-    private void DecrementPlayerSize(object sender, PlayerEventArgs e)
-    {
-        numplayers -= 1;
-    }
-
-    // Calculate the distance based off the bluetooth rotation
-    private float CalculateDistance(int rotations)
-    {
-        // Trying to hard code pi
-        float wheelDiameter = (78 * 2.54f) / 100000;
-        float wheelCircumference = wheelDiameter * 3.14f;
-        return rotations * wheelCircumference;
     }
 }
