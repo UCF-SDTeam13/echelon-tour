@@ -30,8 +30,7 @@ public class livestats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject g = GameObject.FindGameObjectWithTag("NODESTROY");
-        g.SendMessage("StartWorkout");
+        BLEPlugin.Instance.StartWorkout();
 
         resistanceText.text = resistance.ToString();
     }
@@ -45,13 +44,13 @@ public class livestats : MonoBehaviour
 
     public void updateUIText()
     {
-        //rpm = Bike.Instance.RPM;
+        rpm = Bike.Instance.RPM;
 
         // FOR TESTING
-        rpm = 30;
+        //rpm = 30;
 
         speed = rpm * speedMultiplier;
-        distance +=  rpm * wheelDiameter * 3.14f;
+        distance += rpm * wheelDiameter * 3.14f;
 
         rpmText.text = rpm.ToString();
         speedText.text = speed.ToString();
@@ -63,6 +62,6 @@ public class livestats : MonoBehaviour
 
     public void storeinDB()
     {
-        
+
     }
 }
