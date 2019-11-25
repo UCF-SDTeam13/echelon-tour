@@ -58,27 +58,22 @@ public class Leaderboard : MonoBehaviour
         for (int i = 1; i < numplayers; i++)
         {
             // Check if next player has higher distance. If so move this one down and next up
-            if(players[i] < players[i+1])
-            {
+            //if(players[i] < players[i+1])
+            //{
                 temp = entryContainter.Find("Player" + i).transform.position;
                 entryContainter.Find("Player" + i).transform.position = entryContainter.Find("Player" + (i+1)).transform.position;
                 entryContainter.Find("Player" + (i+1)).transform.position = temp;
                 updatePlace(i, i+1);
-
-                //testing
-                if(i == 6)
-                    players[7] = 3;
-            }
+            //}
         }
     }
 
     private void initializeBoard(int i)
     {
+        players.Add(i,0);
         entryTemplate.Find("Place").GetComponent<Text>().text = i.ToString();
-        entryTemplate.Find("Username").GetComponent<Text>().text = "test" + i;
-        entryTemplate.Find("Distance").GetComponent<Text>().text = "test" + i;
-
-        players[i+1] = 0;
+        entryTemplate.Find("Username").GetComponent<Text>().text = "Player" + i;
+        entryTemplate.Find("Distance").GetComponent<Text>().text = players[i].ToString();
     }
 
     private void updatePlace(int currentPlace, int newPlace)
@@ -89,11 +84,11 @@ public class Leaderboard : MonoBehaviour
 
     private void UpdateLiveStats(object sender, StatsUpdateEventArgs e)
     {
-        // Update player table when players make changes
-        updatePlayersTable(e.peerId, e.rotations);
+        players[e.peerId] = CalculateDistance(e.rotations);
+        entryContainter.Find("Player" + e.peerId).GetComponent<Text>().text = players[e.peerId].ToString();
     }
 
-    // When a player enters the lobby, their 
+    // When a player enters the lobby, the numplayers count will increment & their name will appear on the leaderboard.
     private void IncrementPlayerSize(object sender, CustomizationUpdateEventArgs e)
     {
         numplayers += 1;
@@ -113,11 +108,6 @@ public class Leaderboard : MonoBehaviour
         float wheelDiameter = (78 * 2.54f) / 100000;
         float wheelCircumference = wheelDiameter * 3.14f;
         return rotations * wheelCircumference;
-    }
-
-    private void updatePlayersTable(int ID, int rotations)
-    {
-
     }
 
     public void collapseLeaderboard()
