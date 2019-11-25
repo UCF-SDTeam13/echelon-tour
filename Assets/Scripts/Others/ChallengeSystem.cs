@@ -41,7 +41,7 @@ public class ChallengeSystem : MonoBehaviour
         tsc01 = new TopSpeedChallenge(TopSpeedImage, 40);
         msc01 = new MaintainSpeedChallenge(MaintainSpeedImage, 30, 30);
         rpc01 = new RacePlacementChallenge(RacePlacementImage, 3);
-        tdc01 = new TotalDistanceChallenge(TotalDistanceImage, 500); //Not sure of value
+        tdc01 = new TotalDistanceChallenge(TotalDistanceImage, 1); //Not sure of value
 
         //RealTimeClient.Instance.RaceEnd += RaceEndTrigger;
     }
