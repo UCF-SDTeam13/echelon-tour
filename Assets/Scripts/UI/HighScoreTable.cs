@@ -17,7 +17,7 @@ public class HighScoreTable : MonoBehaviour
 
     public static Text placeText;
 
-    int numplayers = 8;
+    int numofplayers = 8;
 
 
     private void Awake()
@@ -25,13 +25,13 @@ public class HighScoreTable : MonoBehaviour
         // Initialize the number of players that finished the race
         // numplayers = ;
         
-        entryContainter = transform.Find("HighScoreEntryContainer");
+        entryContainter = transform.Find("HighScoreTable/HighScoreEntryContainer");
         entryTemplate = entryContainter.Find("HighScoreEntryTemplate");
         
         entryTemplate.gameObject.SetActive(false);
 
         float templateHeight = 30f;
-        for (int i = 0; i < numplayers; i++)
+        for (int i = 0; i < numofplayers; i++)
         {
             getResults(i);
 

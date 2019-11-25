@@ -45,8 +45,8 @@ public class livestats : MonoBehaviour
     {
         rpm = Bike.Instance.RPM;
 
-        speed = rpm * speedMultiplier;
-        distance += rpm * wheelDiameter * 3.14f;
+        speed = Bike.Instance.RPM * speedMultiplier;
+        distance = Bike.Instance.Count * wheelDiameter * 3.14f;
 
         rpmText.text = rpm.ToString();
         speedText.text = speed.ToString();

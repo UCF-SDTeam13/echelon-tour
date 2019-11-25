@@ -38,10 +38,10 @@ public class ChallengeSystem : MonoBehaviour
         //challengeStatuses = new bool[numChallenges];
 
         // Initialize the challenges with certain stats
-        tsc01 = new TopSpeedChallenge(TopSpeedImage, 30);
+        tsc01 = new TopSpeedChallenge(TopSpeedImage, 40);
         msc01 = new MaintainSpeedChallenge(MaintainSpeedImage, 30, 30);
         rpc01 = new RacePlacementChallenge(RacePlacementImage, 3);
-        tdc01 = new TotalDistanceChallenge(TotalDistanceImage, 10); //Not sure of value
+        tdc01 = new TotalDistanceChallenge(TotalDistanceImage, 1); //Not sure of value
 
         //RealTimeClient.Instance.RaceEnd += RaceEndTrigger;
     }

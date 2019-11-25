@@ -6,9 +6,9 @@ using TMPro;
 public class SubmitCheck : MonoBehaviour
 {
     public GameObject login;
-    public GameObject modelSelect;
     public GameObject submit;
     public GameObject errorDialogBox;
+    public GameObject levelLoader;
 
     public GameObject username;
     public GameObject password;
@@ -39,8 +39,8 @@ public class SubmitCheck : MonoBehaviour
             submitButton.interactable = true;
 
             // If statement added here later when we keep it stored in playerpref
-            modelSelect.SetActive(true);
-            login.SetActive(false);
+            levelLoader.GetComponent<LevelLoader>().LoadLevel("MainMenu");
+
         }
         else
         {
