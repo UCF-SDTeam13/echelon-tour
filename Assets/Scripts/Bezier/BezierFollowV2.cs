@@ -11,12 +11,13 @@ public class BezierFollowV2 : MonoBehaviour
     public float speed;
     public int peerId = 0;
     public bool isMultiplayer = false;
+    public bool startFollow = false;
 
     private void Start()
     {
         // NOTE: Moved to Start Tracking
     }
-    public void StartTracking()
+    public void StartFollowing()
     {
         // Find the tracker component
         tracker = GetComponent<BezierTracker>();
@@ -26,9 +27,16 @@ public class BezierFollowV2 : MonoBehaviour
             // Need to unsubscribe
             RealTimeClient.Instance.StatsUpdate += GetPlayerStats;
         }
+
+        startFollow = true;
     }
     private void Update()
     {
+        if(isMultiplayer == true && startFollow == false)
+        {
+            return;
+        }
+
         if (isMultiplayer == true)
         {
             if (peerId == RealTimeClient.Instance.peerId)

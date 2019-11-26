@@ -29,16 +29,20 @@ public class SpawnManagerV2 : MonoBehaviour
     {
         //players = new GameObject[numRoutes];
         players = new Dictionary<int, GameObject>();
+
+        /*
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         RealTimeClient.Instance.PlayerDisconnect += DespawnPlayer;
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         BLEDebug.LogInfo($"Realtime PlayerId: {API.Instance.PlayerId}, PlayerSessionId: {API.Instance.PlayerSessionId}");
         RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WEBSOCKET, API.Instance.PlayerSessionId, new byte[0]);
+        */
     }
 
     private void Start()
     {
-        StartCoroutine("SpawnCoroutine");
+        Spawn("maleModel1", 1);
+        //StartCoroutine("SpawnCoroutine");
     }
 
     IEnumerator SpawnCoroutine()
@@ -102,10 +106,11 @@ public class SpawnManagerV2 : MonoBehaviour
         }
 
         // Instantiate Prefab Before Changing It
+        //Debug.Log(spawnLocation.x + " " + spawnLocation.y + " " + spawnLocation.z);
         GameObject iModel = Instantiate(prefab, spawnLocation, spawnRotation);
 
-        iModel.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index - 1);
-
+        iModel.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index);
+        
         if (isMultiplayer == true)
         {
             Debug.Log("Multiplayer Detected");
@@ -113,8 +118,9 @@ public class SpawnManagerV2 : MonoBehaviour
             iModel.GetComponent<BezierTracker>().isMultiplayer = true;
             iModel.GetComponent<PlayerStats>().peerId = index;
         }
-
+        
         iModel.SendMessage("StartTracking");
+        iModel.SendMessage("StartFollowing");
         //players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
         players.Add(index, iModel);
         //GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);

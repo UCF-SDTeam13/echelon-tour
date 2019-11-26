@@ -3610,7 +3610,7 @@ MonoBehaviour:
   updatedRPM: 0
   speed: 0
   peerId: 0
-  isMultiplayer: 0
+  isMultiplayer: 1
 --- !u!114 &8120283039703925669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3632,7 +3632,7 @@ MonoBehaviour:
   circuit: {fileID: 0}
   targetLookAhead: {x: 0, y: 0, z: 0}
   speed: 0
-  isMultiplayer: 0
+  isMultiplayer: 1
   serverPlayerPosition: {x: 0, y: 0, z: 0}
   serverProgressDistance: 0
 --- !u!114 &465224864910416450
@@ -3647,7 +3647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c352583c559d8cb45a47d2f6c6edd28b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  peerId: 0
+  peerId: 1
   rpm: 0
   count: 0
   distance: 0
