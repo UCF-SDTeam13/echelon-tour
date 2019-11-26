@@ -110,6 +110,18 @@ public class RealTimeClient
         }
 
     }
+    public bool IsConnectedAndReady()
+    {
+        if (Client != null)
+        {
+            return Client.ConnectedAndReady;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
     public void UpdateCustomization(string characterModelId)
     {
         BLEDebug.LogInfo("Sending Customization Update");
@@ -142,6 +154,7 @@ public class RealTimeClient
      */
     private void OnOpenEvent(object sender, EventArgs e)
     {
+        BLEDebug.LogInfo("Connection Opened");
     }
 
     /**
@@ -149,6 +162,7 @@ public class RealTimeClient
      */
     private void OnCloseEvent(object sender, EventArgs e)
     {
+        BLEDebug.LogInfo("Connection Closed");
     }
 
     /**
@@ -156,6 +170,7 @@ public class RealTimeClient
      */
     private void OnGroupMembershipUpdate(object sender, GroupMembershipEventArgs e)
     {
+        BLEDebug.LogInfo("Group Membership Updated");
     }
 
     /**
