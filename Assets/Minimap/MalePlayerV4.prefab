@@ -3568,6 +3568,7 @@ GameObject:
   - component: {fileID: 5096963433032624732}
   - component: {fileID: 8120283039703925670}
   - component: {fileID: 8120283039703925669}
+  - component: {fileID: 465224864910416450}
   m_Layer: 0
   m_Name: MalePlayerV4
   m_TagString: Untagged
@@ -3605,8 +3606,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 923628344752205298}
+  currentRPM: 0
+  updatedRPM: 0
   speed: 0
-  isPlayer: 0
+  peerId: 0
+  isMultiplayer: 0
 --- !u!114 &8120283039703925669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3628,3 +3632,22 @@ MonoBehaviour:
   circuit: {fileID: 0}
   targetLookAhead: {x: 0, y: 0, z: 0}
   speed: 0
+  isMultiplayer: 0
+  serverPlayerPosition: {x: 0, y: 0, z: 0}
+  serverProgressDistance: 0
+--- !u!114 &465224864910416450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8120283039703925668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c352583c559d8cb45a47d2f6c6edd28b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  peerId: 0
+  rpm: 0
+  count: 0
+  distance: 0

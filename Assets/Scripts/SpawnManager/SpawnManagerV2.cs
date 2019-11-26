@@ -33,7 +33,7 @@ public class SpawnManagerV2 : MonoBehaviour
         RealTimeClient.Instance.PlayerDisconnect += DespawnPlayer;
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         BLEDebug.LogInfo($"Realtime PlayerId: {API.Instance.PlayerId}, PlayerSessionId: {API.Instance.PlayerSessionId}");
-        // RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
+        RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WEBSOCKET, API.Instance.PlayerSessionId, new byte[0]);
     }
 
     private void Start()
@@ -43,7 +43,6 @@ public class SpawnManagerV2 : MonoBehaviour
 
     IEnumerator SpawnCoroutine()
     {
-        RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
         yield return new WaitForSecondsRealtime(10.0f);
         RealTimeClient.Instance.UpdateCustomization(PlayerPrefs.GetString("Model"));
         BLEDebug.LogInfo($"peerId :{RealTimeClient.Instance.peerId}");
@@ -102,17 +101,22 @@ public class SpawnManagerV2 : MonoBehaviour
                 break;
         }
 
-        prefab.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index - 1);
+        // Instantiate Prefab Before Changing It
+        GameObject iModel = Instantiate(prefab, spawnLocation, spawnRotation);
+
+        iModel.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index - 1);
 
         if (isMultiplayer == true)
         {
-            prefab.GetComponent<BezierFollowV2>().isMultiplayer = true;
-            prefab.GetComponent<BezierTracker>().isMultiplayer = true;
-            prefab.GetComponent<PlayerStats>().peerId = index;
+            Debug.Log("Multiplayer Detected");
+            iModel.GetComponent<BezierFollowV2>().isMultiplayer = true;
+            iModel.GetComponent<BezierTracker>().isMultiplayer = true;
+            iModel.GetComponent<PlayerStats>().peerId = index;
         }
 
+        iModel.SendMessage("StartTracking");
         //players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
-        players.Add(index, Instantiate(prefab, spawnLocation, spawnRotation));
+        players.Add(index, iModel);
         //GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
     }
 
