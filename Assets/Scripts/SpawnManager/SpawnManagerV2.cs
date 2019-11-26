@@ -18,18 +18,14 @@ public class SpawnManagerV2 : MonoBehaviour
     [SerializeField] private GameObject minimapCam = null;
 
     //NEED TO CHECK TO LIST
-    //[SerializeField] private GameObject[] players;
     [SerializeField] private Dictionary<int, GameObject> players;
 
     [SerializeField] private GameObject multiCircuit;
-
-    [SerializeField] private bool isMultiplayer;
 
     private void Awake()
     {
         //players = new GameObject[numRoutes];
         players = new Dictionary<int, GameObject>();
-
 
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         RealTimeClient.Instance.PlayerDisconnect += DespawnPlayer;
@@ -41,7 +37,6 @@ public class SpawnManagerV2 : MonoBehaviour
 
     private void Start()
     {
-        //Spawn("maleModel1", 1);
         StartCoroutine("SpawnCoroutine");
     }
 
@@ -110,20 +105,15 @@ public class SpawnManagerV2 : MonoBehaviour
         GameObject iModel = Instantiate(prefab, spawnLocation, spawnRotation);
 
         iModel.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index);
-
-        if (isMultiplayer == true)
-        {
-            Debug.Log("Multiplayer Detected");
-            iModel.GetComponent<BezierFollowV2>().isMultiplayer = true;
-            iModel.GetComponent<BezierTracker>().isMultiplayer = true;
-            iModel.GetComponent<PlayerStats>().peerId = index;
-        }
+        iModel.GetComponent<BezierFollowV2>().isMultiplayer = true;
+        iModel.GetComponent<BezierTracker>().isMultiplayer = true;
+        iModel.GetComponent<PlayerStats>().peerId = index;
 
         iModel.SendMessage("StartTracking");
         iModel.SendMessage("StartFollowing");
-        //players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
+        iModel.GetComponentInChildren<BezierTiltController>().SendMessage("StartTilting");
+
         players.Add(index, iModel);
-        //GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
     }
 
     // Despawn

@@ -9,18 +9,24 @@ public class BezierTiltController : MonoBehaviour
     [SerializeField] private Transform helper;
 
     private Vector3 inverseTransformPoint;
-    private BezierTracker tracker;
+    public BezierTracker tracker;
     private Vector3 initialEuler;
+    public bool startTilt = false;
 
-    private void Start()
+    public void StartTilting()
     {
-        // Get the tracker component and save the initial euler angles
         tracker = GetComponentInParent<BezierTracker>();
         initialEuler = transform.localEulerAngles;
+        startTilt = true;
     }
 
     private void LateUpdate()
     {
+        if(startTilt == false)
+        {
+            return;
+        }
+
         // Calculate the turn and then get the tilt
         CalculateTurn();
         CalculateTilt();
@@ -82,6 +88,10 @@ public class BezierTiltController : MonoBehaviour
     {
         if (Application.isPlaying)
         {
+            if(startTilt == false)
+            {
+                return;
+            }
             // Draw a line from the player to the look head
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, tracker.targetLookAhead);

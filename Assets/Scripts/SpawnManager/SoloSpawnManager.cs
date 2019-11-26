@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class SoloSpawnManager : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class SoloSpawnManager : MonoBehaviour
 
     public GameObject playerCam = null;
     public GameObject minimapCam = null;
+
+    public GameObject circuit = null;
 
     private void Awake()
     {
@@ -26,8 +29,21 @@ public class SoloSpawnManager : MonoBehaviour
                 break;
         }
 
-        model.SetActive(true);
-        playerCam.GetComponent<CameraPivot>().SetTarget(model);
-        minimapCam.GetComponent<MinimapFollow>().target = model;
+        GameObject iModel = Instantiate(model, transform.position, transform.rotation);
+
+        iModel.GetComponent<BezierTracker>().circuit = circuit.GetComponent<BezierCircuit>();
+        iModel.SendMessage("StartTracking");
+        iModel.SendMessage("StartFollowing");
+        iModel.GetComponentInChildren<BezierTiltController>().SendMessage("StartTilting");
+
+        playerCam.GetComponent<CameraPivot>().SetTarget(iModel);
+        minimapCam.GetComponent<MinimapFollow>().target = iModel;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawCube(transform.position, Vector3.one);
     }
 }

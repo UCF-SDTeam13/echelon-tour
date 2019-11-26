@@ -23,16 +23,8 @@ public class BezierTracker : MonoBehaviour
     public bool isMultiplayer = false;
     public Vector3 serverPlayerPosition;
     public float serverProgressDistance;
-    public bool startTrack;
+    public bool startTrack = false;
 
-    private void Awake()
-    {
-        // May not need anymore (Use editor for singleplayer, use spawm manager for multiplayer)
-        // Find the bezier circuit in the scene
-        //circuit = GameObject.FindGameObjectWithTag("Circuit").GetComponent<BezierCircuit>();
-
-        // NOTE: Moved to StartTracking
-    }
     public void StartTracking()
     {
         if (isMultiplayer == true)
@@ -46,9 +38,12 @@ public class BezierTracker : MonoBehaviour
             Debug.Log("Failed to find circuit gameobject, possible tag missing.");
         }
 
+        startTrack = true;
+
         // Makes sure everything is inital
         Reset();
     }
+
     // Resets the progressDistnace to 0
     public void Reset()
     {

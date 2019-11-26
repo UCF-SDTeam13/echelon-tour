@@ -13,10 +13,6 @@ public class BezierFollowV2 : MonoBehaviour
     public bool isMultiplayer = false;
     public bool startFollow = false;
 
-    private void Start()
-    {
-        // NOTE: Moved to Start Tracking
-    }
     public void StartFollowing()
     {
         // Find the tracker component
@@ -30,6 +26,7 @@ public class BezierFollowV2 : MonoBehaviour
 
         startFollow = true;
     }
+
     private void Update()
     {
         if(isMultiplayer == true && startFollow == false)
