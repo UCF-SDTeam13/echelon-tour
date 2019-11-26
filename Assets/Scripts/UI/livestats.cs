@@ -7,7 +7,7 @@ public class livestats : MonoBehaviour
 {
     public GameObject uiStatsUpdate;
     private UiStatsUpdate getUpdatedStats;
-    
+
     public Text rpmText;
     public Text speedText;
     public Text resistanceText;
@@ -27,12 +27,13 @@ public class livestats : MonoBehaviour
     {
         getUpdatedStats = uiStatsUpdate.GetComponent<UiStatsUpdate>();
         BLEPlugin.Instance.StartWorkout();
+        StartCoroutine("UpdateUiStats");
     }
 
     // Update is called once per frame
     void Update()
     {
-        updateUIText();
+        //updateUIText();
     }
 
     public void updateUIText()
@@ -55,5 +56,35 @@ public class livestats : MonoBehaviour
         // Need to be event for this one
         calories += getUpdatedStats.CalculateCalories();
         caloriesText.text = "TBD"; //calories.ToString();
+    }
+
+    IEnumerator UpdateUiStats()
+    {
+        while (true)
+        {
+            rpm = getUpdatedStats.CalculateRPM();
+            rpmText.text = rpm.ToString();
+
+            speed = getUpdatedStats.CalculateSpeed();
+            speedText.text = speed.ToString("F2");
+
+            resistance = getUpdatedStats.CalculateResistance();
+            resistanceText.text = resistance.ToString();
+
+            watts = getUpdatedStats.CalculatePowerOutput();
+            wattsText.text = watts.ToString();
+
+            distance = getUpdatedStats.CalculateDistance();
+            distanceText.text = distance.ToString("F2");
+
+            // Need to be event for this one
+            if (rpm != 0)
+            {
+                calories += getUpdatedStats.CalculateCalories();
+                caloriesText.text = calories.ToString();
+            }
+
+            yield return new WaitForSeconds(1);
+        }
     }
 }

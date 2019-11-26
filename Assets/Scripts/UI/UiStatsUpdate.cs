@@ -83,6 +83,7 @@ public class UiStatsUpdate : MonoBehaviour
         public const float MinutesToSeconds = 60;
         public const float SecondsToMinutes = 1 / 60f;
         public const float RPMToSpeedLevel = 1 / 10f;
+        public const float KMPHToMPH = 0.62137f;
     }
 
     public struct Min
@@ -154,8 +155,8 @@ public class UiStatsUpdate : MonoBehaviour
         float rpmRatio = 1;
         float wheelDiameter = (78 * 2.54f) / 100000;
         float distancePerCount = wheelDiameter * Mathf.PI * rpmRatio;
-        float speedMultiplier = distancePerCount * 60 / 2;
-        return Bike.Instance.RPM * speedMultiplier;
+        float speedMultiplier = distancePerCount * 60;
+        return Bike.Instance.RPM * speedMultiplier * Ratio.KMPHToMPH;
     }
 
     public float CalculateDistance()
