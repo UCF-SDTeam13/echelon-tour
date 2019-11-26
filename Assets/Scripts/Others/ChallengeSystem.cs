@@ -51,13 +51,13 @@ public class ChallengeSystem : MonoBehaviour
         // MAY NEED TO CHECK IF MATCH IS FINISHED FIRST
         
         // Checks if the top speed is correct
-        if (tsc01.Achieved == false && CalculateSpeed() >= tsc01.Speed)
+        if (tsc01.Achieved == false && WorkoutCalculations.CalculateSpeed(Bike.Instance.RPM) >= tsc01.Speed)
         {
             StartCoroutine(TopSpeedTrigger(tsc01));
         }
 
         // Checks if the speed is above a certain amount
-        if (msc01.Achieved == false && msc01.Active == false && CalculateSpeed() >= msc01.Speed)
+        if (msc01.Achieved == false && msc01.Active == false && WorkoutCalculations.CalculateSpeed(Bike.Instance.RPM) >= msc01.Speed)
         {
             float startTime = Time.time;
             msc01.Active = true;
@@ -72,7 +72,7 @@ public class ChallengeSystem : MonoBehaviour
         */
 
         // Checks if a certain amount of distance is achieved
-        if(tdc01.Achieved == false && CalculateDistance() >= tdc01.Distance)
+        if(tdc01.Achieved == false && WorkoutCalculations.CalculateSpeed(Bike.Instance.Count) >= tdc01.Distance)
         {
             StartCoroutine(TotalDistanceTrigger(tdc01));
         }

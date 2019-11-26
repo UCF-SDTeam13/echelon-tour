@@ -47,7 +47,8 @@ public class BezierFollowV2 : MonoBehaviour
         }
 
         currentRPM = updatedRPM;
-        CalculateSpeed(currentRPM); //Get rpm from server
+        WorkoutCalculations.CalculateSpeed(currentRPM);
+        //CalculateSpeed(updatedRPM); //Get rpm from server
     }
 
     private void GetPlayerStats(object sender, StatsUpdateEventArgs e)

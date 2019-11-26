@@ -8044,7 +8044,6 @@ GameObject:
   - component: {fileID: 1932456763}
   - component: {fileID: 1932456762}
   - component: {fileID: 1932456761}
-  - component: {fileID: 1932456766}
   m_Layer: 5
   m_Name: Live Stats
   m_TagString: Untagged
@@ -8064,7 +8063,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f60db993c06e44a5b9d52780023ab17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiStatsUpdate: {fileID: 1932456760}
   rpmText: {fileID: 1350398976}
   speedText: {fileID: 1654879431}
   resistanceText: {fileID: 751446028}
@@ -8152,18 +8150,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 53.405}
   m_SizeDelta: {x: 775.5, y: 93.01}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1932456766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932456760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cac81491f2c302e408b795a10b7cfb63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1945524317
 GameObject:
   m_ObjectHideFlags: 0
