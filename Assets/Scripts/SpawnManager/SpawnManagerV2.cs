@@ -33,7 +33,7 @@ public class SpawnManagerV2 : MonoBehaviour
         RealTimeClient.Instance.PlayerDisconnect += DespawnPlayer;
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         BLEDebug.LogInfo($"Realtime PlayerId: {API.Instance.PlayerId}, PlayerSessionId: {API.Instance.PlayerSessionId}");
-        // RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
+        RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WEBSOCKET, API.Instance.PlayerSessionId, new byte[0]);
     }
 
     private void Start()
@@ -43,7 +43,6 @@ public class SpawnManagerV2 : MonoBehaviour
 
     IEnumerator SpawnCoroutine()
     {
-        RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WS_UDP_UNSECURED, API.Instance.PlayerSessionId, new byte[0]);
         yield return new WaitForSecondsRealtime(10.0f);
         RealTimeClient.Instance.UpdateCustomization(PlayerPrefs.GetString("Model"));
         BLEDebug.LogInfo($"peerId :{RealTimeClient.Instance.peerId}");

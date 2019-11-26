@@ -66,10 +66,12 @@ public class RealTimeClient
         PlayerId = _PlayerId;
         // Create a client configuration to specify a secure or unsecure connection type
         // Best practice is to set up a secure connection using the connection type RT_OVER_WSS_DTLS_TLS12.
-        ClientConfiguration clientConfiguration = new ClientConfiguration
+        ClientConfiguration clientConfiguration = new ClientConfiguration();
+        /*
         {
             ConnectionType = connectionType
         };
+        */
 
         // Create a Realtime client with the client configuration            
         Client = new Client(clientConfiguration);
@@ -108,24 +110,6 @@ public class RealTimeClient
         }
 
     }
-
-    /// <summary>
-    /// Example of sending to a custom message to the server.
-    /// 
-    /// Server could be replaced by known peer Id etc.
-    /// </summary>
-    /// <param name="intent">Choice of delivery intent ie Reliable, Fast etc. </param>
-    /// <param name="payload">Custom payload to send with message</param>
-    /*
-    public void SendMessage(DeliveryIntent intent, string payload)
-    {
-
-        Client.SendMessage(Client.NewMessage(OP_CODE_CUSTOM_OP1)
-            .WithDeliveryIntent(intent)
-            .WithTargetPlayer(Constants.PLAYER_ID_SERVER)
-            .WithPayload(StringToBytes(payload)));
-    }
-    */
     public void UpdateCustomization(string characterModelId)
     {
         BLEDebug.LogInfo("Sending Customization Update");
