@@ -17,7 +17,7 @@ public class CountdownTimer : MonoBehaviour
     public GameObject time;
     public GameObject leaderboard;
 
-    void Start ()
+    void Start()
     {
         currentTime = startingTime;
     }
@@ -25,7 +25,7 @@ public class CountdownTimer : MonoBehaviour
     void Update()
     {
         string currentScene = SceneManager.GetActiveScene().name;
-        if(currentScene != "MainMenu")
+        if (currentScene == "SoloRide" || currentScene == "MatchMakingLobby" || currentScene == "EchelonDomeTrack")
         {
             setUIText();
         }
@@ -89,7 +89,7 @@ public class CountdownTimer : MonoBehaviour
         Debug.Log("Game has ended");
         countdownText.text = "00:00";
 
-        if(SceneManager.GetActiveScene().name == "SoloRide")
+        if (SceneManager.GetActiveScene().name == "SoloRide")
         {
             highscoreTable.SetActive(true);
         }
