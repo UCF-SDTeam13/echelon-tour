@@ -101,17 +101,22 @@ public class SpawnManagerV2 : MonoBehaviour
                 break;
         }
 
-        prefab.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index - 1);
+        // Instantiate Prefab Before Changing It
+        GameObject iModel = Instantiate(prefab, spawnLocation, spawnRotation);
+
+        iModel.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index - 1);
 
         if (isMultiplayer == true)
         {
-            prefab.GetComponent<BezierFollowV2>().isMultiplayer = true;
-            prefab.GetComponent<BezierTracker>().isMultiplayer = true;
-            prefab.GetComponent<PlayerStats>().peerId = index;
+            Debug.Log("Multiplayer Detected");
+            iModel.GetComponent<BezierFollowV2>().isMultiplayer = true;
+            iModel.GetComponent<BezierTracker>().isMultiplayer = true;
+            iModel.GetComponent<PlayerStats>().peerId = index;
         }
 
+        iModel.SendMessage("StartTracking");
         //players[index] = Instantiate(prefab, spawnLocation, spawnRotation);
-        players.Add(index, Instantiate(prefab, spawnLocation, spawnRotation));
+        players.Add(index, iModel);
         //GameObject spawnInstance = Instantiate(prefab, spawnLocation, spawnRotation);
     }
 

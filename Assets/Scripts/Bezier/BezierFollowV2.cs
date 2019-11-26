@@ -14,6 +14,10 @@ public class BezierFollowV2 : MonoBehaviour
 
     private void Start()
     {
+        // NOTE: Moved to Start Tracking
+    }
+    public void StartTracking()
+    {
         // Find the tracker component
         tracker = GetComponent<BezierTracker>();
 
@@ -23,7 +27,6 @@ public class BezierFollowV2 : MonoBehaviour
             RealTimeClient.Instance.StatsUpdate += GetPlayerStats;
         }
     }
-
     private void Update()
     {
         if (isMultiplayer == true)

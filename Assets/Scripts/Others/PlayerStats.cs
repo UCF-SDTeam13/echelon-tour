@@ -9,16 +9,19 @@ public class PlayerStats : MonoBehaviour
 
     private void Start()
     {
+        // NOTE: Moved to StartTracking
+    }
+    public void StartTracking()
+    {
         RealTimeClient.Instance.StatsUpdate += UpdatePlayerStats;
     }
-    
     private void UpdatePlayerStats(object sender, StatsUpdateEventArgs e)
     {
         rpm = e.rpm;
         count = e.rotations;
         distance = CalculateDistance(count);
     }
-    
+
     private float CalculateDistance(int count)
     {
         float wheelDiameter = (78 * 2.54f) / 100000;

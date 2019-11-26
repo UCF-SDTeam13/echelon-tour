@@ -30,13 +30,17 @@ public class BezierTracker : MonoBehaviour
         // Find the bezier circuit in the scene
         // circuit = GameObject.FindGameObjectWithTag("Circuit").GetComponent<BezierCircuit>();
 
-        if(isMultiplayer == true)
+        // NOTE: Moved to StartTracking
+    }
+    public void StartTracking()
+    {
+        if (isMultiplayer == true)
         {
             RealTimeClient.Instance.StatsUpdate += GetPositions;
             StartCoroutine("UpdateServerStats");
         }
 
-        if(circuit == null)
+        if (circuit == null)
         {
             Debug.Log("Failed to find circuit gameobject, possible tag missing.");
         }
@@ -44,7 +48,6 @@ public class BezierTracker : MonoBehaviour
         // Makes sure everything is inital
         Reset();
     }
-
     // Resets the progressDistnace to 0
     public void Reset()
     {
@@ -54,14 +57,14 @@ public class BezierTracker : MonoBehaviour
     private void FixedUpdate()
     {
         // Get a speed based off how much is traveled between frames
-        if(Time.fixedDeltaTime > 0)
+        if (Time.fixedDeltaTime > 0)
         {
             speed = Mathf.Lerp(speed, (lastPosition - transform.position).magnitude / Time.fixedDeltaTime,
                                Time.fixedDeltaTime);
         }
 
         // Change the target position
-        target.position = 
+        target.position =
             circuit.GetTrackPoint(progressDistance + targetOffset + targetFactor * speed).position;
 
         // Change the target rotation
@@ -78,7 +81,7 @@ public class BezierTracker : MonoBehaviour
         Vector3 progressDelta = progressPoint.position - transform.position;
 
         // Compare progressDelta with server progressDelta
-        if(isMultiplayer == true)
+        if (isMultiplayer == true)
         {
             BezierCircuit.TrackPoint serverProgressPoint = circuit.GetTrackPoint(serverProgressDistance);
 
@@ -92,7 +95,7 @@ public class BezierTracker : MonoBehaviour
         }
 
         // Checks if less than 0 and increment the progressDistance
-        if(Vector3.Dot(progressDelta, progressPoint.direction) < 0)
+        if (Vector3.Dot(progressDelta, progressPoint.direction) < 0)
         {
             progressDistance += progressDelta.magnitude * 0.5f;
         }
@@ -103,13 +106,13 @@ public class BezierTracker : MonoBehaviour
         // Save the last position
         lastPosition = transform.position;
     }
-    
+
     private void GetPositions(object sender, StatsUpdateEventArgs e)
     {
         Vector3 newPlayerPos = new Vector3();
         float newProgressDis = e.progressDistance;
 
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             newPlayerPos[i] = e.playerPosition[i];
         }
