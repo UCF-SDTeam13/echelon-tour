@@ -18,10 +18,14 @@ public class BezierFollowV2 : MonoBehaviour
         // Find the tracker component
         tracker = GetComponent<BezierTracker>();
 
-        if (isMultiplayer == true && peerId != RealTimeClient.Instance.peerId)
+        if (isMultiplayer == true)
         {
-            // Need to unsubscribe
-            RealTimeClient.Instance.StatsUpdate += GetPlayerStats;
+            peerId = GetComponent<PlayerStats>().peerId;
+            
+            if(peerId != RealTimeClient.Instance.peerId)
+            {
+                RealTimeClient.Instance.StatsUpdate += GetPlayerStats;
+            }
         }
 
         startFollow = true;
