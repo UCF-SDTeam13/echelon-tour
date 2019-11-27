@@ -32,7 +32,6 @@ public class SpawnManagerV2 : MonoBehaviour
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         BLEDebug.LogInfo($"Realtime PlayerId: {API.Instance.PlayerId}, PlayerSessionId: {API.Instance.PlayerSessionId}");
         RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WEBSOCKET, API.Instance.PlayerSessionId, new byte[0]);
-
     }
 
     private void Start()
@@ -88,10 +87,10 @@ public class SpawnManagerV2 : MonoBehaviour
         GameObject prefab = null;
         switch (model)
         {
-            case "maleModel1":
+            case "MaleModel1":
                 prefab = maleModel1;
                 break;
-            case "femaleModel1":
+            case "FemaleModel1":
                 prefab = femaleModel1;
                 break;
             default:
@@ -104,7 +103,7 @@ public class SpawnManagerV2 : MonoBehaviour
         //Debug.Log(spawnLocation.x + " " + spawnLocation.y + " " + spawnLocation.z);
         GameObject iModel = Instantiate(prefab, spawnLocation, spawnRotation);
 
-        iModel.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index);
+        iModel.GetComponent<BezierTracker>().circuit = multiCircuit.GetComponent<BezierMultiCircuitController>().SetTrack(index - 1);
         iModel.GetComponent<BezierFollowV2>().isMultiplayer = true;
         iModel.GetComponent<BezierTracker>().isMultiplayer = true;
         iModel.GetComponent<PlayerStats>().peerId = index;

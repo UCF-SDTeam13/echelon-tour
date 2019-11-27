@@ -21,14 +21,16 @@ public class BezierTracker : MonoBehaviour
     public float speed = 0;
 
     public bool isMultiplayer = false;
-    public Vector3 serverPlayerPosition;
-    public float serverProgressDistance;
+    public int peerId = 0;
+    public Vector3 serverPlayerPosition = Vector3.zero;
+    public float serverProgressDistance = 0;
     public bool startTrack = false;
 
     public void StartTracking()
     {
         if (isMultiplayer == true)
         {
+            peerId = GetComponent<PlayerStats>().peerId;
             RealTimeClient.Instance.StatsUpdate += GetPositions;
             StartCoroutine("UpdateServerStats");
         }
@@ -82,11 +84,12 @@ public class BezierTracker : MonoBehaviour
         Vector3 progressDelta = progressPoint.position - transform.position;
 
         // Compare progressDelta with server progressDelta
-        if (isMultiplayer == true)
+        if (isMultiplayer == true && peerId != RealTimeClient.Instance.peerId && serverProgressDistance != 0 && serverPlayerPosition != Vector3.zero)
         {
             BezierCircuit.TrackPoint serverProgressPoint = circuit.GetTrackPoint(serverProgressDistance);
 
-            if (Mathf.Abs(serverProgressDistance - progressDistance) > 10) //Distance
+            Debug.Log(serverProgressDistance + " " + progressDistance);
+            if (Mathf.Abs(serverProgressDistance - progressDistance) > 10) //Need a new value
             {
                 transform.position = serverPlayerPosition;
                 progressDistance = serverProgressDistance;
