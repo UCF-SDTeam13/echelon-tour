@@ -37,7 +37,7 @@ public class FlatJSON
         {
             sb.Append("\"");
             sb.Append(kvPair.Key);
-            sb.Append("\":\"[");
+            sb.Append("\":[");
             foreach (string v in kvPair.Value)
             {
                 sb.Append("\"");
@@ -145,7 +145,8 @@ public class FlatJSON
                         // [ found
                         // Beginning of Array
                         // -> Look for "
-                        state = ParseSearchState.EndArrayValue;
+                        stringArray.Clear();
+                        state = ParseSearchState.BeginArrayValue;
                     }
                     break;
                 case ParseSearchState.BeginArrayValue:
@@ -191,6 +192,7 @@ public class FlatJSON
                         // ] found
                         // End of Array
                         // Emit Array
+                        BLEDebug.LogInfo("Emit Array " + key);
                         stringArrays.Add(key, stringArray.ToArray());
                         // -> Look for , or }
                         state = ParseSearchState.EndJSON;
@@ -205,6 +207,7 @@ public class FlatJSON
                         value = sb.ToString();
                         // Add Key and Value to Dictionary
                         stringValues.Add(key, value);
+                        BLEDebug.LogInfo("Emit Key " + key);
                         // -> Look for , or }
                         state = ParseSearchState.EndJSON;
                     }

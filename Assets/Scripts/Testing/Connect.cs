@@ -39,7 +39,6 @@ public class Connect : MonoBehaviour
         await API.Instance.CreateMatchmakingTicket();
         do
         {
-            BLEDebug.LogInfo("Checking Matchmaking Ticket Status");
             await API.Instance.CheckMatchmakingTicketStatus();
         } while (API.Instance.Status == "SEARCHING" || API.Instance.Status == "PLACING");
         if (API.Instance.Status == "COMPLETED")
@@ -75,8 +74,8 @@ public class Connect : MonoBehaviour
             {
                 BLEDebug.LogInfo("Connected");
                 float[] playerPos = { 1, 2, 3 };
-                float[] targetPos = { 4, 5, 6 };
-                RealTimeClient.Instance.UpdateStats(0, 0, playerPos, 0.0f);
+                float progressDistance = 10;
+                RealTimeClient.Instance.UpdateStats(0, 0, playerPos, progressDistance);
             }
             //BLEDebug.LogInfo("East1 Ping" + pingEast1);
             //BLEDebug.LogInfo("East2 Ping" + pingEast2);
