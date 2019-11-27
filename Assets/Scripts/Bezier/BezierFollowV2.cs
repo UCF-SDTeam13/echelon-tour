@@ -47,7 +47,7 @@ public class BezierFollowV2 : MonoBehaviour
         }
 
         currentRPM = updatedRPM;
-        WorkoutCalculations.CalculateSpeed(currentRPM);
+        speed = WorkoutCalculations.CalculateGameSpeed(currentRPM);
         //CalculateSpeed(updatedRPM); //Get rpm from server
     }
 
@@ -85,6 +85,7 @@ public class BezierFollowV2 : MonoBehaviour
         }
     }
 
+    /*
     private void CalculateSpeed(int rpm)
     {
         // Trying to hard code pi
@@ -97,5 +98,6 @@ public class BezierFollowV2 : MonoBehaviour
         // mph to ms, I know fun right
         speed = mph / 0.621f * 1000 / 60 / 60;
     }
+    */
 }
 

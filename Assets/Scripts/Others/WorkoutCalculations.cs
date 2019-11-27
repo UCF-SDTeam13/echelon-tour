@@ -83,6 +83,7 @@ public class WorkoutCalculations
         public const float SecondsToMinutes = 1 / 60f;
         public const float RPMToSpeedLevel = 1 / 10f;
         public const float KMPHToMPH = 0.62137f;
+        public const float KMPHToMPS = 3.6f;
     }
 
     public struct Min
@@ -149,6 +150,7 @@ public class WorkoutCalculations
         return EnergyTable[ResistanceLevel] * 60;
     }
 
+    // MPH
     public static float CalculateSpeed(int rpm)
     {
         float rpmRatio = 1;
@@ -156,6 +158,15 @@ public class WorkoutCalculations
         float distancePerCount = wheelDiameter * Mathf.PI * rpmRatio;
         float speedMultiplier = distancePerCount * 60;
         return rpm * speedMultiplier * Ratio.KMPHToMPH;
+    }
+
+    public static float CalculateGameSpeed(int rpm)
+    {
+        float rpmRatio = 1;
+        float wheelDiameter = (78 * 2.54f) / 100000;
+        float distancePerCount = wheelDiameter * Mathf.PI * rpmRatio;
+        float speedMultiplier = distancePerCount * 60;
+        return rpm * speedMultiplier / Ratio.KMPHToMPS;
     }
 
     public static float CalculateDistance(int count)
