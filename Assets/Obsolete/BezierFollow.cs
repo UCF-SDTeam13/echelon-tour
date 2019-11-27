@@ -20,7 +20,7 @@ public class BezierFollow : MonoBehaviour
     {
         bezierCurves = new BezierCurve[bezierRoutes.Length];
 
-        for(int i = 0; i < bezierRoutes.Length; i++)
+        for (int i = 0; i < bezierRoutes.Length; i++)
         {
             bezierCurves[i] = bezierRoutes[i].GetComponent<BezierCurve>();
         }
@@ -31,10 +31,10 @@ public class BezierFollow : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.Log(currentRoute + " " + currentPoint);
-        Debug.Log(transform.position + " " + currentTarget);
+        // Debug.Log(currentRoute + " " + currentPoint);
+        // Debug.Log(transform.position + " " + currentTarget);
 
-        if(currentPoint == bezierCurves[currentRoute].numPoints + 1)
+        if (currentPoint == bezierCurves[currentRoute].numPoints + 1)
         {
             currentRoute++;
             currentRoute = currentRoute % bezierRoutes.Length;

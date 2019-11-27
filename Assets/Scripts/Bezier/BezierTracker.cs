@@ -32,7 +32,11 @@ public class BezierTracker : MonoBehaviour
         {
             peerId = GetComponent<PlayerStats>().peerId;
             RealTimeClient.Instance.StatsUpdate += GetPositions;
-            StartCoroutine("UpdateServerStats");
+            if (peerId == RealTimeClient.Instance.peerId)
+            {
+                StartCoroutine("UpdateServerStats");
+            }
+
         }
 
         if (circuit == null)
@@ -54,7 +58,7 @@ public class BezierTracker : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(isMultiplayer == true && startTrack == false)
+        if (isMultiplayer == true && startTrack == false)
         {
             return;
         }
@@ -88,7 +92,7 @@ public class BezierTracker : MonoBehaviour
         {
             BezierCircuit.TrackPoint serverProgressPoint = circuit.GetTrackPoint(serverProgressDistance);
 
-            Debug.Log(serverProgressDistance + " " + progressDistance);
+            // Debug.Log(serverProgressDistance + " " + progressDistance);
             if (Mathf.Abs(serverProgressDistance - progressDistance) > 10) //Need a new value
             {
                 transform.position = serverPlayerPosition;
@@ -133,7 +137,7 @@ public class BezierTracker : MonoBehaviour
             float progressDis = progressDistance;
 
             RealTimeClient.Instance.UpdateStats(Bike.Instance.Count, Bike.Instance.RPM, playerPos, progressDis);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1.0f);
         }
     }
 

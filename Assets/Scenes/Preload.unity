@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 895076333}
   - component: {fileID: 895076335}
   - component: {fileID: 895076336}
+  - component: {fileID: 895076337}
   m_Layer: 0
   m_Name: DontDestroyOnLoad
   m_TagString: NODESTROY
@@ -187,5 +188,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9df8405b172a444b3b655a1777e1fd28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &895076337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895076332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b37b76b5429c3c1429e14d761711f9d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

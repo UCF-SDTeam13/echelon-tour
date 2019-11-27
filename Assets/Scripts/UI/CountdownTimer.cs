@@ -86,7 +86,7 @@ public class CountdownTimer : MonoBehaviour
     // This cotrols what will happen when timer runs out
     public void finishAction()
     {
-        Debug.Log("Game has ended");
+        // Debug.Log("Game has ended");
         countdownText.text = "00:00";
 
         if (SceneManager.GetActiveScene().name == "SoloRide")

@@ -29,7 +29,6 @@ public class SpawnManagerV2 : MonoBehaviour
 
         RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         RealTimeClient.Instance.PlayerDisconnect += DespawnPlayer;
-        RealTimeClient.Instance.CustomizationUpdate += SpawnPlayer;
         BLEDebug.LogInfo($"Realtime PlayerId: {API.Instance.PlayerId}, PlayerSessionId: {API.Instance.PlayerSessionId}");
         RealTimeClient.Instance.Connect(API.Instance.PlayerId, API.Instance.DnsName, API.Instance.TcpPort, API.Instance.UdpPort, ConnectionType.RT_OVER_WEBSOCKET, API.Instance.PlayerSessionId, new byte[0]);
     }
@@ -50,9 +49,8 @@ public class SpawnManagerV2 : MonoBehaviour
     }
     private void SpawnPlayer(object sender, CustomizationUpdateEventArgs e)
     {
-        Spawn(e.characterModelId, e.peerId);
+        UnityMainDispatcher.Instance.QForMainThread(Spawn, e.characterModelId, e.peerId);
     }
-
     private void DespawnPlayer(object sender, PlayerEventArgs e)
     {
         Despawn(e.peerId);
