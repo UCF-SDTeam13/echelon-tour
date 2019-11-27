@@ -64,35 +64,28 @@ public class livestats : MonoBehaviour
         caloriesText.text = "TBD"; //calories.ToString();
     }
     */
-
+    
     IEnumerator UpdateUiStats()
     {
         while (true)
         {
-            //rpm = getUpdatedStats.CalculateRPM();
             rpm = WorkoutCalculations.CalculateRPM();
             rpmText.text = rpm.ToString();
 
-            //speed = getUpdatedStats.CalculateSpeed();
             speed = WorkoutCalculations.CalculateSpeed(Bike.Instance.RPM);
             speedText.text = speed.ToString("F2");
 
-            //resistance = getUpdatedStats.CalculateResistance();
             resistance = WorkoutCalculations.CalculateResistance();
             resistanceText.text = resistance.ToString();
 
-            //watts = getUpdatedStats.CalculatePowerOutput();
             watts = WorkoutCalculations.CalculatePowerOutput(Bike.Instance.RPM);
             wattsText.text = watts.ToString();
 
-            //distance = getUpdatedStats.CalculateDistance();
-            distance = WorkoutCalculations.CalculateDistance(Bike.Instance.Count);
-            distanceText.text = distance.ToString("F2");
-
-            // Need to be event for this one
             if (rpm != 0)
             {
-                //calories += getUpdatedStats.CalculateCalories();
+                distance = WorkoutCalculations.CalculateDistance(Bike.Instance.Count);
+                distanceText.text = distance.ToString("F2");
+
                 calories += WorkoutCalculations.CalculateCalories();
                 caloriesText.text = calories.ToString();
             }
@@ -100,4 +93,34 @@ public class livestats : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
     }
+    /*
+    IEnumerator UpdateUiStats()
+    {
+        while (true)
+        {
+            rpm = Random.Range(1, 100);
+            rpmText.text = rpm.ToString();
+
+            speed = Random.Range(0, 100);
+            speedText.text = speed.ToString("F2");
+
+            resistance = Random.Range(0, 100);
+            resistanceText.text = resistance.ToString();
+
+            watts = Random.Range(0, 100);
+            wattsText.text = watts.ToString();
+
+            if (rpm != 0)
+            {
+                distance = Random.Range(0, 100);
+                distanceText.text = distance.ToString("F2");
+
+                calories += Random.Range(0, 100);
+                caloriesText.text = calories.ToString();
+            }
+
+            yield return new WaitForSeconds(1);
+        }
+    }
+    */
 }

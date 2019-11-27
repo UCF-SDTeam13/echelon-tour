@@ -2768,7 +2768,7 @@ GameObject:
   - component: {fileID: 737779421}
   - component: {fileID: 737779420}
   m_Layer: 0
-  m_Name: TotalOutput Placeholder
+  m_Name: Calories Placeholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2824,7 +2824,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: TOTAL OUTPUT
+  m_Text: CALORIES
 --- !u!222 &737779421
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3803,7 +3803,7 @@ GameObject:
   - component: {fileID: 954849884}
   - component: {fileID: 954849883}
   m_Layer: 0
-  m_Name: TotalOutput Placeholder
+  m_Name: Calories Placeholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3840,7 +3840,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: TOTAL OUTPUT
+  m_Text: CALORIES
 --- !u!222 &954849884
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7954,13 +7954,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f60db993c06e44a5b9d52780023ab17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiStatsUpdate: {fileID: 0}
   rpmText: {fileID: 687512683}
   speedText: {fileID: 742539156}
   resistanceText: {fileID: 491089587}
   wattsText: {fileID: 2034571545}
   distanceText: {fileID: 742439829}
-  caloriesText: {fileID: 0}
+  caloriesText: {fileID: 954849883}
 --- !u!114 &1597859969
 MonoBehaviour:
   m_ObjectHideFlags: 0
