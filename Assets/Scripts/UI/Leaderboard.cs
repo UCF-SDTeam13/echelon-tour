@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Leaderboard : MonoBehaviour
 {
     // Set to true when testing locally
-    bool testing = true;
+    bool testing = false;
     private Transform entryContainter;
     private Transform entryTemplate;
     private Transform entryContainterHS;
@@ -102,17 +102,7 @@ public class Leaderboard : MonoBehaviour
                         place[i + 1] = tempInt; 
                     }
                 //TESTING
-                if(i==6)
-                {
-                    players[6]=30;
-                    entryContainter.Find("Player" + 6).Find("Distance").GetComponent<Text>().text = players[6].ToString();
-                    
-                    players[7]=20;
-                    entryContainter.Find("Player" + 7).Find("Distance").GetComponent<Text>().text = players[7].ToString();
-
-                    players[3]=60;
-                    entryContainter.Find("Player" + 3).Find("Distance").GetComponent<Text>().text = players[3].ToString();
-                }
+                //testingTable();
             }
 
         }
@@ -206,5 +196,17 @@ public class Leaderboard : MonoBehaviour
         {
             entryContainter.Find("Player" + i).gameObject.SetActive(true);
         }
+    }
+
+    public void testingTable()
+    {
+        players[6]=30;
+        entryContainter.Find("Player" + 6).Find("Distance").GetComponent<Text>().text = players[6].ToString();
+        
+        players[7]=20;
+        entryContainter.Find("Player" + 7).Find("Distance").GetComponent<Text>().text = players[7].ToString();
+
+        players[3]=60;
+        entryContainter.Find("Player" + 3).Find("Distance").GetComponent<Text>().text = players[3].ToString();
     }
 }
