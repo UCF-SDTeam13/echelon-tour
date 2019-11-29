@@ -70,8 +70,6 @@ public class Leaderboard : MonoBehaviour
         Vector3 temp;
         int tempInt;
         string tempString;
-        int currentPlace;
-        int nextPlace;
 
         // For each player, check the player for distance
         for (int i = 1; i < 8; i++)
