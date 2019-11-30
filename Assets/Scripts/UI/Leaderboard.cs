@@ -144,10 +144,10 @@ public class Leaderboard : MonoBehaviour
 
     private void UpdateLiveStatsMainThread(StatsUpdateEventArgs e)
     {
-        players[e.peerId] += CalculateDistance(e.rotations);
+        players[e.peerId] = CalculateDistance(e.rotations);
         if (e.peerId >= 1 && e.peerId <= 8)
         {
-            entryContainter.Find("Player" + e.peerId).Find("Distance").GetComponent<Text>().text = players[e.peerId].ToString();
+            entryContainter.Find("Player" + e.peerId).Find("Distance").GetComponent<Text>().text = players[e.peerId].ToString("F2");
         }
     }
 
