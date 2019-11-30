@@ -42,7 +42,7 @@ public class SpawnManagerV2 : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1.0f);
         RealTimeClient.Instance.UpdateCustomization(PlayerPrefs.GetString("Model"));
-        BLEDebug.LogInfo($"peerId :{RealTimeClient.Instance.peerId}");
+        BLEDebug.LogInfo($"peerId :{RealTimeClient.Instance.peerId}, CharacterModelId: {API.Instance.CharacterModelId}");
         Spawn(API.Instance.CharacterModelId, RealTimeClient.Instance.peerId);
         playerCam.GetComponent<CameraPivot>().SetTarget(players[RealTimeClient.Instance.peerId]);
         minimapCam.GetComponent<MinimapFollow>().target = players[RealTimeClient.Instance.peerId];
@@ -97,7 +97,7 @@ public class SpawnManagerV2 : MonoBehaviour
                 break;
             default:
                 prefab = maleModel1;
-                Debug.Log("Model does not exist");
+                Debug.Log($"Model: {model} not exist");
                 break;
         }
 

@@ -219,7 +219,7 @@ public class RealTimeClient
             case OP_CODE_CUSTOMIZATION_UPDATE:
                 fJSON.Deserialize(BytesToString(e.Data));
                 fJSON.TryGetStringValue("PlayerId", out string customplayer);
-                fJSON.TryGetStringValue("CharacterModelId", out string characterModel);
+                fJSON.TryGetStringValue("characterModelId", out string characterModel);
                 OnCustomizationUpdate(e.Sender, customplayer, characterModel);
                 break;
             default:

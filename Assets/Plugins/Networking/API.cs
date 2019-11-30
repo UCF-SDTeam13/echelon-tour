@@ -11,8 +11,8 @@ public sealed class API
     private static readonly Lazy<API>
     _API = new Lazy<API>(() => new API());
     public static API Instance => _API.Value;
-    public enum LoginStatus {TOKEN_EXPIRED, LOGGING_IN, LOGGED_IN, FAILED};
-    public LoginStatus CurrentLoginStatus{get; set;} = LoginStatus.TOKEN_EXPIRED;
+    public enum LoginStatus { TOKEN_EXPIRED, LOGGING_IN, LOGGED_IN, FAILED };
+    public LoginStatus CurrentLoginStatus { get; set; } = LoginStatus.TOKEN_EXPIRED;
     private const int firstPort = 33400;
     private const int lastPort = 33500;
     private readonly HttpClient client;
@@ -83,10 +83,6 @@ public sealed class API
         {
             return _CharacterModelId;
         }
-        set
-        {
-            _CharacterModelId = value;
-        }
     }
 
     private string _DnsName;
@@ -123,12 +119,14 @@ public sealed class API
         fJSON.TryGetStringValue("idToken", out idToken);
         fJSON.TryGetStringValue("refreshToken", out refreshToken);
         fJSON.TryGetStringValue("accessToken", out accessToken);
-        if (idToken != null) {
+        if (idToken != null)
+        {
             // Set Token for Authentication
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(idToken);
             CurrentLoginStatus = LoginStatus.LOGGED_IN;
         }
-        else {
+        else
+        {
             CurrentLoginStatus = LoginStatus.FAILED;
         }
     }
@@ -187,8 +185,9 @@ public sealed class API
         fJSON.TryGetStringValue("characterModelId", out _CharacterModelId);
     }
 
-    public async Task SetCustomization()
+    public async Task SetCustomization(string cModelId)
     {
+        _CharacterModelId = cModelId;
         BLEDebug.LogInfo("Setting CharacterModelId");
         FlatJSON fJSON = new FlatJSON();
         fJSON.Add("characterModelId", _CharacterModelId);
@@ -199,7 +198,7 @@ public sealed class API
         BLEDebug.LogInfo("CharacterModel " + body);
         fJSON.Deserialize(body);
 
-        fJSON.TryGetStringValue("characterModelId", out _CharacterModelId);
+        // fJSON.TryGetStringValue("characterModelId", out _CharacterModelId);
     }
     // Given a starting and ending range, finds an open UDP port to use as the listening port
     private void FindAvailableUDPPort()

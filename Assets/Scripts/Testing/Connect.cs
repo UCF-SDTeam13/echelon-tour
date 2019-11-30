@@ -29,11 +29,9 @@ public class Connect : MonoBehaviour
         await API.Instance.Login("test", "password");
         await API.Instance.GetCustomization();
         BLEDebug.LogInfo(API.Instance.CharacterModelId);
-        API.Instance.CharacterModelId = "model2";
-        await API.Instance.SetCustomization();
+        await API.Instance.SetCustomization("model2");
         BLEDebug.LogInfo(API.Instance.CharacterModelId);
-        API.Instance.CharacterModelId = "model1";
-        await API.Instance.SetCustomization();
+        await API.Instance.SetCustomization("model1");
         BLEDebug.LogInfo(API.Instance.CharacterModelId);
 
         await API.Instance.CreateMatchmakingTicket();
