@@ -40,7 +40,7 @@ public class SpawnManagerV2 : MonoBehaviour
 
     IEnumerator SpawnCoroutine()
     {
-        yield return new WaitForSecondsRealtime(10.0f);
+        yield return new WaitForSecondsRealtime(1.0f);
         RealTimeClient.Instance.UpdateCustomization(PlayerPrefs.GetString("Model"));
         BLEDebug.LogInfo($"peerId :{RealTimeClient.Instance.peerId}");
         Spawn(API.Instance.CharacterModelId, RealTimeClient.Instance.peerId);
@@ -49,7 +49,11 @@ public class SpawnManagerV2 : MonoBehaviour
     }
     private void SpawnPlayer(object sender, CustomizationUpdateEventArgs e)
     {
-        UnityMainDispatcher.Instance.QForMainThread(Spawn, e.characterModelId, e.peerId);
+        if (e.peerId != RealTimeClient.Instance.peerId)
+        {
+            UnityMainDispatcher.Instance.QForMainThread(Spawn, e.characterModelId, e.peerId);
+        }
+
     }
     private void DespawnPlayer(object sender, PlayerEventArgs e)
     {

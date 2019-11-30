@@ -117,16 +117,19 @@ public class BezierTracker : MonoBehaviour
 
     private void GetPositions(object sender, StatsUpdateEventArgs e)
     {
-        Vector3 newPlayerPos = new Vector3();
-        float newProgressDis = e.progressDistance;
-
-        for (int i = 0; i < 3; i++)
+        if (e.peerId != RealTimeClient.Instance.peerId)
         {
-            newPlayerPos[i] = e.playerPosition[i];
-        }
+            Vector3 newPlayerPos = new Vector3();
+            float newProgressDis = e.progressDistance;
 
-        serverPlayerPosition = newPlayerPos;
-        serverProgressDistance = newProgressDis;
+            for (int i = 0; i < 3; i++)
+            {
+                newPlayerPos[i] = e.playerPosition[i];
+            }
+
+            serverPlayerPosition = newPlayerPos;
+            serverProgressDistance = newProgressDis;
+        }
     }
 
     IEnumerator UpdateServerStats()

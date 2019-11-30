@@ -14,7 +14,7 @@ public class Leaderboard : MonoBehaviour
     private static float wheelDiameter = 78 * 2.54f / 100000;
     private static float rpmRatio = 1f;
     int rpm = 0;
-    int numplayers = 0;
+    int numplayers = 1;
     public static string playerName;
     public static float distance;
 
@@ -79,7 +79,7 @@ public class Leaderboard : MonoBehaviour
                 // Check if next player has higher distance. If so move this one down and next up
                 if (place[i] == j)
                     if (players[place[i]] < players[place[i + 1]])
-                    {   
+                    {
                         // Update live leaderboard
                         temp = entryContainter.Find("Player" + (place[i])).transform.position;
                         entryContainter.Find("Player" + (place[i])).transform.position = entryContainter.Find("Player" + (place[i + 1])).transform.position;
@@ -95,9 +95,9 @@ public class Leaderboard : MonoBehaviour
                         entryContainter.Find("Player" + place[i]).Find("Place").GetComponent<Text>().text = entryContainter.Find("Player" + place[i + 1]).Find("Place").GetComponent<Text>().text;
                         entryContainter.Find("Player" + place[i + 1]).Find("Place").GetComponent<Text>().text = tempString;
 
-                        tempInt = place[i]; 
+                        tempInt = place[i];
                         place[i] = place[i + 1];
-                        place[i + 1] = tempInt; 
+                        place[i + 1] = tempInt;
                     }
                 //TESTING
                 //testingTable();
@@ -111,9 +111,9 @@ public class Leaderboard : MonoBehaviour
     // Match up final leaderboard with everything in live leaderboard
     private void matchUp()
     {
-        for(int i = 1; i < 9; i++)
+        for (int i = 1; i < 9; i++)
         {
-             // Place
+            // Place
             entryContainterHS.Find("Player" + i).Find("Place").GetComponent<Text>().text = entryContainter.Find("Player" + i).Find("Place").GetComponent<Text>().text;
             // Distance
             entryContainterHS.Find("Player" + i).Find("Distance").GetComponent<Text>().text = entryContainter.Find("Player" + i).Find("Distance").GetComponent<Text>().text;
@@ -145,7 +145,7 @@ public class Leaderboard : MonoBehaviour
     private void UpdateLiveStatsMainThread(StatsUpdateEventArgs e)
     {
         players[e.peerId] += CalculateDistance(e.rotations);
-        if(e.peerId >= 1 && e.peerId <= 8)
+        if (e.peerId >= 1 && e.peerId <= 8)
         {
             entryContainter.Find("Player" + e.peerId).Find("Distance").GetComponent<Text>().text = players[e.peerId].ToString();
         }
@@ -198,13 +198,13 @@ public class Leaderboard : MonoBehaviour
 
     public void testingTable()
     {
-        players[6]=30;
+        players[6] = 30;
         entryContainter.Find("Player" + 6).Find("Distance").GetComponent<Text>().text = players[6].ToString();
-        
-        players[7]=20;
+
+        players[7] = 20;
         entryContainter.Find("Player" + 7).Find("Distance").GetComponent<Text>().text = players[7].ToString();
 
-        players[3]=60;
+        players[3] = 60;
         entryContainter.Find("Player" + 3).Find("Distance").GetComponent<Text>().text = players[3].ToString();
     }
 }
