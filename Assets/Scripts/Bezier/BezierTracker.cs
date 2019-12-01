@@ -26,8 +26,11 @@ public class BezierTracker : MonoBehaviour
     public float serverProgressDistance = 0;
     public bool startTrack = false;
 
+    public BezierFollowV2 followScript;
+
     public void StartTracking()
     {
+        followScript = GetComponent<BezierFollowV2>();
         if (isMultiplayer == true)
         {
             peerId = GetComponent<PlayerStats>().peerId;
@@ -94,16 +97,21 @@ public class BezierTracker : MonoBehaviour
             float distanceDelta = Mathf.Abs(serverProgressDistance - progressDistance);
 
             // Debug.Log(serverProgressDistance + " " + progressDistance);
-            if (distanceDelta > 20) //Need a new value
+            if (distanceDelta > 30) //Need a new value
             {
                 transform.position = serverPlayerPosition;
                 progressDistance = serverProgressDistance;
                 progressPoint = serverProgressPoint;
                 progressDelta = serverProgressPoint.position - serverPlayerPosition;
+                followScript.speedOffset = 0;
             }
-            else if(distanceDelta > 10)
+            else if (distanceDelta > 10)
             {
-
+                followScript.speedOffset = 5;
+            }
+            else
+            {
+                followScript.speedOffset = 0;
             }
         }
 

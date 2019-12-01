@@ -17920,6 +17920,11 @@ PrefabInstance:
       propertyPath: turnSpeed
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 6750644253474251562, guid: 20a55d588159c4d429b7f3174fa5cc61,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 567
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20a55d588159c4d429b7f3174fa5cc61, type: 3}
 --- !u!1 &1789963095

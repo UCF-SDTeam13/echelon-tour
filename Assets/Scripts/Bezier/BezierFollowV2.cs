@@ -12,6 +12,7 @@ public class BezierFollowV2 : MonoBehaviour
     public int peerId = 0;
     public bool isMultiplayer = false;
     public bool startFollow = false;
+    public float speedOffset = 0;
 
     public void StartFollowing()
     {
@@ -51,7 +52,7 @@ public class BezierFollowV2 : MonoBehaviour
         }
 
         currentRPM = updatedRPM;
-        speed = WorkoutCalculations.CalculateGameSpeed(currentRPM);
+        speed = WorkoutCalculations.CalculateGameSpeed(currentRPM) + speedOffset;
         //CalculateSpeed(updatedRPM); //Get rpm from server
     }
 
