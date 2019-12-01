@@ -27,7 +27,18 @@ public class livestats : MonoBehaviour
     {
         //getUpdatedStats = uiStatsUpdate.GetComponent<UiStatsUpdate>();
         BLEPlugin.Instance.StartWorkout();
+        initialize();
         StartCoroutine("UpdateUiStats");
+    }
+
+    private void initialize()
+    {
+        rpmText.text = rpm.ToString();
+        speedText.text = speed.ToString("F2");
+        resistanceText.text = resistance.ToString();
+        wattsText.text = watts.ToString();
+        distanceText.text = distance.ToString("F2");
+        caloriesText.text = calories.ToString();
     }
 
     /*
