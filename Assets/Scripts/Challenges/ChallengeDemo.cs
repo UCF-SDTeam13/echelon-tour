@@ -101,7 +101,7 @@ public class RacePlacement
 
         this.Title = "Final Placement Challenge";
         this.Image = image;
-        this.Description = "Finish in " + rankString + " place";
+        this.Description = "Finish in " + rankString + " place or higher";
         this.Rank = rank;
     }
 }

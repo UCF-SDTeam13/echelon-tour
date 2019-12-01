@@ -15,7 +15,6 @@ public class ChallengeManager : MonoBehaviour
 
     private void Start()
     {
-        RealTimeClient.Instance.RaceEnd += RaceEnded;
         challenges = GameObject.FindGameObjectWithTag("Challenges").GetComponent<ChallengeDemo>();
     }
 
@@ -42,7 +41,7 @@ public class ChallengeManager : MonoBehaviour
         }
     }
 
-    private void RaceEnded(object sender, EventArgs e)
+    public void RaceEnded()
     {
         if(PlayerPrefs.GetInt("RacePlacement1") != 1) //need to find placement
         {
@@ -74,7 +73,7 @@ public class ChallengeManager : MonoBehaviour
     IEnumerator MaintainSpeedTrigger(MaintainSpeed challenge)
     {
         PlayerPrefs.SetInt("MaintainSpeed1", 1);
-        challengeImage = challenge.Image;
+        challengeImage.GetComponent<RawImage>().texture = challenge.Image.GetComponent<RawImage>().texture;
         challengeTitle.GetComponent<Text>().text = challenge.Title;
         challengeDescription.GetComponent<Text>().text = challenge.Description;
         challengePanel.SetActive(true);
@@ -89,7 +88,7 @@ public class ChallengeManager : MonoBehaviour
     IEnumerator RacePlacementTrigger(RacePlacement challenge)
     {
         PlayerPrefs.SetInt("RacePlacement1", 1);
-        challengeImage = challenge.Image;
+        challengeImage.GetComponent<RawImage>().texture = challenge.Image.GetComponent<RawImage>().texture;
         challengeTitle.GetComponent<Text>().text = challenge.Title;
         challengeDescription.GetComponent<Text>().text = challenge.Description;
         challengePanel.SetActive(true);
@@ -104,7 +103,7 @@ public class ChallengeManager : MonoBehaviour
     IEnumerator TotalDistanceTrigger(TotalDistance challenge)
     {
         PlayerPrefs.SetInt("TotalDistance1", 1);
-        challengeImage = challenge.Image;
+        challengeImage.GetComponent<RawImage>().texture = challenge.Image.GetComponent<RawImage>().texture;
         challengeTitle.GetComponent<Text>().text = challenge.Title;
         challengeDescription.GetComponent<Text>().text = challenge.Description;
         challengePanel.SetActive(true);
@@ -119,7 +118,7 @@ public class ChallengeManager : MonoBehaviour
     IEnumerator DailiesCompletedTrigger(DailiesCompleted challenge)
     {
         PlayerPrefs.SetInt("DailiesCompleted", 1);
-        challengeImage = challenge.Image;
+        challengeImage.GetComponent<RawImage>().texture = challenge.Image.GetComponent<RawImage>().texture;
         challengeTitle.GetComponent<Text>().text = challenge.Title;
         challengeDescription.GetComponent<Text>().text = challenge.Description;
         challengePanel.SetActive(true);

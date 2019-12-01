@@ -9032,6 +9032,7 @@ MonoBehaviour:
   optionsButton: {fileID: 699694254}
   time: {fileID: 2108542348}
   leaderboard: {fileID: 1105557268}
+  challengeSystem: {fileID: 1398232200}
 --- !u!114 &2099478726
 MonoBehaviour:
   m_ObjectHideFlags: 0

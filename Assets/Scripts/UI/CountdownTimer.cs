@@ -17,9 +17,11 @@ public class CountdownTimer : MonoBehaviour
     public GameObject time;
     public GameObject leaderboard;
 
+    public GameObject challengeSystem;
+
     void Start()
     {
-        currentTime = startingTime;
+        currentTime = startingTime;  
     }
 
     void Update()
@@ -102,6 +104,8 @@ public class CountdownTimer : MonoBehaviour
             leaderboard.SetActive(false);
             highscoreTable.SendMessageUpwards("ShowHighScore");
         }
+
+        challengeSystem.GetComponent<ChallengeManager>().SendMessage("RaceEnded");
 
         //SceneManager.LoadSceneAsync("Loss");
         //Application.Quit();
