@@ -24,8 +24,8 @@ public class ChallengeDemo : MonoBehaviour
         PlayerPrefs.SetInt("TotalDistance1", 0);
         PlayerPrefs.SetInt("DailiesCompleted", 0);
 
-        tsc01 = new TopSpeed(topSpeedImage, 30);
-        msc01 = new MaintainSpeed(maintainSpeedImage, 15, 30);
+        tsc01 = new TopSpeed(topSpeedImage, 20);
+        msc01 = new MaintainSpeed(maintainSpeedImage, 10, 30);
         rpc01 = new RacePlacement(racePlacementImage, 3);
         tdc01 = new TotalDistance(totalDistanceImage, 2);
         dcc01 = new DailiesCompleted(dailiesCompletedImage);
