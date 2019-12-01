@@ -61,7 +61,7 @@ public class MatchMakingCheck : MonoBehaviour
     IEnumerator CheckConnectionV2()
     {
         // Need to restart workout, not sure if info is reseted
-        BLEPlugin.Instance.StopScan();
+        BLEPlugin.Instance.StopWorkout();
 
         yield return new WaitForSeconds(1);
 

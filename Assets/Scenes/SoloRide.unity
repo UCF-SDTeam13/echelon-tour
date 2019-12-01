@@ -9027,7 +9027,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countdownText: {fileID: 515134443}
-  highscoreTable: {fileID: 964886926}
+  highscoreTable: {fileID: 1101555079}
   livestats: {fileID: 1932456760}
   optionsButton: {fileID: 699694254}
   time: {fileID: 2108542348}

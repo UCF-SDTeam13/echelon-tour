@@ -47,7 +47,7 @@ public class ChallengeUI : MonoBehaviour
         }
         else
         {
-            topSpeed.GetComponentInChildren<TMP_Text>().text = challenges.msc01.Title + ": COMPLETED";
+            maintainSpeed.GetComponentInChildren<TMP_Text>().text = challenges.msc01.Title + ": COMPLETED";
         }
     }
 
@@ -59,7 +59,7 @@ public class ChallengeUI : MonoBehaviour
         }
         else
         {
-            topSpeed.GetComponentInChildren<TMP_Text>().text = challenges.rpc01.Title + ": COMPLETED";
+            racePlacement.GetComponentInChildren<TMP_Text>().text = challenges.rpc01.Title + ": COMPLETED";
         }
     }
 
@@ -71,7 +71,7 @@ public class ChallengeUI : MonoBehaviour
         }
         else
         {
-            topSpeed.GetComponentInChildren<TMP_Text>().text = challenges.tdc01.Title + ": COMPLETED";
+            totalDistance.GetComponentInChildren<TMP_Text>().text = challenges.tdc01.Title + ": COMPLETED";
         }
     }
 
@@ -83,7 +83,7 @@ public class ChallengeUI : MonoBehaviour
         }
         else
         {
-            topSpeed.GetComponentInChildren<TMP_Text>().text = challenges.dcc01.Title + ": COMPLETED";
+            dailiesCompleted.GetComponentInChildren<TMP_Text>().text = challenges.dcc01.Title + ": COMPLETED";
         }
     }
 

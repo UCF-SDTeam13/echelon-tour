@@ -91,14 +91,19 @@ public class BezierTracker : MonoBehaviour
         if (isMultiplayer == true && peerId != RealTimeClient.Instance.peerId && serverProgressDistance != 0 && serverPlayerPosition != Vector3.zero)
         {
             BezierCircuit.TrackPoint serverProgressPoint = circuit.GetTrackPoint(serverProgressDistance);
+            float distanceDelta = Mathf.Abs(serverProgressDistance - progressDistance);
 
             // Debug.Log(serverProgressDistance + " " + progressDistance);
-            if (Mathf.Abs(serverProgressDistance - progressDistance) > 10) //Need a new value
+            if (distanceDelta > 20) //Need a new value
             {
                 transform.position = serverPlayerPosition;
                 progressDistance = serverProgressDistance;
                 progressPoint = serverProgressPoint;
                 progressDelta = serverProgressPoint.position - serverPlayerPosition;
+            }
+            else if(distanceDelta > 10)
+            {
+
             }
         }
 

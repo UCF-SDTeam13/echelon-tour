@@ -106,6 +106,7 @@ public class CountdownTimer : MonoBehaviour
         }
 
         challengeSystem.GetComponent<ChallengeManager>().SendMessage("RaceEnded");
+        BLEPlugin.Instance.StopWorkout();
 
         //SceneManager.LoadSceneAsync("Loss");
         //Application.Quit();
