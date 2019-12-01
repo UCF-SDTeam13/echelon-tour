@@ -21,6 +21,11 @@ public class Leaderboard : MonoBehaviour
     Dictionary<int, float> players = new Dictionary<int, float>();
     Dictionary<int, int> place = new Dictionary<int, int>();
 
+    // Statistics
+    private float AvgSpeedTotal = 0;
+    private int numSpeedMeasurements = 1;
+
+    private bool racing = true;
     private void Awake()
     {
         RealTimeClient.Instance.StatsUpdate += UpdateLiveStats;
@@ -140,12 +145,23 @@ public class Leaderboard : MonoBehaviour
     private void UpdateLiveStats(object sender, StatsUpdateEventArgs e)
     {
         UnityMainDispatcher.Instance.QForMainThread(UpdateLiveStatsMainThread, e);
+        if (racing && e.peerId == RealTimeClient.Instance.peerId)
+        {
+            AvgSpeedTotal += e.rpm;
+            ++numSpeedMeasurements;
+        }
     }
-
+    public void ShowHighScore()
+    {
+        entryContainterHS.Find("Player" + RealTimeClient.Instance.peerId).Find("AvgSpeed").gameObject.SetActive(true);
+        entryContainterHS.Find("Player" + RealTimeClient.Instance.peerId).Find("AvgSpeed").GetComponent<Text>().text = WorkoutCalculations.CalculateSpeed((int)AvgSpeedTotal / numSpeedMeasurements).ToString("F2");
+        racing = false;
+    }
     private void UpdateLiveStatsMainThread(StatsUpdateEventArgs e)
     {
         players[e.peerId] = CalculateDistance(e.rotations);
-        if (e.peerId >= 1 && e.peerId <= 8)
+        BLEDebug.LogInfo($"STAT: {e.peerId} {players[e.peerId]} {e.rotations}");
+        if (racing && e.peerId >= 1 && e.peerId <= 8)
         {
             entryContainter.Find("Player" + e.peerId).Find("Distance").GetComponent<Text>().text = players[e.peerId].ToString("F2");
         }

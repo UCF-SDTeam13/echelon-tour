@@ -100,6 +100,7 @@ public class CountdownTimer : MonoBehaviour
             optionsButton.SetActive(false);
             time.SetActive(false);
             leaderboard.SetActive(false);
+            highscoreTable.SendMessageUpwards("ShowHighScore");
         }
 
         //SceneManager.LoadSceneAsync("Loss");
