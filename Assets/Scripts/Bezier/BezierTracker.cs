@@ -105,9 +105,9 @@ public class BezierTracker : MonoBehaviour
                 progressDelta = serverProgressPoint.position - serverPlayerPosition;
                 followScript.speedOffset = 0;
             }
-            else if (distanceDelta > 10)
+            else if (distanceDelta > 5)
             {
-                followScript.speedOffset = 5;
+                followScript.speedOffset = 10;
             }
             else
             {
