@@ -97,12 +97,13 @@ public class CountdownTimer : MonoBehaviour
         }
         else
         {
+            leaderboard.SendMessage("Collapse");
             highscoreTable.SetActive(true);
             livestats.SetActive(false);
             optionsButton.SetActive(false);
             time.SetActive(false);
             leaderboard.SetActive(false);
-            highscoreTable.SendMessageUpwards("ShowHighScore");
+            //highscoreTable.SendMessageUpwards("ShowHighScore");
         }
 
         challengeSystem.GetComponent<ChallengeManager>().SendMessage("RaceEnded");
@@ -111,4 +112,6 @@ public class CountdownTimer : MonoBehaviour
         //SceneManager.LoadSceneAsync("Loss");
         //Application.Quit();
     }
+
+    
 }

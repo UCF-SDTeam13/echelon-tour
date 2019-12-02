@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Leaderboard : MonoBehaviour
-{
+{/*
     // Set to true when testing locally
     bool testing = false;
     private Transform entryContainter;
@@ -28,7 +28,7 @@ public class Leaderboard : MonoBehaviour
     private bool racing = true;
     private void Awake()
     {
-        RealTimeClient.Instance.StatsUpdate += UpdateLiveStats;
+        //8RealTimeClient.Instance.StatsUpdate += UpdateLiveStats;
         RealTimeClient.Instance.PlayerDisconnect += DecrementPlayerSize;
         RealTimeClient.Instance.CustomizationUpdate += IncrementPlayerSize;
     }
@@ -157,6 +157,7 @@ public class Leaderboard : MonoBehaviour
         entryContainterHS.Find("Player" + RealTimeClient.Instance.peerId).Find("AvgSpeed").GetComponent<Text>().text = WorkoutCalculations.CalculateSpeed((int)AvgSpeedTotal / numSpeedMeasurements).ToString("F2");
         racing = false;
     }
+
     private void UpdateLiveStatsMainThread(StatsUpdateEventArgs e)
     {
         players[e.peerId] = CalculateDistance(e.rotations);
@@ -204,6 +205,7 @@ public class Leaderboard : MonoBehaviour
             entryContainter.Find("Player" + i).gameObject.SetActive(false);
         }
     }
+
     public void expandLeaderboard()
     {
         for (int i = 1; i < 9; i++)
@@ -223,4 +225,5 @@ public class Leaderboard : MonoBehaviour
         players[3] = 60;
         entryContainter.Find("Player" + 3).Find("Distance").GetComponent<Text>().text = players[3].ToString();
     }
+    */
 }
